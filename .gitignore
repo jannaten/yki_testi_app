@@ -1,0 +1,8 @@
+.env
+db/data
+*/data/*
+server/build
+node_modules
+subdomain.config.json
+db/backups
+server/files/**/
