@@ -1,5 +1,10 @@
 import React from "react";
+import { LoopTrue } from "./spring/LoopTrue";
 
 export default function App() {
-  return <>Hello there</>;
+  return (
+    <div>
+      <LoopTrue />
+    </div>
+  );
 }
