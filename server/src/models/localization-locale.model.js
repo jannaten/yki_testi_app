@@ -1,20 +1,29 @@
 const mongoose = require("mongoose");
 
-const localizationLocaleSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: true,
-    minlength: 2,
-    maxlength: 50,
+const localizationLocaleSchema = new mongoose.Schema(
+  {
+    name: {
+      type: String,
+      required: true,
+      minlength: 2,
+      maxlength: 50,
+    },
+    locale: {
+      type: String,
+      required: true,
+      minlength: 2,
+      maxlength: 50,
+      unique: true,
+    },
+    deletedAt: {
+      type: Date,
+      default: null,
+    },
   },
-  locale: {
-    type: String,
-    required: true,
-    minlength: 2,
-    maxlength: 50,
-    unique: true,
-  },
-});
+  {
+    timestamps: true,
+  }
+);
 
 const LocalizationLocale = mongoose.model(
   "Localization_Locale",

@@ -1,10 +1,21 @@
 import React from "react";
-import { LoopTrue } from "./spring/LoopTrue";
+import { routes } from "./config";
+import { NavBar } from "./components";
+import { Toaster } from "react-hot-toast";
+import { Switch, Route } from "react-router-dom";
+import { SearchresultPage, IdentifyPage } from "./pages";
+import "./App.css";
 
 export default function App() {
+  const { home, identify } = routes;
   return (
     <div>
-      <LoopTrue />
+      <NavBar />
+      <Switch>
+        <Route exact path={home} component={SearchresultPage} />
+        <Route exact path={identify} component={IdentifyPage} />
+      </Switch>
+      <Toaster />
     </div>
   );
 }

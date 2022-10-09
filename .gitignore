@@ -6,3 +6,4 @@ node_modules
 subdomain.config.json
 db/backups
 server/files/**/
+demo
