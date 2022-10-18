@@ -17,7 +17,7 @@ const localizationKeyValuesSchema = new mongoose.Schema(
           type: String,
           required: true,
           minlength: 2,
-          maxlength: 50,
+          maxlength: 2048,
         },
         valueType: {
           type: String,

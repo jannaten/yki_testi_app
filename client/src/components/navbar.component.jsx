@@ -11,9 +11,11 @@ const NavbarComponent = () => {
   return (
     <Navbar
       style={{
+        zIndex: 100,
         width: "100%",
         color: "#FBFAF5",
         cursor: "pointer",
+        position: "fixed",
         backgroundColor: "#9967CE",
       }}
       expand="lg"
