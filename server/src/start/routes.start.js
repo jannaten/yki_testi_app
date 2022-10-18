@@ -1,3 +1,4 @@
+const path = require("path");
 const express = require("express");
 const usersRoute = require("../routes/user.route");
 const { unknownEndpointHandler } = require("../middlewares");
@@ -11,6 +12,17 @@ module.exports = function (app) {
   app.use(`${BASE}/users`, usersRoute);
   app.use(`${BASE}/localization_locales`, localizationLocaleRoute);
   app.use(`${BASE}/localization_key_values`, localizationKeyValuesRoute);
+  app.use(express.static(path.join(__dirname, "../../../client/build")));
+  app.get("*", function (_, res) {
+    res.sendFile(
+      path.join(__dirname, "../../../client/build/index.html"),
+      function (err) {
+        if (err) {
+          res.status(500).send(err);
+        }
+      }
+    );
+  });
   app.use(unknownEndpointHandler);
   // app.use(errorLogger);
 };

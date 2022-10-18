@@ -8,7 +8,7 @@ require("./src/start/middlewares.start")(app);
 require("./src/start/routes.start")(app);
 require("./src/start/mongoose.start")();
 
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 3005;
 
 const server = app.listen(PORT, () => {
   logger.info(`listening to port ${PORT}`);
