@@ -7,3 +7,4 @@ subdomain.config.json
 db/backups
 server/files/**/
 demo
+.vercel
