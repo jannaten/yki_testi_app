@@ -1,7 +1,8 @@
 .env
 db/data
 */data/*
-server/build
+# server/build
+client/build
 node_modules
 subdomain.config.json
 db/backups

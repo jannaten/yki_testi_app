@@ -1,9 +1,9 @@
 const winston = require("winston");
-const winstonDailyRotate = require("winston-daily-rotate-file");
+// const winstonDailyRotate = require("winston-daily-rotate-file");
 const expressWinston = require("express-winston");
 
 const isProduction = process.env.NODE_ENV === "production";
-const logsFolder = process.env.LOG_FOLDER || "./logs";
+// const logsFolder = process.env.LOG_FOLDER || "./logs";
 const transports = [
   new winston.transports.Console({
     format: winston.format.simple(),
@@ -11,23 +11,23 @@ const transports = [
   }),
 ];
 
-if (isProduction) {
-  transports.push(
-    new winston.transports.File({
-      filename: logsFolder + "/errors.log",
-      level: "error",
-    })
-  );
+// if (isProduction) {
+//   transports.push(
+//     new winston.transports.File({
+//       filename: logsFolder + "/errors.log",
+//       level: "error",
+//     })
+//   );
 
-  transports.push(
-    new winstonDailyRotate({
-      filename: logsFolder + "/%DATE%.log",
-      datePattern: "YYYY-MM-DD",
-      maxFiles: isProduction ? "14d" : "3d",
-      level: "info",
-    })
-  );
-}
+//   transports.push(
+//     new winstonDailyRotate({
+//       filename: logsFolder + "/%DATE%.log",
+//       datePattern: "YYYY-MM-DD",
+//       maxFiles: isProduction ? "14d" : "3d",
+//       level: "info",
+//     })
+//   );
+// }
 
 const logger = winston.createLogger({
   level: isProduction ? "info" : "silly",
