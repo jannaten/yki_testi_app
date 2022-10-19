@@ -20,3 +20,14 @@ export const SideBarTableHolder = styled.div`
   overflow-y: scroll;
   max-height: ${({ theme }) => (theme.height > 722 ? "63vh" : "18rem")};
 `;
+
+export const SideBarLocalizationMatchTitle = styled.p`
+  font-size: 1.5rem;
+  color: ${({ theme }) => theme.primary};
+`;
+
+export const SideBarLocalizationMatchHolder = styled.div`
+  opacity: 0.7;
+  padding-top: 2rem;
+  text-align: center;
+`;

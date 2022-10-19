@@ -2,6 +2,8 @@ import React from "react";
 import { Form, Col, Table } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { translationInputReset } from "../redux/slices";
+import { SideBarLocalizationMatchTitle } from "../styles";
+import { SideBarLocalizationMatchHolder } from "../styles";
 import { addTranslation, handleTranslationValueChange } from "../redux/slices";
 import { SideBarContainer, PrimaryButton, SideBarTableHolder } from "../styles";
 
@@ -111,17 +113,11 @@ const Sidebar = () => {
                 : unmountedStyle
             }
           >
-            <div
-              style={{
-                opacity: "0.7",
-                paddingTop: "2rem",
-                textAlign: "center",
-              }}
-            >
-              <p style={{ fontSize: "1.5rem", color: "#9967CE" }}>
+            <SideBarLocalizationMatchHolder>
+              <SideBarLocalizationMatchTitle>
                 {filteredTranslations.length}{" "}
                 {filteredTranslations.length > 1 ? "results" : "result"} found
-              </p>
+              </SideBarLocalizationMatchTitle>
               <SideBarTableHolder>
                 <Table striped bordered hover size="sm">
                   <thead>
@@ -157,7 +153,7 @@ const Sidebar = () => {
                   </tbody>
                 </Table>
               </SideBarTableHolder>
-            </div>
+            </SideBarLocalizationMatchHolder>
           </div>
         )}
     </SideBarContainer>

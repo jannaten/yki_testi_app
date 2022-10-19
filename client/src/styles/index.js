@@ -1,5 +1,10 @@
+export { LocalizationEditorButtonsHolder } from "./localization.styles";
 export { SideBarHolder, SideBarContainer } from "./sidebar.styles";
+export { SideBarLocalizationMatchHolder } from "./sidebar.styles";
+export { SideBarLocalizationMatchTitle } from "./sidebar.styles";
+export { LocalizationTitleCount } from "./localization.styles";
 export { LocalizationHolder } from "./localization.styles";
 export { SideBarTableHolder } from "./sidebar.styles";
 export { NavBarHolder } from "./navigation.styles";
 export { PrimaryButton } from "./buttons.styles";
+export { LoaderHolder } from "./common.styles";

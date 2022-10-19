@@ -1,10 +1,12 @@
 import React, { useEffect } from "react";
 import { XDiamond } from "react-bootstrap-icons";
+import { LocalizationTitleCount } from "../styles";
 import { useDispatch, useSelector } from "react-redux";
 import { LocalizationDeleteModal } from "../components";
-import { SideBarHolder, LocalizationHolder } from "../styles";
 import { Table, Form, Button, Row, InputGroup } from "react-bootstrap";
 import { LocalizationEditModal, Sidebar, Loader } from "../components";
+import { LoaderHolder, LocalizationEditorButtonsHolder } from "../styles";
+import { SideBarHolder, LocalizationHolder, PrimaryButton } from "../styles";
 import { loadTranslations, loadLanguages, openModal } from "../redux/slices";
 
 const SearchresultPage = () => {
@@ -24,28 +26,23 @@ const SearchresultPage = () => {
         <Sidebar />
       </SideBarHolder>
       <LocalizationHolder lg={10} md={9} sm={12} className="px-5">
-        <div style={{ marginTop: "3.8rem" }}>
-          <p style={{ fontSize: "3rem", color: "#9967CE" }}>
+        <div className="mt-5">
+          <LocalizationTitleCount>
             {translations.length}{" "}
             {translations.length > 1 ? "translations" : "translation"} found
-          </p>
+          </LocalizationTitleCount>
           <InputGroup className="mb-3">
             <Form.Control
               aria-describedby="basic-addon2"
               aria-label="search translations"
               placeholder="search translations"
             />
-            <Button
-              variant=""
-              id="basic-addon2"
-              style={{ backgroundColor: "#9967CE", color: "#FBFAF5" }}
-            >
+            <PrimaryButton variant="" id="basic-addon2">
               search
-            </Button>
+            </PrimaryButton>
           </InputGroup>
           {translations.length > 0 ? (
             <Table size="lg">
-              {/* <Table striped bordered hover size="sm"> */}
               <thead>
                 <tr>
                   <th>#</th>
@@ -79,20 +76,9 @@ const SearchresultPage = () => {
                             </>
                           </td>
                         ))}
-                      <td
-                        style={{
-                          display: "flex",
-                          flexDirection: "row",
-                          alignItems: "center",
-                          justifyContent: "flex-end",
-                        }}
-                      >
-                        <Button
+                      <LocalizationEditorButtonsHolder>
+                        <PrimaryButton
                           variant=""
-                          style={{
-                            color: "#FBFAF5",
-                            backgroundColor: "#9967CE",
-                          }}
                           onClick={() =>
                             dispatch(
                               openModal({
@@ -106,9 +92,9 @@ const SearchresultPage = () => {
                           }
                         >
                           Edit
-                        </Button>
+                        </PrimaryButton>
                         <Button
-                          style={{ marginLeft: "1rem" }}
+                          className="ms-3"
                           variant="outline-dark"
                           onClick={() =>
                             dispatch(
@@ -124,23 +110,15 @@ const SearchresultPage = () => {
                         >
                           <XDiamond width={20} height={20} />
                         </Button>
-                      </td>
+                      </LocalizationEditorButtonsHolder>
                     </tr>
                   ))}
               </tbody>
             </Table>
           ) : (
-            <div
-              style={{
-                display: "flex",
-                marginTop: "15rem",
-                flexDirection: "row",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
+            <LoaderHolder>
               <Loader />
-            </div>
+            </LoaderHolder>
           )}
         </div>
       </LocalizationHolder>
