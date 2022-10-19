@@ -1,4 +1,5 @@
-const BASE = "http://localhost:3005/api";
+const BASE =
+  process.env.NODE_ENV === "production" ? "/api" : "http://localhost:3005/api";
 
 export const api = {
   userSignIn: `${BASE}/users/signin`,
