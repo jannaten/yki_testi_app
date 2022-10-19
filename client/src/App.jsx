@@ -1,15 +1,21 @@
-import React from "react";
-import { routes } from "./config";
+import React, { useState } from "react";
 import { Toaster } from "react-hot-toast";
+import { routes, themes } from "./config";
+import { useWindowDimensions } from "./hooks";
 import { Switch, Route } from "react-router-dom";
+import { ThemeProvider } from "styled-components";
 import { SearchresultPage, IdentifyPage } from "./pages";
 import { NavBar, ModalRootComponent } from "./components";
 import "./App.css";
 
 export default function App() {
+  const size = useWindowDimensions();
   const { home, identify } = routes;
+  const [theme, setTheme] = useState("defaultTheme");
   return (
-    <div>
+    <ThemeProvider
+      theme={{ ...themes[theme], width: size.width, height: size.height }}
+    >
       <NavBar />
       <ModalRootComponent />
       <Switch>
@@ -17,6 +23,6 @@ export default function App() {
         <Route exact path={identify} component={IdentifyPage} />
       </Switch>
       <Toaster />
-    </div>
+    </ThemeProvider>
   );
 }

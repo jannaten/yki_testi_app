@@ -2,8 +2,9 @@ import React, { useEffect } from "react";
 import { XDiamond } from "react-bootstrap-icons";
 import { useDispatch, useSelector } from "react-redux";
 import { LocalizationDeleteModal } from "../components";
+import { SideBarHolder, LocalizationHolder } from "../styles";
+import { Table, Form, Button, Row, InputGroup } from "react-bootstrap";
 import { LocalizationEditModal, Sidebar, Loader } from "../components";
-import { Table, Form, Button, Col, Row, InputGroup } from "react-bootstrap";
 import { loadTranslations, loadLanguages, openModal } from "../redux/slices";
 
 const SearchresultPage = () => {
@@ -19,32 +20,10 @@ const SearchresultPage = () => {
 
   return (
     <Row className="m-0 p-0">
-      <Col
-        lg={2}
-        md={3}
-        sm={12}
-        style={{
-          zIndex: 99,
-          position: "fixed",
-          minHeight: "100vh",
-          marginTop: "3.8rem",
-          backgroundColor: "#FAFAFA",
-          boxShadow: `rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset`,
-        }}
-      >
+      <SideBarHolder lg={2} md={3} sm={12}>
         <Sidebar />
-      </Col>
-      <Col
-        lg={10}
-        md={9}
-        sm={12}
-        className="px-5"
-        style={{
-          height: "100vh",
-          marginLeft: "auto",
-          marginTop: "3.8rem",
-        }}
-      >
+      </SideBarHolder>
+      <LocalizationHolder lg={10} md={9} sm={12} className="px-5">
         <div style={{ marginTop: "3.8rem" }}>
           <p style={{ fontSize: "3rem", color: "#9967CE" }}>
             {translations.length}{" "}
@@ -164,7 +143,7 @@ const SearchresultPage = () => {
             </div>
           )}
         </div>
-      </Col>
+      </LocalizationHolder>
     </Row>
   );
 };

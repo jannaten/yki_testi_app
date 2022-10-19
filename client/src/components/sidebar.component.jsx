@@ -1,8 +1,9 @@
 import React from "react";
+import { Form, Col, Table } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { translationInputReset } from "../redux/slices";
-import { Button, Container, Form, Col, Table } from "react-bootstrap";
 import { addTranslation, handleTranslationValueChange } from "../redux/slices";
+import { SideBarContainer, PrimaryButton, SideBarTableHolder } from "../styles";
 
 const Sidebar = () => {
   const dispatch = useDispatch();
@@ -44,9 +45,9 @@ const Sidebar = () => {
   };
 
   return (
-    <Container style={{ marginTop: "5rem" }}>
+    <SideBarContainer>
       <Form>
-        <p className="my-4 h5">Add a translation</p>
+        <p className="h5">Add a translation</p>
         {languages.length > 0 &&
           languages.map(({ _id, name, locale }) => (
             <Form.Group className="my-3" key={_id}>
@@ -67,9 +68,8 @@ const Sidebar = () => {
             </Form.Group>
           ))}
         {languages.length > 0 && (
-          <Button
+          <PrimaryButton
             variant=""
-            style={{ backgroundColor: "#9967CE", color: "#FBFAF5" }}
             onClick={() => {
               dispatch(
                 addTranslation({
@@ -96,68 +96,71 @@ const Sidebar = () => {
               dispatch(translationInputReset());
             }}
           >
-            Submit
-          </Button>
+            Add
+          </PrimaryButton>
         )}
       </Form>
-      <div
-        className="transitionDiv w-100"
-        style={
-          filteredTranslations.length !== translations.length &&
-          filteredTranslations.length > 0
-            ? mountedStyle
-            : unmountedStyle
-        }
-      >
-        <div
-          style={{
-            paddingTop: "2rem",
-            opacity: "0.7",
-            textAlign: "center",
-          }}
-        >
-          <p style={{ fontSize: "1.5rem", color: "#9967CE" }}>
-            {filteredTranslations.length}{" "}
-            {filteredTranslations.length > 1 ? "results" : "result"} found
-          </p>
-          <div style={{ overflowY: "scroll", maxHeight: "63vh" }}>
-            <Table striped bordered hover size="sm">
-              <thead>
-                <tr>
-                  {languages.length &&
-                    languages.map(({ _id, locale }) => (
-                      <th key={_id}>{locale}</th>
-                    ))}
-                </tr>
-              </thead>
-              <tbody>
-                {filteredTranslations.length > 0 &&
-                  filteredTranslations.map((translation) => (
-                    <tr key={translation._id}>
-                      {languages?.length &&
-                        languages.map((locales) => (
-                          <td key={locales._id}>
-                            <>
-                              {translation.locale_values.length &&
-                                translation.locale_values.map(
-                                  ({ language, name }, index) => (
-                                    <span key={index}>
-                                      {locales.locale === language.locale &&
-                                        name}
-                                    </span>
-                                  )
-                                )}
-                            </>
-                          </td>
+      {filteredTranslations.length !== translations.length &&
+        filteredTranslations.length > 0 && (
+          <div
+            className="w-100"
+            style={
+              filteredTranslations.length !== translations.length &&
+              filteredTranslations.length > 0
+                ? mountedStyle
+                : unmountedStyle
+            }
+          >
+            <div
+              style={{
+                opacity: "0.7",
+                paddingTop: "2rem",
+                textAlign: "center",
+              }}
+            >
+              <p style={{ fontSize: "1.5rem", color: "#9967CE" }}>
+                {filteredTranslations.length}{" "}
+                {filteredTranslations.length > 1 ? "results" : "result"} found
+              </p>
+              <SideBarTableHolder>
+                <Table striped bordered hover size="sm">
+                  <thead>
+                    <tr>
+                      {languages.length &&
+                        languages.map(({ _id, locale }) => (
+                          <th key={_id}>{locale}</th>
                         ))}
                     </tr>
-                  ))}
-              </tbody>
-            </Table>
+                  </thead>
+                  <tbody>
+                    {filteredTranslations.length > 0 &&
+                      filteredTranslations.map((translation) => (
+                        <tr key={translation._id}>
+                          {languages?.length &&
+                            languages.map((locales) => (
+                              <td key={locales._id}>
+                                <>
+                                  {translation.locale_values.length &&
+                                    translation.locale_values.map(
+                                      ({ language, name }, index) => (
+                                        <span key={index}>
+                                          {locales.locale === language.locale &&
+                                            name}
+                                        </span>
+                                      )
+                                    )}
+                                </>
+                              </td>
+                            ))}
+                        </tr>
+                      ))}
+                  </tbody>
+                </Table>
+              </SideBarTableHolder>
+            </div>
           </div>
-        </div>
-      </div>
-    </Container>
+        )}
+    </SideBarContainer>
   );
 };
 

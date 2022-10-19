@@ -1,25 +1,18 @@
 import { routes } from "../config";
 import React, { useState } from "react";
+import { NavBarHolder } from "../styles";
 import { useHistory } from "react-router-dom";
+// import { useWindowDimensions } from "../hooks";
 import { PlusLg, XLg } from "react-bootstrap-icons";
 import { Button, Container, Nav, Navbar } from "react-bootstrap";
 
 const NavbarComponent = () => {
+  // const size = useWindowDimensions();
   const history = useHistory();
   const { home, identify } = routes;
   const [toggleButton, setToggleButton] = useState(false);
   return (
-    <Navbar
-      style={{
-        zIndex: 100,
-        width: "100%",
-        color: "#FBFAF5",
-        cursor: "pointer",
-        position: "fixed",
-        backgroundColor: "#9967CE",
-      }}
-      expand="lg"
-    >
+    <NavBarHolder expand="lg">
       <Container fluid>
         <Navbar.Brand className="px-4 mt-1">
           <h5 style={{ color: "#FBFAF5" }} onClick={() => history.push(home)}>
@@ -65,7 +58,7 @@ const NavbarComponent = () => {
           </Button>
         </Navbar.Collapse>
       </Container>
-    </Navbar>
+    </NavBarHolder>
   );
 };
 
