@@ -3,7 +3,7 @@ import { XDiamond } from "react-bootstrap-icons";
 import { LocalizationTitleCount } from "../styles";
 import { useDispatch, useSelector } from "react-redux";
 import { LocalizationDeleteModal } from "../components";
-import { Table, Form, Button, Row, InputGroup } from "react-bootstrap";
+import { Table, Form, Button, Row, InputGroup, Col } from "react-bootstrap";
 import { LocalizationEditModal, Sidebar, Loader } from "../components";
 import { LoaderHolder, LocalizationEditorButtonsHolder } from "../styles";
 import { SideBarHolder, LocalizationHolder, PrimaryButton } from "../styles";
@@ -22,11 +22,11 @@ const SearchresultPage = () => {
 
   return (
     <Row className="m-0 p-0">
-      <SideBarHolder lg={2} md={3} sm={12}>
+      <SideBarHolder xm={12} sm={12} md={12} lg={2} xl={2}>
         <Sidebar />
       </SideBarHolder>
-      <LocalizationHolder lg={10} md={9} sm={12} className="px-5">
-        <div className="mt-5">
+      <LocalizationHolder xl={10} lg={10} md={12} xm={12} sm={12}>
+        <div>
           <LocalizationTitleCount>
             {translations.length}{" "}
             {translations.length > 1 ? "translations" : "translation"} found

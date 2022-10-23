@@ -1,3 +1,4 @@
+// xm < 576, sm >= 576, md >= 768, lg >= 992, xl >= 1200
 import styled from "styled-components";
 import { Navbar } from "react-bootstrap";
 
@@ -7,7 +8,8 @@ export const NavBarHolder = styled(Navbar)`
   cursor: pointer;
   margin-top: 0rem;
   background-color: ${({ theme }) => theme.primary};
-  position: ${({ theme }) => theme.width > "575" && "fixed"};
+  position: ${({ theme }) => theme.width <= 992 && "fixed"};
+  margin-bottom: ${({ theme }) => theme.width >= 992 && "auto"};
 `;
 
 // export const SideBarColHolderStyle = styled(Col)`

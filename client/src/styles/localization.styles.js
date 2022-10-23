@@ -1,11 +1,13 @@
+// xm < 576, sm >= 576, md >= 768, lg >= 992, xl >= 1200
 import { Col } from "react-bootstrap";
 import styled from "styled-components";
 
 export const LocalizationHolder = styled(Col)`
-  height: 100%;
   z-index: 98;
+  height: 100%;
   margin-left: auto;
-  margin-top: ${({ theme }) => theme.width > 767 && "2.8rem"};
+  padding: ${({ theme }) =>
+    theme.width >= 992 ? "2rem 3rem 0rem 3rem" : "2rem 0rem 0rem 2rem"};
 `;
 
 export const LocalizationEditorButtonsHolder = styled.td`
