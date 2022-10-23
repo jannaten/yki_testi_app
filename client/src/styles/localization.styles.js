@@ -6,8 +6,9 @@ export const LocalizationHolder = styled(Col)`
   z-index: 98;
   height: 100%;
   margin-left: auto;
+  text-align: ${({ theme }) => theme.width < 992 && "center"};
   padding: ${({ theme }) =>
-    theme.width >= 992 ? "2rem 3rem 0rem 3rem" : "2rem 0rem 0rem 2rem"};
+    theme.width >= 992 ? "2rem 3rem 0rem 3rem" : "1.5rem 1rem 0rem 1rem"};
 `;
 
 export const LocalizationEditorButtonsHolder = styled.td`

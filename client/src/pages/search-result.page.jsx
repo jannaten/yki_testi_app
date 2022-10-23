@@ -1,9 +1,10 @@
 import React, { useEffect } from "react";
+import { useTheme } from "styled-components";
 import { XDiamond } from "react-bootstrap-icons";
 import { LocalizationTitleCount } from "../styles";
 import { useDispatch, useSelector } from "react-redux";
 import { LocalizationDeleteModal } from "../components";
-import { Table, Form, Button, Row, InputGroup, Col } from "react-bootstrap";
+import { Table, Form, Button, Row, InputGroup } from "react-bootstrap";
 import { LocalizationEditModal, Sidebar, Loader } from "../components";
 import { LoaderHolder, LocalizationEditorButtonsHolder } from "../styles";
 import { SideBarHolder, LocalizationHolder, PrimaryButton } from "../styles";
@@ -11,6 +12,7 @@ import { loadTranslations, loadLanguages, openModal } from "../redux/slices";
 
 const SearchresultPage = () => {
   const dispatch = useDispatch();
+  const { width } = useTheme();
   const { translations, languages } = useSelector(
     ({ localization }) => localization
   );
@@ -21,11 +23,11 @@ const SearchresultPage = () => {
   }, []);
 
   return (
-    <Row className="m-0 p-0">
-      <SideBarHolder xm={12} sm={12} md={12} lg={2} xl={2}>
+    <Row className={width >= 922 && "pt-5 m-0 pb-0 pe-0 ps-0"}>
+      <SideBarHolder xm={12} sm={12} md={12} lg={3} xl={2}>
         <Sidebar />
       </SideBarHolder>
-      <LocalizationHolder xl={10} lg={10} md={12} xm={12} sm={12}>
+      <LocalizationHolder xm={12} sm={12} md={12} lg={9} xl={10}>
         <div>
           <LocalizationTitleCount>
             {translations.length}{" "}
@@ -42,23 +44,34 @@ const SearchresultPage = () => {
             </PrimaryButton>
           </InputGroup>
           {translations.length > 0 ? (
-            <Table size="lg">
+            <Table size="lg" responsive={width < 992}>
               <thead>
-                <tr>
-                  <th>#</th>
+                <tr
+                  style={width < 992 ? { width: "100vw" } : {}}
+                  className={
+                    width < 992 ? "d-flex flex-column text-center" : ""
+                  }
+                >
+                  {width >= 992 ? <th>keys</th> : <th></th>}
                   {languages.length &&
                     languages.map(({ _id, name, locale }) => (
                       <th key={_id}>
                         {locale} ({name})
                       </th>
                     ))}
-                  <th className="ms-auto"></th>
+                  {width >= 992 && <th className="ms-auto"></th>}
                 </tr>
               </thead>
               <tbody>
                 {translations.length > 0 &&
                   translations.map((translation) => (
-                    <tr key={translation._id}>
+                    <tr
+                      key={translation._id}
+                      style={width < 992 ? { width: "100vw" } : {}}
+                      className={
+                        width < 992 ? "d-flex flex-column text-center" : ""
+                      }
+                    >
                       <td>{translation.key}</td>
                       {languages?.length &&
                         languages.map((locales) => (

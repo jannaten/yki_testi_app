@@ -4,17 +4,16 @@ import { Col, Container } from "react-bootstrap";
 
 export const SideBarHolder = styled(Col)`
   z-index: 99;
-  position: theme.width >= 992 && "fixed";
-  width: ${({ theme }) => theme.width < 992 && "100%"};
   background-color: ${({ theme }) => theme.basic.bright};
-  height: ${({ theme }) => (theme.width >= 992 ? "100vh" : "100%")};
+  height: ${({ theme }) => theme.width >= 992 && "100vh"};
+  position: ${({ theme }) => theme.width >= 992 && "fixed"};
   box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset,
     rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset;
 `;
 
 export const SideBarContainer = styled(Container)`
   margin-top: ${({ theme }) => (theme.width >= 992 ? "3rem" : "2rem")};
-  margin-bottom: ${({ theme }) => theme.width < 992 && "1rem"};
+  margin-bottom: ${({ theme }) => theme.width < 992 && "2rem"};
 `;
 
 export const SideBarTableHolder = styled.div`
