@@ -8,5 +8,4 @@ export const NavBarHolder = styled(Navbar)`
   width: ${({ theme }) => theme.width >= 992 && "100vw"};
   position: ${({ theme }) => theme.width >= 992 && "fixed"};
   background-color: ${({ theme }) => theme.primary};
-  margin-bottom: ${({ theme }) => theme.width >= 992 && "auto"};
 `;

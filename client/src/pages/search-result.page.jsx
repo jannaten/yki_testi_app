@@ -23,7 +23,7 @@ const SearchresultPage = () => {
   }, []);
 
   return (
-    <Row className={width >= 922 && "pt-5 m-0 pb-0 pe-0 ps-0"}>
+    <Row className={width >= 992 ? "pt-5 m-0 pb-0 pe-0 ps-0" : "m-0 p-0"}>
       <SideBarHolder xm={12} sm={12} md={12} lg={3} xl={2}>
         <Sidebar />
       </SideBarHolder>
