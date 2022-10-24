@@ -10,3 +10,13 @@ export const PrimaryButton = styled(Button)`
     color: ${({ theme }) => theme.basic.bright};
   }
 `;
+
+export const SecondaryButton = styled(Button)`
+  background-color: ${({ theme }) => theme.basic.bright};
+  color: ${({ theme }) => theme.primary};
+  &:hover {
+    border: ${({ theme }) => `0.2rem solid ${theme.basic.bright}`};
+    background-color: ${({ theme }) => theme.primary};
+    color: ${({ theme }) => theme.basic.bright};
+  }
+`;

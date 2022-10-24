@@ -1,22 +1,28 @@
+import { successToast } from ".";
 import { routes } from "../config";
+import Avatar from "boring-avatars";
 import React, { useState } from "react";
 import { NavBarHolder } from "../styles";
+import { SecondaryButton } from "../styles";
 import { useHistory } from "react-router-dom";
-// import { useWindowDimensions } from "../hooks";
+import { onClearUserValue } from "../redux/slices";
 import { PlusLg, XLg } from "react-bootstrap-icons";
-import { Button, Container, Nav, Navbar } from "react-bootstrap";
+import { useSelector, useDispatch } from "react-redux";
+import { Container, Nav, Navbar } from "react-bootstrap";
 
 const NavbarComponent = () => {
-  // const size = useWindowDimensions();
   const history = useHistory();
+  const dispatch = useDispatch();
   const { home, identify } = routes;
+  const { user } = useSelector(({ user }) => user);
   const [toggleButton, setToggleButton] = useState(false);
+
   return (
     <NavBarHolder expand="lg">
       <Container fluid>
         <Navbar.Brand className="px-4 mt-1">
           <h5 style={{ color: "#FBFAF5" }} onClick={() => history.push(home)}>
-            YKI practice app
+            YKI harjoittelu
           </h5>
         </Navbar.Brand>
         <Navbar.Toggle
@@ -45,17 +51,42 @@ const NavbarComponent = () => {
             style={{ maxHeight: "100px" }}
             navbarScroll
           ></Nav>
-          <Button
+          {user && (
+            <div
+              style={{
+                color: "#fff",
+                width: "fit-content",
+                borderRadius: "0.3rem",
+                border: "0.1rem solid #fff",
+                marginRight: "1rem",
+                padding: "0.2rem 1rem",
+              }}
+            >
+              <Avatar
+                size={40}
+                variant="beam"
+                name={user.full_name}
+                colors={["#92A1C6", "#146A7C", "#ffffff", "#C271B4", "#C20D90"]}
+              />
+              <span className="me-2 ms-2">{user.username}</span>
+            </div>
+          )}
+          <SecondaryButton
+            className="me-5"
             variant=""
-            style={{
-              backgroundColor: "#FBFAF5",
-              color: "#9967CE",
-              marginRight: "2rem",
+            onClick={() => {
+              if (user) {
+                localStorage.removeItem("token");
+                history.push(home);
+                dispatch(onClearUserValue());
+                successToast("Succesfully logged out");
+              } else {
+                history.push(identify);
+              }
             }}
-            onClick={() => history.push(identify)}
           >
-            sign in
-          </Button>
+            {user ? "sign out" : "sign in"}
+          </SecondaryButton>
         </Navbar.Collapse>
       </Container>
     </NavBarHolder>

@@ -3,9 +3,22 @@ const router = express.Router();
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { User } = require("../models");
+const { auth } = require("../middlewares");
 const { OAuth2Client } = require("google-auth-library");
+const { randomString, errorLogger } = require("../utils");
 
 const { JWT_SECRET_KEY } = process.env;
+
+router.get("/token", auth, async (req, res) => {
+  try {
+    const user = await User.findOne({ _id: req.user.id }, "-password");
+    if (!user) return res.status(404).json({ message: "User doesn't exist" });
+    res.send(user);
+  } catch (err) {
+    errorLogger(err);
+    res.status(500).send(err);
+  }
+});
 
 router.post("/signin", async (req, res) => {
   if (req.body.token) {
@@ -20,16 +33,23 @@ router.post("/signin", async (req, res) => {
       return res.status(400).send({ error: "email is not varified" });
     const user = await User.findOne({ email: payload.email });
     if (!user) {
-      const value = `${payload.given_name}.${payload.family_name}`;
+      const value = `${payload?.given_name?.toLowerCase()}.${payload?.family_name?.toLowerCase()}`;
       const hashedPassword = await bcrypt.hash(value, 12);
       const result = await User.create({
         email: payload.email,
-        username: value,
         password: hashedPassword,
+        username: `${value}${randomString(5)}`,
         full_name: `${payload.given_name} ${payload.family_name}`,
       });
       const token = jwt.sign(
-        { email: result.email, id: result._id },
+        {
+          id: result._id,
+          type: result.type,
+          email: result.email,
+          status: result.status,
+          username: result.username,
+          full_name: result.full_name,
+        },
         JWT_SECRET_KEY,
         {
           expiresIn: "10h",
@@ -38,7 +58,14 @@ router.post("/signin", async (req, res) => {
       return res.status(201).json({ result, token });
     } else {
       const token = jwt.sign(
-        { email: user.email, id: user._id },
+        {
+          id: user._id,
+          type: user.type,
+          email: user.email,
+          status: user.status,
+          username: user.username,
+          full_name: user.full_name,
+        },
         JWT_SECRET_KEY,
         {
           expiresIn: "10h",
@@ -48,14 +75,20 @@ router.post("/signin", async (req, res) => {
     }
   } else {
     const { email, password } = req.body;
-
     const user = await User.findOne({ email });
     if (!user) return res.status(404).json({ message: "User doesn't exist" });
     const isPasswordCorrect = await bcrypt.compare(password, user.password);
     if (!isPasswordCorrect)
       return res.status(400).json({ message: "Invalid credentials" });
     const token = jwt.sign(
-      { email: user.email, id: user._id },
+      {
+        id: user._id,
+        type: user.type,
+        email: user.email,
+        status: user.status,
+        username: user.username,
+        full_name: user.full_name,
+      },
       JWT_SECRET_KEY,
       {
         expiresIn: "10h",

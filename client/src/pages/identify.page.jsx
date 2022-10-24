@@ -1,45 +1,39 @@
-import axios from "axios";
-import { api } from "../config";
-import jwt_decode from "jwt-decode";
+import { routes } from "../config";
+import React, { useEffect } from "react";
+import { successToast } from "../components";
 import { useHistory } from "react-router-dom";
-import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Button, Col, Container, Form, Row } from "react-bootstrap";
-
-const INITIAL_SIGN_IN_DATA = {
-  email: "",
-  password: "",
-};
+import { onHandleUserValueChange, signInOrUp } from "../redux/slices";
 
 function IdentifyPage() {
+  const { home } = routes;
   const history = useHistory();
-  const { userSignIn } = api;
-  const [initialInputValues, setInitialInputValues] =
-    useState(INITIAL_SIGN_IN_DATA);
+  const dispatch = useDispatch();
+  const { initialInputValues, user } = useSelector(({ user }) => user);
 
   const handleCallbackResponse = async (token) => {
     try {
-      const response = await axios.post(userSignIn, { token });
-      const decoded = jwt_decode(response.data.token);
-      console.log("response ", decoded);
+      await dispatch(signInOrUp({ token }));
+      successToast("Succesfully logged in");
+      history.push(home);
     } catch (error) {
       console.log(error);
     }
   };
 
-  const onHandleChange = (e) => {
-    const value = e.target.value;
-    setInitialInputValues({ ...initialInputValues, [e.target.name]: value });
-  };
-
   const onSubmit = async () => {
     try {
-      const response = await axios.post(userSignIn, {
-        email: initialInputValues.email,
-        password: initialInputValues.password,
-      });
-      const decoded = jwt_decode(response.data.token);
-      console.log("response ", decoded);
-      setInitialInputValues(INITIAL_SIGN_IN_DATA);
+      await dispatch(
+        signInOrUp({
+          email: initialInputValues.email,
+          password: initialInputValues.password,
+        })
+      );
+      history.push(home);
+      successToast("Succesfully logged in");
+      // const decoded = jwt_decode(response.data.token);
+      // console.log("response ", decoded);
     } catch (error) {
       console.log(error);
     }
@@ -76,16 +70,16 @@ function IdentifyPage() {
                 type="email"
                 name="email"
                 value={initialInputValues.email}
-                onChange={onHandleChange}
                 placeholder="type your email here"
+                onChange={(e) => dispatch(onHandleUserValueChange(e))}
               />
               <Form.Label className="mt-2">password</Form.Label>
               <Form.Control
                 type="password"
                 name="password"
-                onChange={onHandleChange}
                 value={initialInputValues.password}
                 placeholder="type your password here"
+                onChange={(e) => dispatch(onHandleUserValueChange(e))}
               />
               <Button
                 variant=""
