@@ -4950,6 +4950,11 @@ react-select@^5.4.0:
     prop-types "^15.6.0"
     react-transition-group "^4.3.0"
 
+react-simple-oauth2-login@^0.5.3:
+  version "0.5.3"
+  resolved "https://registry.yarnpkg.com/react-simple-oauth2-login/-/react-simple-oauth2-login-0.5.3.tgz#6bb785e3d4efcd0ac55143f2c6cbde6115ef0bb5"
+  integrity sha512-gLrvxu1/9oxGPOo9Uy5AWcNMBu6XWcMVngyi0gCkQqyntHbbkc97yeCCP9t2AsMa5iIyHjMc+U5nUi4804Y0+g==
+
 react-sortable-hoc@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/react-sortable-hoc/-/react-sortable-hoc-2.0.0.tgz#f6780d8aa4b922a21f3e754af542f032677078b7"

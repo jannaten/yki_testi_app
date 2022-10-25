@@ -2,25 +2,37 @@ import { routes } from "../config";
 import React, { useEffect } from "react";
 import { successToast } from "../components";
 import { useHistory } from "react-router-dom";
+import { Facebook } from "react-bootstrap-icons";
 import { useDispatch, useSelector } from "react-redux";
 import { Button, Col, Container, Form, Row } from "react-bootstrap";
 import { onHandleUserValueChange, signInOrUp } from "../redux/slices";
+import { FacebookAuthButton } from "../styles/buttons.styles";
 
 function IdentifyPage() {
   const { home } = routes;
   const history = useHistory();
   const dispatch = useDispatch();
-  const { initialInputValues, user } = useSelector(({ user }) => user);
+  const { initialInputValues } = useSelector(({ user }) => user);
 
-  const handleCallbackResponse = async (token) => {
+  const handleCallbackResponseGoogle = async (token) => {
     try {
-      await dispatch(signInOrUp({ token }));
+      await dispatch(signInOrUp({ token, platform: "google" }));
       successToast("Succesfully logged in");
       history.push(home);
     } catch (error) {
       console.log(error);
     }
   };
+
+  const handleCallbackResponseFacebook = async (response) => {
+    await dispatch(
+      signInOrUp({ token: response.access_token, platform: "facebook" })
+    );
+    history.push(home);
+    successToast("Succesfully logged in");
+  };
+
+  const onFailure = (response) => console.error(response);
 
   const onSubmit = async () => {
     try {
@@ -45,7 +57,7 @@ function IdentifyPage() {
       google.accounts.id.initialize({
         client_id:
           "695731560544-97qetivnd557fmungu98e14t5sdh600q.apps.googleusercontent.com",
-        callback: handleCallbackResponse,
+        callback: handleCallbackResponseGoogle,
       });
       google.accounts.id.renderButton(document.getElementById("signInDiv"), {
         theme: "outline",
@@ -91,7 +103,41 @@ function IdentifyPage() {
               </Button>
             </Col>
           </Row>
-          <div id="signInDiv" style={{ width: "14%", marginTop: "2rem" }}></div>
+          <div
+            style={{
+              border: "0.1rem solid #066CD2",
+              borderRadius: "0.3rem",
+              width: "fit-content",
+              marginTop: "2rem",
+              padding: "0.2rem",
+            }}
+          >
+            <Facebook
+              className="ms-1 mb-1"
+              color="#066CD2"
+              width={18}
+              height={18}
+            />
+            <FacebookAuthButton
+              className="facebookAuthButton"
+              buttonText="Connect with facebook"
+              authorizationUrl="https://www.facebook.com/dialog/oauth"
+              responseType="token"
+              // clientId="1961643604225793"
+              // redirectUri="http://localhost:3000"
+              // clientId={
+              //   process.env.NODE_ENV === "development"
+              //     ? "1961643604225793"
+              //     : "835936037455876"
+              // }
+              clientId="1961643604225793"
+              redirectUri={`http://${window.location.href.split("/")[2]}`}
+              scope="email"
+              onSuccess={handleCallbackResponseFacebook}
+              onFailure={onFailure}
+            />
+          </div>
+          <div id="signInDiv" style={{ width: "15%", marginTop: "1rem" }}></div>
         </Form.Group>
       </Container>
     </div>

@@ -23,6 +23,7 @@
     "react-redux": "^7.2.5",
     "react-router-dom": "^5.2.0",
     "react-select": "^5.4.0",
+    "react-simple-oauth2-login": "^0.5.3",
     "react-sortable-hoc": "^2.0.0",
     "react-spring": "^9.5.5",
     "react-use-gesture": "^9.1.3",
