@@ -16,23 +16,22 @@ export default function App() {
   const { home, identify } = routes;
   const [theme, setTheme] = useState("defaultTheme");
 
-  // useEffect(async () => {
-  //   if (localStorage.token) {
-  //     await dispatch(loadUser());
-  //   }
-  // }, []);
+  useEffect(async () => {
+    if (localStorage.token) {
+      await dispatch(loadUser());
+    }
+  }, []);
 
   return (
     <ThemeProvider
       theme={{ ...themes[theme], width: size.width, height: size.height }}
     >
-      <h1>Test</h1>
-      {/* <NavBar />
+      <NavBar />
       <ModalRootComponent />
       <Switch>
         <Route exact path={home} component={SearchresultPage} />
         <Route exact path={identify} component={IdentifyPage} />
-      </Switch> */}
+      </Switch>
       <Toaster />
     </ThemeProvider>
   );
