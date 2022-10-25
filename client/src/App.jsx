@@ -16,11 +16,11 @@ export default function App() {
   const { home, identify } = routes;
   const [theme, setTheme] = useState("defaultTheme");
 
-  useEffect(async () => {
-    if (localStorage.token) {
-      await dispatch(loadUser());
-    }
-  }, []);
+  // useEffect(async () => {
+  //   if (localStorage.token) {
+  //     await dispatch(loadUser());
+  //   }
+  // }, []);
 
   return (
     <ThemeProvider
