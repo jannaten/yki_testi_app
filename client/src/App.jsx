@@ -26,12 +26,13 @@ export default function App() {
     <ThemeProvider
       theme={{ ...themes[theme], width: size.width, height: size.height }}
     >
-      <NavBar />
+      <h1>Test</h1>
+      {/* <NavBar />
       <ModalRootComponent />
       <Switch>
         <Route exact path={home} component={SearchresultPage} />
         <Route exact path={identify} component={IdentifyPage} />
-      </Switch>
+      </Switch> */}
       <Toaster />
     </ThemeProvider>
   );
