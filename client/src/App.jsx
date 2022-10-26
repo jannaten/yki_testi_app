@@ -22,8 +22,16 @@ export default function App() {
     if (localStorage.token) {
       dispatch(loadUser());
     }
+    checkLocation();
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const checkLocation = () => {
+    if (!window.location.href.includes("#")) {
+      window.location.href = `${window.location.href}#/`;
+    }
+  };
 
   return (
     <ThemeProvider
@@ -32,8 +40,9 @@ export default function App() {
       <NavBar />
       <ModalRootComponent />
       <Routes>
-        <Route path={home} element={<SearchresultPage />} />
-        <Route path={identify} element={<IdentifyPage />} />
+        {/* <Route path="/" element={<Navigate replace to="/home" />} /> */}
+        <Route exact path={home} element={<SearchresultPage />} />
+        <Route exact path={identify} element={<IdentifyPage />} />
       </Routes>
       <Toaster />
     </ThemeProvider>
