@@ -41,7 +41,7 @@ const Pagination = (props) => {
                       cursor: "pointer",
                     }
               }
-              className="page-link shadow-none"
+              className="page-link  shadow-none"
               onClick={() => props.onPageChange(page)}
             >
               {page}
