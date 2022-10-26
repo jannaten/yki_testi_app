@@ -200,6 +200,16 @@ const SearchresultPage = () => {
               <Loader />
             </LoaderHolder>
           )}
+          <Container className="text-center">
+            <Pagination
+              pageSize={pageSize}
+              onNextPage={onNextPage}
+              currentPage={currentPage}
+              onPageChange={handlePageChange}
+              onPreviousPage={onPreviousPage}
+              itemsCount={filteredTranslations.length}
+            />
+          </Container>
         </div>
       </LocalizationHolder>
     </Row>

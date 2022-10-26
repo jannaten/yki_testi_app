@@ -8,26 +8,29 @@ const Pagination = (props) => {
   const pages = _.range(1, pagesCount + 1);
   return (
     <nav className="row justify-content-center">
-      <ul className="pagination">
+      <ul className="d-flex flex-direction-row flex-wrap justify-content-center align-items-center list-unstyled">
         {pages.map((page) => (
-          <li
-            key={page}
-            // className={page === currentPage ? "page-item active" : "page-item"}
-          >
+          <li key={page}>
             <button
               style={
                 page === currentPage
                   ? {
                       backgroundColor: "#9967CE",
                       color: "#fff",
+                      width: "2rem",
+                      height: "2rem",
                       border: "none",
                       borderRadius: "0.3rem",
+                      cursor: "pointer",
                     }
                   : {
                       backgroundColor: "#fff",
                       color: "#9967CE",
                       border: "none",
+                      width: "2rem",
+                      height: "2rem",
                       borderRadius: "0.3rem",
+                      cursor: "pointer",
                     }
               }
               className="page-link shadow-none"
