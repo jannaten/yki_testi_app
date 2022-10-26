@@ -6,7 +6,11 @@ const { requestLogger } = require("../utils");
 
 module.exports = function (app) {
   app.use(cors());
-  app.use(helmet());
+  app.use(
+    helmet({
+      crossOriginResourcePolicy: false,
+    })
+  );
   app.use(express.json());
   // app.use(requestLogger);
   app.use(express.urlencoded({ extended: true }));
