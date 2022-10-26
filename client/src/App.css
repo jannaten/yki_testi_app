@@ -121,6 +121,17 @@
   }
 }
 
+.kep-login-facebook {
+  background-color: white !important;
+  border: none !important;
+  color: #066cd2 !important;
+  font-family: "Signika", sans-serif !important;
+  padding: 0.3rem 1.3rem 0.3rem 0.3rem !important;
+  font-weight: normal !important;
+  text-transform: lowercase !important;
+  font-size: 0.9rem !important;
+}
+
 body {
   margin: 0;
   padding: 0;

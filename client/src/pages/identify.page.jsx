@@ -2,8 +2,8 @@ import { routes } from "../config";
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Facebook } from "react-bootstrap-icons";
+import FacebookLogin from "react-facebook-login";
 import { useDispatch, useSelector } from "react-redux";
-import { FacebookAuthButton } from "../styles/buttons.styles";
 import { successToast } from "../components/common/toast.component";
 import { Button, Col, Container, Form, Row } from "react-bootstrap";
 import { onHandleUserValueChange, signInOrUp } from "../redux/slices";
@@ -25,14 +25,18 @@ function IdentifyPage() {
   };
 
   const handleCallbackResponseFacebook = async (response) => {
-    await dispatch(
-      signInOrUp({ token: response.access_token, platform: "facebook" })
-    );
-    navigate(home);
-    successToast("Succesfully logged in");
+    try {
+      if (response.accessToken) {
+        await dispatch(
+          signInOrUp({ token: response.accessToken, platform: "facebook" })
+        );
+        navigate(home);
+        successToast("Succesfully logged in");
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
-
-  const onFailure = (response) => console.error(response);
 
   const onSubmit = async () => {
     try {
@@ -106,29 +110,23 @@ function IdentifyPage() {
           </Row>
           <div
             style={{
-              border: "0.1rem solid #066CD2",
-              borderRadius: "0.3rem",
-              width: "fit-content",
+              padding: "0rem",
               marginTop: "2rem",
-              padding: "0.2rem",
+              width: "fit-content",
+              borderRadius: "0.3rem",
+              border: "0.1rem solid #066CD2",
             }}
           >
             <Facebook
-              className="ms-1 mb-1"
+              className="ms-2 mb-1"
               color="#066CD2"
               width={18}
               height={18}
             />
-            <FacebookAuthButton
-              className="facebookAuthButton"
-              buttonText="Connect with facebook"
-              authorizationUrl="https://www.facebook.com/dialog/oauth"
-              responseType="token"
-              clientId="1394130381115728"
-              redirectUri={window.location.origin}
-              scope="email"
-              onSuccess={handleCallbackResponseFacebook}
-              onFailure={onFailure}
+            <FacebookLogin
+              appId="1394130381115728"
+              fields="name,email,picture"
+              callback={handleCallbackResponseFacebook}
             />
           </div>
           <div id="signInDiv" style={{ width: "15%", marginTop: "1rem" }}></div>
