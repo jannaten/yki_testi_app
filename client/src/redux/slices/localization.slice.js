@@ -41,6 +41,7 @@ export const addTranslation = createAsyncThunk(
       return respond.data;
     } catch (error) {
       errorToast(error.response.data.message);
+      console.log(error);
       return rejectWithValue(error.response.data);
     }
   }
