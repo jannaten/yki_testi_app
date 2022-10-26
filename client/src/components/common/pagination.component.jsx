@@ -15,6 +15,10 @@ const Pagination = (props) => {
               style={
                 page === currentPage
                   ? {
+                      display: "flex",
+                      flexDirection: "row",
+                      justifyContent: "center",
+                      alignItems: "center",
                       backgroundColor: "#9967CE",
                       color: "#fff",
                       width: "2rem",
@@ -24,6 +28,10 @@ const Pagination = (props) => {
                       cursor: "pointer",
                     }
                   : {
+                      display: "flex",
+                      flexDirection: "row",
+                      justifyContent: "center",
+                      alignItems: "center",
                       backgroundColor: "#fff",
                       color: "#9967CE",
                       border: "none",
