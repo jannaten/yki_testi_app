@@ -1,17 +1,17 @@
-import { successToast } from ".";
 import { routes } from "../config";
 import Avatar from "boring-avatars";
 import React, { useState } from "react";
 import { NavBarHolder } from "../styles";
 import { SecondaryButton } from "../styles";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { onClearUserValue } from "../redux/slices";
 import { PlusLg, XLg } from "react-bootstrap-icons";
 import { useSelector, useDispatch } from "react-redux";
+import { successToast } from "./common/toast.component";
 import { Container, Nav, Navbar } from "react-bootstrap";
 
 const NavbarComponent = () => {
-  const history = useHistory();
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const { home, identify } = routes;
   const { user } = useSelector(({ user }) => user);
@@ -21,7 +21,7 @@ const NavbarComponent = () => {
     <NavBarHolder expand="lg">
       <Container fluid>
         <Navbar.Brand className="px-4 mt-1">
-          <h5 style={{ color: "#FBFAF5" }} onClick={() => history.push(home)}>
+          <h5 style={{ color: "#FBFAF5" }} onClick={() => navigate(home)}>
             YKI harjoittelu
           </h5>
         </Navbar.Brand>
@@ -77,11 +77,11 @@ const NavbarComponent = () => {
             onClick={() => {
               if (user) {
                 localStorage.removeItem("token");
-                history.push(home);
+                navigate(home);
                 dispatch(onClearUserValue());
                 successToast("Succesfully logged out");
               } else {
-                history.push(identify);
+                navigate(identify);
               }
             }}
           >

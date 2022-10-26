@@ -1,8 +1,8 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { errorToast } from "../../components";
-import jwt_decode from "jwt-decode";
-import { api } from "../../config";
 import axios from "axios";
+import { api } from "../../config";
+import jwt_decode from "jwt-decode";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { errorToast } from "../../components/common/toast.component";
 
 export const loadUser = createAsyncThunk(
   "user/loadUser",

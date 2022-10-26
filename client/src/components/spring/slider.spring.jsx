@@ -14,7 +14,15 @@ const right = {
 };
 
 const Slider = ({ children, value }) => {
-  const [{ x, bg, scale, justifySelf }, api] = useSpring(() => ({
+  const [
+    {
+      x,
+      bg,
+      scale,
+      // justifySelf
+    },
+    api,
+  ] = useSpring(() => ({
     x: 0,
     scale: 1,
     ...left,
@@ -28,12 +36,12 @@ const Slider = ({ children, value }) => {
     })
   );
 
-  const avSize = x.to({
-    map: Math.abs,
-    range: [50, 300],
-    output: [0.5, 1],
-    extrapolate: "clamp",
-  });
+  // const avSize = x.to({
+  //   map: Math.abs,
+  //   range: [50, 300],
+  //   output: [0.5, 1],
+  //   extrapolate: "clamp",
+  // });
 
   return (
     <animated.div

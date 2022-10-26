@@ -1,4 +1,11 @@
 export {
+  loadUser,
+  signInOrUp,
+  onClearUserValue,
+  onHandleUserValueChange,
+} from "./user.slice";
+export { openModal, closeModal } from "./modal.slice";
+export {
   editKeyValues,
   loadLanguages,
   addTranslation,
@@ -10,10 +17,3 @@ export {
   handleEnableKeyEditing,
   handleTranslationValueChange,
 } from "./localization.slice";
-export { openModal, closeModal } from "./modal.slice";
-export {
-  loadUser,
-  signInOrUp,
-  onClearUserValue,
-  onHandleUserValueChange,
-} from "./user.slice";

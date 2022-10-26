@@ -35,6 +35,7 @@ const Sidebar = () => {
         ) {
           return true;
         }
+        return el;
       });
       return false;
     });

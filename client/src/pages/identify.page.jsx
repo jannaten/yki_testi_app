@@ -1,16 +1,16 @@
 import { routes } from "../config";
 import React, { useEffect } from "react";
-import { successToast } from "../components";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Facebook } from "react-bootstrap-icons";
 import { useDispatch, useSelector } from "react-redux";
+import { FacebookAuthButton } from "../styles/buttons.styles";
+import { successToast } from "../components/common/toast.component";
 import { Button, Col, Container, Form, Row } from "react-bootstrap";
 import { onHandleUserValueChange, signInOrUp } from "../redux/slices";
-import { FacebookAuthButton } from "../styles/buttons.styles";
 
 function IdentifyPage() {
   const { home } = routes;
-  const history = useHistory();
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const { initialInputValues } = useSelector(({ user }) => user);
 
@@ -18,7 +18,7 @@ function IdentifyPage() {
     try {
       await dispatch(signInOrUp({ token, platform: "google" }));
       successToast("Succesfully logged in");
-      history.push(home);
+      navigate(home);
     } catch (error) {
       console.log(error);
     }
@@ -28,7 +28,7 @@ function IdentifyPage() {
     await dispatch(
       signInOrUp({ token: response.access_token, platform: "facebook" })
     );
-    history.push(home);
+    navigate(home);
     successToast("Succesfully logged in");
   };
 
@@ -42,7 +42,7 @@ function IdentifyPage() {
           password: initialInputValues.password,
         })
       );
-      history.push(home);
+      navigate(home);
       successToast("Succesfully logged in");
       // const decoded = jwt_decode(response.data.token);
       // console.log("response ", decoded);
@@ -65,9 +65,10 @@ function IdentifyPage() {
       });
     } catch (error) {
       console.log(error.message);
-      history.push("/");
+      // navigate(home);
     }
     /* global google */
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -123,15 +124,8 @@ function IdentifyPage() {
               buttonText="Connect with facebook"
               authorizationUrl="https://www.facebook.com/dialog/oauth"
               responseType="token"
-              // clientId="1961643604225793"
-              // redirectUri="http://localhost:3000"
-              // clientId={
-              //   process.env.NODE_ENV === "development"
-              //     ? "1961643604225793"
-              //     : "835936037455876"
-              // }
               clientId="1961643604225793"
-              redirectUri={`http://${window.location.href.split("/")[2]}`}
+              redirectUri={window.location.origin}
               scope="email"
               onSuccess={handleCallbackResponseFacebook}
               onFailure={onFailure}

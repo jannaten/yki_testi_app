@@ -16,6 +16,7 @@ function LocalizationEditModal({ translation }) {
 
   useEffect(() => {
     dispatch(handleKeyValueChange(translation));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -112,6 +113,7 @@ function LocalizationEditModal({ translation }) {
             );
             modifiedData.locale_values.map((el) => {
               el.language = el.language._id;
+              return el;
             });
             const { payload } = await dispatch(editKeyValues(modifiedData));
             dispatch(translationInputReset());

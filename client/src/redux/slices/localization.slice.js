@@ -1,7 +1,10 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { errorToast, successToast } from "../../components";
-import { api } from "../../config";
 import axios from "axios";
+import { api } from "../../config";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import {
+  errorToast,
+  successToast,
+} from "../../components/common/toast.component";
 
 export const loadTranslations = createAsyncThunk(
   "localization/loadTranslations",
@@ -30,7 +33,7 @@ export const loadLanguages = createAsyncThunk(
 );
 
 export const addTranslation = createAsyncThunk(
-  "localization/addKeyValues",
+  "localization/addTranslation",
   async (data, { rejectWithValue }) => {
     try {
       const respond = await axios.post(api.localizationKeyValues, data);

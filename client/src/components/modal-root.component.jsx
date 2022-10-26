@@ -20,7 +20,8 @@ export default function ModalRootComponent() {
 
   useEffect(() => {
     dispatch(closeModal());
-  }, [location.pathname]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [window.location.pathname]);
 
   return (
     <Modal

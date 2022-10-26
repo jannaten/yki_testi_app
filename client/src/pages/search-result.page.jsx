@@ -4,17 +4,20 @@ import { InputGroup } from "react-bootstrap";
 import { XDiamond } from "react-bootstrap-icons";
 import { LocalizationTitleCount } from "../styles";
 import React, { useState, useEffect } from "react";
+import Sidebar from "../components/sidebar.component";
 import { useDispatch, useSelector } from "react-redux";
-import { LocalizationDeleteModal, Pagination } from "../components";
+import Loader from "../components/common/loader.component";
+import Pagination from "../components/common/pagination.component";
 import { Table, Form, Button, Row, Container } from "react-bootstrap";
-import { LocalizationEditModal, Sidebar, Loader } from "../components";
 import { LoaderHolder, LocalizationEditorButtonsHolder } from "../styles";
-import { SideBarHolder, LocalizationHolder, PrimaryButton } from "../styles";
 import { loadTranslations, loadLanguages, openModal } from "../redux/slices";
+import { SideBarHolder, LocalizationHolder, PrimaryButton } from "../styles";
+import LocalizationEditModal from "../components/modals/localization-edit.modal";
+import LocalizationDeleteModal from "../components/modals/localization-delete-modal";
 
 const SearchresultPage = () => {
   const [searchInputValue, setSearchInputValue] = useState("");
-  const [sliderView, setSliderView] = useState(false);
+  const [sliderView] = useState(false);
   const [pageSize] = useState(25);
   const [currentPage, setCurrentPage] = useState(1);
   const dispatch = useDispatch();
@@ -26,6 +29,7 @@ const SearchresultPage = () => {
   useEffect(() => {
     dispatch(loadLanguages());
     dispatch(loadTranslations());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handlePageChange = (page) => {
