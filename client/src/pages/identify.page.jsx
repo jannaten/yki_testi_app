@@ -125,7 +125,7 @@ function IdentifyPage() {
               authorizationUrl="https://www.facebook.com/dialog/oauth"
               responseType="token"
               clientId="1394130381115728"
-              redirectUri="https://yki-harjoittelu-client.vercel.app"
+              redirectUri="yki-harjoittelu-client.vercel.app"
               scope="email"
               onSuccess={handleCallbackResponseFacebook}
               onFailure={onFailure}
