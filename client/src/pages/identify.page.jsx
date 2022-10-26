@@ -27,9 +27,7 @@ function IdentifyPage() {
   const handleCallbackResponseFacebook = async (response) => {
     try {
       if (response.accessToken) {
-        await dispatch(
-          signInOrUp({ token: response.accessToken, platform: "facebook" })
-        );
+        await dispatch(signInOrUp({ token: response, platform: "facebook" }));
         navigate(home);
         successToast("Succesfully logged in");
       }

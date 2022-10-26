@@ -76,21 +76,16 @@ router.post("/signin", async (req, res) => {
         return res.status(200).json({ result: user, token });
       }
     } else if (req.body.platform === "facebook") {
-      const respond = await axios.get(
-        `https://graph.facebook.com/me?fields=id,name,email,picture.type(large)&access_token=${req.body.token}`
-      );
-      const user = await User.findOne({ email: respond.data.email });
+      const { name, email } = req.body.token;
+      const user = await User.findOne({ email });
       if (!user) {
-        const value = respond?.data?.name
-          ?.split("\n")[0]
-          ?.replaceAll(" ", ".")
-          ?.toLowerCase();
+        const value = name?.split("\n")[0]?.replaceAll(" ", ".")?.toLowerCase();
         const hashedPassword = await bcrypt.hash(value, 12);
         const result = await User.create({
-          email: respond.data.email,
+          email,
           password: hashedPassword,
           username: `${value}${randomString(5)}`,
-          full_name: respond.data.name,
+          full_name: name,
         });
         const token = jwt.sign(
           {
