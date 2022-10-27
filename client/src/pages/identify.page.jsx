@@ -122,7 +122,7 @@ function IdentifyPage() {
               height={18}
             />
             <FacebookLogin
-              appId="1394130381115728"
+              appId="3286213598362579"
               fields="name,email,picture"
               callback={handleCallbackResponseFacebook}
             />
