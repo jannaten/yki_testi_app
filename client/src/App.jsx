@@ -22,16 +22,15 @@ export default function App() {
     if (localStorage.token) {
       dispatch(loadUser());
     }
-    checkLocation();
-
+    // checkLocation();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const checkLocation = () => {
-    if (!window.location.href.includes("#")) {
-      window.location.href = `${window.location.href}#/`;
-    }
-  };
+  // const checkLocation = () => {
+  //   if (!window.location.href.includes("#")) {
+  //     window.location.href = `${window.location.href}#/`;
+  //   }
+  // };
 
   return (
     <ThemeProvider
