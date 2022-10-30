@@ -2,15 +2,17 @@ import { routes } from "../config";
 import Avatar from "boring-avatars";
 import React, { useState } from "react";
 import { useRouter } from "next/router";
+import { useTheme } from "styled-components";
 import { onClearUserValue } from "../redux/slices";
 import { PlusLg, XLg } from "react-bootstrap-icons";
 import { useSelector, useDispatch } from "react-redux";
 import { successToast } from "./common/toast.component";
+import { Container, Nav, Navbar } from "react-bootstrap";
 import { NavBarHolder, SecondaryButton } from "../styles";
-import { Container, Nav, Navbar, Button } from "react-bootstrap";
 
 const NavbarComponent = () => {
   const router = useRouter();
+  const { width } = useTheme();
   const dispatch = useDispatch();
   const { home, identify } = routes;
   const { user } = useSelector(({ user }) => user);
@@ -61,6 +63,7 @@ const NavbarComponent = () => {
                 border: "0.1rem solid #fff",
                 marginRight: "1rem",
                 padding: "0.2rem 1rem",
+                marginBottom: width <= 992 && "1rem"
               }}
             >
               <Avatar

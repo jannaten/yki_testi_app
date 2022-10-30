@@ -39,8 +39,6 @@ function IdentifyPage() {
       );
       router.push(home);
       successToast("Succesfully logged in");
-      // const decoded = jwt_decode(response.data.token);
-      // console.log("response ", decoded);
     } catch (error) {
       console.log(error);
     }
@@ -84,7 +82,6 @@ function IdentifyPage() {
             className="mt-5"
             onClick={GoogleLogin}
             style={{ border: "0.1rem solid #9967CE" }}
-          // className="text-white bg-gray-700 p-4 w-full font-medium rounded-lg flex align-middle gap-2"
           >
             <FcGoogle style={{fontSize: "1.5rem"}}/>
             <span className="ms-2">sign in with Google</span>

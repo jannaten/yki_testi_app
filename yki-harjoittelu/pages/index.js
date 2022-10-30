@@ -1,12 +1,12 @@
 import Head from "next/head";
 import { paginate } from "../utils";
 import { useTheme } from "styled-components";
-import { InputGroup } from "react-bootstrap";
-import { XDiamond } from "react-bootstrap-icons";
+import { Col, InputGroup } from "react-bootstrap";
 import { LocalizationTitleCount } from "../styles";
 import React, { useState, useEffect } from "react";
 import Sidebar from "../components/sidebar.component";
 import { useDispatch, useSelector } from "react-redux";
+import { XDiamond, Pencil } from "react-bootstrap-icons";
 import Loader from "../components/common/loader.component";
 import Pagination from "../components/common/pagination.component";
 import { Table, Form, Button, Row, Container } from "react-bootstrap";
@@ -17,15 +17,18 @@ import LocalizationEditModal from "../components/modals/localization-edit.modal"
 import LocalizationDeleteModal from "../components/modals/localization-delete-modal";
 
 export default function Home() {
-  const [searchInputValue, setSearchInputValue] = useState("");
-  const [sliderView] = useState(false);
-  const [pageSize] = useState(25);
-  const [currentPage, setCurrentPage] = useState(1);
-  const dispatch = useDispatch();
   const { width } = useTheme();
+  const dispatch = useDispatch();
+  const [pageSize] = useState(25);
+  const [sliderView] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [searchInputValue, setSearchInputValue] = useState("");
+
+  const { user } = useSelector(({ user }) => user);
   const { translations, languages } = useSelector(
     ({ localization }) => localization
   );
+  const isPrevilegedUser = user?.type === "admin" || user?.type === "teacher";
 
   useEffect(() => {
     dispatch(loadLanguages());
@@ -48,11 +51,11 @@ export default function Home() {
   let filteredTranslations;
   if (isTransltionDefined) {
     filteredTranslations = translations.filter((filtering) => {
-      if (
-        filtering?.key?.toLowerCase().includes(searchInputValue.toLowerCase())
-      ) {
+      if (filtering?.key?.toLowerCase().includes(searchInputValue.toLowerCase()))
         return true;
-      }
+      for (let i = 0; i < filtering.locale_values.length; i++)
+        if (filtering.locale_values[i].name?.toLowerCase().includes(searchInputValue?.toLowerCase()))
+          return true;
       return false;
     });
   }
@@ -105,102 +108,169 @@ export default function Home() {
               />
             </Container>
             {translations.length > 0 ? (
-              <Table size="lg" responsive={width < 992}>
-                <thead>
-                  <tr
-                    style={width < 992 ? { width: "100vw" } : {}}
-                    className={
-                      width < 992 ? "d-flex flex-column text-center" : ""
-                    }
-                  >
-                    {width >= 992 ? <th>keys</th> : <th></th>}
-                    {languages.length &&
-                      languages.map(({ _id, name, locale }) => (
-                        <th key={_id}>
-                          {locale} ({name})
-                        </th>
-                      ))}
-                    {width >= 992 && <th className="ms-auto"></th>}
-                  </tr>
-                </thead>
-                <tbody>
-                  {paginatedTranslations.length > 0 &&
-                    paginatedTranslations.map((translation) => (
+              <>
+                {width <= 992 ? (
+                  <Container>
+                    <Row style={{ borderBottom: "0.1rem solid black" }} className="mb-2 p-0">
+                      {languages.length &&
+                        languages.map(({ _id, name, locale }) => (
+                          <Col xs={!isPrevilegedUser ? 6 : 4} sm={!isPrevilegedUser ? 6 : 5} md={!isPrevilegedUser ? 6 : 5} key={_id} className="d-flex align-items-center">
+                            {locale} ({name})
+                          </Col>
+                        ))}
+                      {isPrevilegedUser && (
+                        <>
+                          <Col xs={2} sm={1} md={1} ></Col>
+                          <Col xs={2} sm={1} md={1}></Col>
+                        </>
+                      )}
+                    </Row>
+                    {paginatedTranslations.length > 0 && paginatedTranslations.map((translation) => (
+                      <Row key={translation._id} style={{ paddingBottom: "1rem", borderBottom: "0.1rem solid #0000000C" }}>
+                        {languages?.length &&
+                          languages.map((locales) => (
+                            <Col key={locales._id} xs={!isPrevilegedUser ? 6 : 4} sm={!isPrevilegedUser ? 6 : 5} md={!isPrevilegedUser ? 6 : 5}
+                              style={{ display: "flex", flexDirection: "row", justifyContent: "flex-start", flexWrap: "wrap", marginTop: "1rem" }}
+                            >
+                              {translation.locale_values.length &&
+                                translation.locale_values.map(
+                                  ({ language, name }, index) => (
+                                    <>
+                                      {locales.locale === language.locale &&
+                                        name}
+                                    </>
+                                  )
+                                )}
+                            </Col>
+                          ))}
+                        {isPrevilegedUser && (
+                          <>
+                            <Col xs={2} sm={1} md={1} style={{ marginTop: "0.5rem" }}>
+                              <PrimaryButton
+                                variant=""
+                                onClick={() =>
+                                  dispatch(
+                                    openModal({
+                                      content: (
+                                        <LocalizationEditModal
+                                          translation={translation}
+                                        />
+                                      ),
+                                    })
+                                  )
+                                }
+                              >
+                                <Pencil />
+                              </PrimaryButton>
+                            </Col>
+                            <Col xs={2} sm={1} md={1} style={{ marginTop: "0.5rem" }}>
+                              <div style={{ width: "2.4rem", height: "2.4rem", display: "flex", justifyContent: "center", alignItems: 'center', cursor: "pointer" }}>
+                                <XDiamond onClick={() =>
+                                  dispatch(
+                                    openModal({
+                                      content: (
+                                        <LocalizationDeleteModal
+                                          translation={translation}
+                                        />
+                                      ),
+                                    })
+                                  )
+                                } width={20} height={20} />
+                              </div>
+                            </Col>
+                          </>
+                        )}
+                      </Row>
+                    ))}
+                  </Container>
+                ) : (
+                  <Table size="lg" responsive={width < 992}>
+                    <thead>
                       <tr
-                        key={translation._id}
                         style={width < 992 ? { width: "100vw" } : {}}
                         className={
                           width < 992 ? "d-flex flex-column text-center" : ""
                         }
                       >
-                        <td>{translation.key}</td>
-                        {/* {
-                        <Slider
-                          value={
-                            translation.locale_values[
-                              translation.locale_values?.length - 1
-                            ]?.name
-                          }
-                        >
-                          Slide.
-                        </Slider>
-                      } */}
-                        {!sliderView &&
-                          languages?.length &&
-                          languages.map((locales) => (
-                            <td key={locales._id}>
-                              <>
-                                {translation.locale_values.length &&
-                                  translation.locale_values.map(
-                                    ({ language, name }, index) => (
-                                      <span key={index}>
-                                        {locales.locale === language.locale &&
-                                          name}
-                                      </span>
-                                    )
-                                  )}
-                              </>
-                            </td>
+                        {(width >= 992 && user?.type === "admin") && <th>keys</th>}
+                        {languages.length &&
+                          languages.map(({ _id, name, locale }) => (
+                            <th key={_id}>
+                              {locale} ({name})
+                            </th>
                           ))}
-                        <LocalizationEditorButtonsHolder>
-                          <PrimaryButton
-                            variant=""
-                            onClick={() =>
-                              dispatch(
-                                openModal({
-                                  content: (
-                                    <LocalizationEditModal
-                                      translation={translation}
-                                    />
-                                  ),
-                                })
-                              )
-                            }
-                          >
-                            Edit
-                          </PrimaryButton>
-                          <Button
-                            className="ms-3"
-                            variant="outline-dark"
-                            onClick={() =>
-                              dispatch(
-                                openModal({
-                                  content: (
-                                    <LocalizationDeleteModal
-                                      translation={translation}
-                                    />
-                                  ),
-                                })
-                              )
-                            }
-                          >
-                            <XDiamond width={20} height={20} />
-                          </Button>
-                        </LocalizationEditorButtonsHolder>
+                        {width >= 992 && (user?.type === "admin" || user?.type === "teacher") && <th className="ms-auto"></th>}
                       </tr>
-                    ))}
-                </tbody>
-              </Table>
+                    </thead>
+                    <tbody>
+                      {paginatedTranslations.length > 0 &&
+                        paginatedTranslations.map((translation) => (
+                          <tr
+                            key={translation._id}
+                            style={width < 992 ? { width: "100vw" } : {}}
+                            className={
+                              width < 992 ? "d-flex flex-column text-center" : ""
+                            }
+                          >
+                            {user?.type === "admin" && <td>{translation.key}</td>}
+                            {!sliderView &&
+                              languages?.length &&
+                              languages.map((locales) => (
+                                <td key={locales._id}>
+                                  <>
+                                    {translation.locale_values.length &&
+                                      translation.locale_values.map(
+                                        ({ language, name }, index) => (
+                                          <span key={index}>
+                                            {locales.locale === language.locale &&
+                                              name}
+                                          </span>
+                                        )
+                                      )}
+                                  </>
+                                </td>
+                              ))}
+                            {(user?.type === "admin" || user?.type === "teacher") && <LocalizationEditorButtonsHolder>
+                              <PrimaryButton
+                                variant=""
+                                onClick={() =>
+                                  dispatch(
+                                    openModal({
+                                      content: (
+                                        <LocalizationEditModal
+                                          translation={translation}
+                                        />
+                                      ),
+                                    })
+                                  )
+                                }
+                              >
+                                Edit
+                              </PrimaryButton>
+                              <Button
+                                className="ms-3"
+                                variant="outline-dark"
+                                onClick={() =>
+                                  dispatch(
+                                    openModal({
+                                      content: (
+                                        <LocalizationDeleteModal
+                                          translation={translation}
+                                        />
+                                      ),
+                                    })
+                                  )
+                                }
+                              >
+                                <XDiamond width={20} height={20} />
+                              </Button>
+                            </LocalizationEditorButtonsHolder>}
+                          </tr>
+                        ))}
+                    </tbody>
+                  </Table>
+                )}
+              </>
             ) : (
               <LoaderHolder>
                 <Loader />
@@ -219,7 +289,7 @@ export default function Home() {
           </div>
         </LocalizationHolder>
       </Row>
-    </div>
+    </div >
   );
 };
 
