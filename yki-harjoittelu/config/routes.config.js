@@ -1,4 +1,4 @@
 export const routes = {
-  home: "/",
-  identify: "/identify",
+	home: "/",
+	identify: "/identify",
 };

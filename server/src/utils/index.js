@@ -4,10 +4,10 @@ const { randomString } = require("./radom-string.utils");
 const { errorLogger, logger, requestLogger } = require("./loggers.utils");
 
 module.exports = {
-  requestLogger,
-  randomString,
-  errorLogger,
-  validateID,
-  isNumber,
-  logger,
+	requestLogger,
+	randomString,
+	errorLogger,
+	validateID,
+	isNumber,
+	logger,
 };

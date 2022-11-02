@@ -18,17 +18,17 @@ const GlobalStyle = createGlobalStyle`
 `;
 
 function MyApp({ Component, pageProps }) {
-  return (
-    <ReduxProvider store={store}>
-      <Head>
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-      </Head>
-      <GlobalStyle />
-      <Layout>
-        <Component {...pageProps} />
-      </Layout>
-    </ReduxProvider>
-  );
+	return (
+		<ReduxProvider store={store}>
+			<Head>
+				<meta name="viewport" content="width=device-width, initial-scale=1" />
+			</Head>
+			<GlobalStyle />
+			<Layout>
+				<Component {...pageProps} />
+			</Layout>
+		</ReduxProvider>
+	);
 }
 
 export default MyApp;

@@ -3,7 +3,7 @@ const { LocalizationLocale } = require("./localization-locale.model");
 const { User } = require("./user.model");
 
 module.exports = {
-  LocalizationKeyValues,
-  LocalizationLocale,
-  User,
+	LocalizationKeyValues,
+	LocalizationLocale,
+	User,
 };

@@ -11,7 +11,7 @@ require("./src/start/mongoose.start")();
 const PORT = process.env.PORT || 3005;
 
 const server = app.listen(PORT, () => {
-  logger.info(`listening to port ${PORT}`);
+	logger.info(`listening to port ${PORT}`);
 });
 
 module.exports = server;

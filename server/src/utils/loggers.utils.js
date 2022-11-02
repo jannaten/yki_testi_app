@@ -5,10 +5,10 @@ const expressWinston = require("express-winston");
 const isProduction = process.env.NODE_ENV === "production";
 // const logsFolder = process.env.LOG_FOLDER || "./logs";
 const transports = [
-  new winston.transports.Console({
-    format: winston.format.simple(),
-    timestamp: true,
-  }),
+	new winston.transports.Console({
+		format: winston.format.simple(),
+		timestamp: true,
+	}),
 ];
 
 // if (isProduction) {
@@ -30,62 +30,62 @@ const transports = [
 // }
 
 const logger = winston.createLogger({
-  level: isProduction ? "info" : "silly",
-  exitOnError: false,
-  format: winston.format.printf(({ message, level }) => {
-    return JSON.stringify({
-      time: new Date().toISOString(),
-      logger: level,
-      message,
-    });
-  }),
-  transports: transports,
+	level: isProduction ? "info" : "silly",
+	exitOnError: false,
+	format: winston.format.printf(({ message, level }) => {
+		return JSON.stringify({
+			time: new Date().toISOString(),
+			logger: level,
+			message,
+		});
+	}),
+	transports: transports,
 });
 
 const requestLogger = expressWinston.logger({
-  transports,
-  format: winston.format.printf(({ message, meta }) => {
-    return JSON.stringify({
-      time: new Date().toISOString(),
-      logger: "request",
-      message,
-      meta,
-    });
-  }),
-  level: "info",
-  meta: true,
-  msg: "{{res.statusCode}} {{req.method}} {{req.url}}",
-  requestWhitelist: [],
-  responseWhitelist: [],
-  //   dynamicMeta: (req, res) => ({
-  //     ...getMetaData(req),
-  //   }),
+	transports,
+	format: winston.format.printf(({ message, meta }) => {
+		return JSON.stringify({
+			time: new Date().toISOString(),
+			logger: "request",
+			message,
+			meta,
+		});
+	}),
+	level: "info",
+	meta: true,
+	msg: "{{res.statusCode}} {{req.method}} {{req.url}}",
+	requestWhitelist: [],
+	responseWhitelist: [],
+	//   dynamicMeta: (req, res) => ({
+	//     ...getMetaData(req),
+	//   }),
 });
 
 const errorLogger = expressWinston.errorLogger({
-  transports,
-  format: winston.format.printf(({ message, meta }) => {
-    return JSON.stringify({
-      time: new Date().toISOString(),
-      logger: "error",
-      message,
-      meta,
-    });
-  }),
-  level: "error",
-  meta: true,
-  msg: "{{err.message}}",
-  blacklistedMetaFields: [
-    "level",
-    "exception",
-    "date",
-    "process",
-    "os",
-    "trace",
-  ],
-  // dynamicMeta: (req, res) => ({
-  //   ...getMetaData(req),
-  // }),
+	transports,
+	format: winston.format.printf(({ message, meta }) => {
+		return JSON.stringify({
+			time: new Date().toISOString(),
+			logger: "error",
+			message,
+			meta,
+		});
+	}),
+	level: "error",
+	meta: true,
+	msg: "{{err.message}}",
+	blacklistedMetaFields: [
+		"level",
+		"exception",
+		"date",
+		"process",
+		"os",
+		"trace",
+	],
+	// dynamicMeta: (req, res) => ({
+	//   ...getMetaData(req),
+	// }),
 });
 
 module.exports = { logger, requestLogger, errorLogger };
