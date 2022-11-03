@@ -11,7 +11,7 @@ export default async function handler(req, res) {
 	switch (method) {
 		case 'GET':
 			let decoded_user = {};
-			const token = req.header("x-auth-token");
+			const token = req.headers['x-auth-token'];
 			if (!token)
 				return res.status(401).send({ error: "ACCESS DENIED: No token provided" });
 			try {
