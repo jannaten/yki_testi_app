@@ -1,5 +1,4 @@
-const BASE =
-	process.env.NODE_ENV === "production" ? "https://yki-harjoittelu.vercel.app/api" : "http://localhost:3005/api";
+const BASE = '/api';
 
 export const api = {
 	userSignIn: `${BASE}/users/signin`,
