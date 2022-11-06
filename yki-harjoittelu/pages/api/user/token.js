@@ -13,22 +13,22 @@ export default async function handler(req, res) {
 			let decoded_user = {};
 			const token = req.headers['x-auth-token'];
 			if (!token)
-				return res.status(401).send({ error: "ACCESS DENIED: No token provided" });
+				return res.status(401).send({ message: "ACCESS DENIED: No token provided" });
 			try {
 				decoded_user = jwt.verify(token, JWT_SECRET_KEY);
 			} catch ({ message }) {
-				res.status(400).send({ error: "INVALID TOKEN", message });
+				return res.status(400).send({ message: "INVALID TOKEN" });
 			}
 			try {
 				const user = await User.findOne({ _id: decoded_user.id }, "-password");
 				if (!user) return res.status(404).json({ message: "User doesn't exist" });
-				res.send(user);
-			} catch (error) {
-				res.status(500).send({ error });
+				return res.send(user);
+			} catch ({message}) {
+				res.status(500).send({ message });
 			}
 			break
 		default:
-			res.status(400).json({ success: false })
+			res.status(400).json({ message: false })
 			break
 	}
 }

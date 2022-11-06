@@ -16,8 +16,8 @@ export default async function handler(req, res) {
 					},
 				});
 				return res.send(keyValues);
-			} catch (error) {
-				res.status(500).send({ error });
+			} catch ({ message }) {
+				res.status(500).send({ message });
 			}
 			break
 		case 'POST':
@@ -34,13 +34,13 @@ export default async function handler(req, res) {
 						path: "language",
 					},
 				});
-				return res.send(result);
-			} catch (error) {
-				res.status(500).send({ error });
+				return res.status(200).send(result);
+			} catch ({ message }) {
+				res.status(500).send({ message });
 			}
 			break
 		default:
-			res.status(500).send({ error: "something happened" });
+			res.status(500).send({ message: "something happened" });
 			break
 	}
 }

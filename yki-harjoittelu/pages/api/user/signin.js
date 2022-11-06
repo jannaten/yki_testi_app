@@ -11,23 +11,14 @@ export default async function handler(req, res) {
 
 	switch (method) {
 		case 'POST':
-			// let decoded_user = {};
-			// const token = req.header("x-auth-token");
-			// if (!token)
-			// 	return res.status(401).send({ error: "ACCESS DENIED: No token provided" });
-			// try {
-			// 	decoded_user = jwt.verify(token, JWT_SECRET_KEY);
-			// } catch ({ message }) {
-			// 	res.status(400).send({ error: "INVALID TOKEN", message });
-			// }
 			try {
 				if (req.body.token) {
 					if (req.body.platform === "fire_base_google") {
 						const { displayName, email, emailVerified, isAnonymous } = req.body.token;
 						if (emailVerified === false)
-							return res.status(400).send({ error: "email is not varified" });
+							return res.status(400).send({ message: "email is not varified" });
 						if (isAnonymous === true)
-							return res.status(400).send({ error: "user is anonymous" });
+							return res.status(400).send({ message: "user is anonymous" });
 						const value = displayName?.split("\n")[0]?.replaceAll(" ", ".")?.toLowerCase();
 						const user = await User.findOne({ email });
 						if (!user) {
@@ -52,7 +43,7 @@ export default async function handler(req, res) {
 									expiresIn: "10h",
 								}
 							);
-							return res.status(201).json({ result, token });
+							return res.status(201).json({ token });
 						} else {
 							const token = jwt.sign(
 								{
@@ -68,7 +59,7 @@ export default async function handler(req, res) {
 									expiresIn: "10h",
 								}
 							);
-							return res.status(200).json({ result: user, token });
+							return res.status(200).json({ token });
 						}
 					} else if (req.body.platform === "facebook") {
 						const { name, email } = req.body.token;
@@ -96,7 +87,7 @@ export default async function handler(req, res) {
 									expiresIn: "10h",
 								}
 							);
-							return res.status(201).json({ result, token });
+							return res.status(201).json({ token });
 						} else {
 							const token = jwt.sign(
 								{
@@ -112,7 +103,7 @@ export default async function handler(req, res) {
 									expiresIn: "10h",
 								}
 							);
-							return res.status(200).json({ result: user, token });
+							return res.status(200).json({ token });
 						}
 					}
 				} else {
@@ -136,14 +127,14 @@ export default async function handler(req, res) {
 							expiresIn: "10h",
 						}
 					);
-					res.status(200).json({ result: user, token });
+					return res.status(200).json({ token });
 				}
-			} catch (error) {
-				res.status(500).send({ error });
+			} catch ({ message }) {
+				res.status(500).send({ message });
 			}
 			break
 		default:
-			res.status(500).send({ error: "something happend" });
+			res.status(500).send({ message: "something happend" });
 			break
 	}
 }

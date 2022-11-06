@@ -13,8 +13,8 @@ export default async function handler(req, res) {
 			try {
 				const locales = await localizationLocaleService.getAll();
 				return res.status(200).send(locales);
-			} catch (error) {
-				res.status(500).send({ error });
+			} catch ({ message }) {
+				res.status(500).send({ message });
 			}
 			break
 		case 'POST':
@@ -23,12 +23,12 @@ export default async function handler(req, res) {
 				if (error) return res.status(400).send({ message: error.details[0].message });
 				const locale = await localizationLocaleService.add(value);
 				return res.status(201).send(locale);
-			} catch (error) {
-				res.status(500).send({ error });
+			} catch ({ message }) {
+				res.status(500).send({ message });
 			}
 			break
 		default:
-			res.status(500).send({ error: "something happened" });
+			res.status(500).send({ message: "something happened" });
 			break
 	}
 }

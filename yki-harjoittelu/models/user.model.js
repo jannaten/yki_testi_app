@@ -12,7 +12,12 @@ const userSchema = new mongoose.Schema(
 			maxlength: 128,
 			unique: true,
 		},
-		password: { type: String, required: true },
+		password: {
+			type: String,
+			required: true,
+			minlength: 5,
+			maxlength: 500,
+		},
 		status: {
 			type: String,
 			enum: statusType,

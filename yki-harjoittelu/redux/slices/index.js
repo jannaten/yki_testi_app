@@ -1,6 +1,7 @@
 export {
 	loadUser,
 	signInOrUp,
+	userUpdate,
 	onClearUserValue,
 	onHandleUserValueChange,
 } from "./user.slice";

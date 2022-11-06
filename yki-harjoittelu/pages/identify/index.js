@@ -20,9 +20,11 @@ function IdentifyPage() {
 		try {
 			const result = await signInWithPopup(auth, googleProvider);
 			if (result.user) {
-				await dispatch(signInOrUp({ token: result.user, platform: "fire_base_google" }));
-				router.push(home);
-				successToast("Succesfully logged in");
+				const userLoggedIn = await dispatch(signInOrUp({ token: result.user, platform: "fire_base_google" }));
+				if (userLoggedIn?.type === "user/signInOrUp/fulfilled") {
+					successToast("Succesfully logged in");
+					router.push(home);
+				}
 			}
 		} catch (error) {
 			console.log(error);
@@ -31,14 +33,16 @@ function IdentifyPage() {
 
 	const onSubmit = async () => {
 		try {
-			await dispatch(
+			const userLoggedIn = await dispatch(
 				signInOrUp({
 					email: initialInputValues.email,
 					password: initialInputValues.password,
 				})
 			);
-			router.push(home);
-			successToast("Succesfully logged in");
+			if (userLoggedIn?.type === "user/signInOrUp/fulfilled") {
+				successToast("Succesfully logged in");
+				router.push(home);
+			}
 		} catch (error) {
 			console.log(error);
 		}

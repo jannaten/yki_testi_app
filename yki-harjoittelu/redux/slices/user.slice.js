@@ -35,6 +35,20 @@ export const signInOrUp = createAsyncThunk(
 	}
 );
 
+export const userUpdate = createAsyncThunk(
+	'user/userUpdate',
+	async (data, { rejectWithValue }) => {
+		try {
+			const response = await axios.patch(api.userUpdate, data);
+			localStorage.setItem("token", response.data.token);
+			return jwt_decode(response.data.token);
+		} catch (error) {
+			errorToast(error.response.data.message);
+			return rejectWithValue(error.response.data);
+		}
+	}
+)
+
 const isPendingAction = (action) => {
 	return action.type.startsWith("user/") && action.type.endsWith("/pending");
 };
@@ -78,6 +92,12 @@ const userSlice = createSlice({
 			})
 			// ADD / ACCESS
 			.addCase(signInOrUp.fulfilled, (state, action) => {
+				state.user = action.payload;
+				state.initialInputValues = INITIAL_SIGN_IN_DATA;
+				state.loading = false;
+			})
+			// UPDATE
+			.addCase(userUpdate.fulfilled, (state, action) => {
 				state.user = action.payload;
 				state.initialInputValues = INITIAL_SIGN_IN_DATA;
 				state.loading = false;

@@ -12,7 +12,7 @@ export default async function handler(req, res) {
 				if (!validateID(id))
 					return res
 						.status(400)
-						.send({ error: `${id} is not a valid id` });
+						.send({ message: `${id} is not a valid id` });
 				const keyValues = await LocalizationKeyValues.findById(id).populate({
 					path: "locale_values",
 					populate: {
@@ -21,11 +21,11 @@ export default async function handler(req, res) {
 				});
 				if (!keyValues)
 					return res.status(404).send({
-						error: `${id} id do not exist in localizationKeyValues collection`,
+						message: `${id} id do not exist in localizationKeyValues collection`,
 					});
 				res.send(keyValues);
-			} catch (error) {
-				res.status(500).send({ error });
+			} catch ({ message }) {
+				res.status(500).send({ message });
 			}
 			break
 
@@ -34,11 +34,11 @@ export default async function handler(req, res) {
 				if (!validateID(id))
 					return res
 						.status(400)
-						.send({ error: `${id} is not a valid id` });
+						.send({ message: `${id} is not a valid id` });
 				let keyValues = await LocalizationKeyValues.findById(id);
 				if (!keyValues)
 					return res.status(404).send({
-						error: `${id} id do not exist in localizationKeyValues collection`,
+						message: `${id} id do not exist in localizationKeyValues collection`,
 					});
 				const { value, error } = schema.validate(req.body);
 				if (error) return res.status(400).send({ message: error.details[0].message });
@@ -51,8 +51,8 @@ export default async function handler(req, res) {
 					},
 				});
 				res.send(keyValues);
-			} catch (error) {
-				res.status(500).send({ error });
+			} catch ({ message }) {
+				res.status(500).send({ message });
 			}
 			break
 
@@ -61,11 +61,11 @@ export default async function handler(req, res) {
 				if (!validateID(id))
 					return res
 						.status(400)
-						.send({ error: `${id} is not a valid id` });
+						.send({ message: `${id} is not a valid id` });
 				let keyValues = await LocalizationKeyValues.findById(id);
 				if (!keyValues)
 					return res.status(404).send({
-						error: `${id}  id do not exist in localizationKeyValues collection`,
+						message: `${id}  id do not exist in localizationKeyValues collection`,
 					});
 				keyValues = await LocalizationKeyValues.findByIdAndDelete(id, {
 					new: true,
@@ -76,13 +76,13 @@ export default async function handler(req, res) {
 					},
 				});
 				res.status(200).send(keyValues);
-			} catch (error) {
-				res.status(500).send({ error });
+			} catch ({ message }) {
+				res.status(500).send({ message });
 			}
 			break
 
 		default:
-			res.status(500).send({ error: "Something happened" });
+			res.status(500).send({ message: "Something happened" });
 			break
 	}
 }
