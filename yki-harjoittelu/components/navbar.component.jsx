@@ -8,15 +8,22 @@ import { PlusLg, XLg } from "react-bootstrap-icons";
 import { useSelector, useDispatch } from "react-redux";
 import { successToast } from "./common/toast.component";
 import { Container, Nav, Navbar } from "react-bootstrap";
-import { NavBarHolder, SecondaryButton } from "../styles";
+import { DropDownButton, NavBarHolder, SecondaryButton } from "../styles";
+import { NavBarToggleButtonHolder, UserProfileNavHolder } from "../styles";
 
 const NavbarComponent = () => {
 	const router = useRouter();
-	const { width } = useTheme();
 	const dispatch = useDispatch();
-	const { home, identify } = routes;
+	const { home, identify, profile } = routes;
 	const { user } = useSelector(({ user }) => user);
 	const [toggleButton, setToggleButton] = useState(false);
+	const [toggleNavDropDown, setToggleNavDropDown] = useState(false);
+
+	const mountedStyle = { animation: "inAnimation 250ms ease-in" };
+	const unmountedStyle = {
+		animation: "outAnimation 270ms ease-out",
+		animationFillMode: "forwards",
+	};
 
 	return (
 		<NavBarHolder expand="lg">
@@ -55,42 +62,57 @@ const NavbarComponent = () => {
 						navbarScroll
 					></Nav>
 					{user && (
-						<div
-							style={{
-								color: "#fff",
-								width: "fit-content",
-								borderRadius: "0.3rem",
-								border: "0.1rem solid #fff",
-								marginRight: "1rem",
-								padding: "0.2rem 1rem",
-								marginBottom: width <= 992 && "1rem"
+						<UserProfileNavHolder
+							onClick={() => setToggleNavDropDown((prev) => !prev)}
+						>
+							<div className='d-flex align-items-center justify-content-center flex-wrap'>
+								<Avatar
+									size={40}
+									variant="beam"
+									name={user.full_name}
+									colors={["#92A1C6", "#146A7C", "#ffffff", "#C271B4", "#C20D90"]}
+								/>
+								<span className="me-2 ms-2">{user.username}</span>
+							</div>
+							{user && toggleNavDropDown && (
+								<NavBarToggleButtonHolder
+									style={user && toggleNavDropDown ? mountedStyle : unmountedStyle}
+									onClick={() => setToggleNavDropDown((prev) => !prev)}
+								>
+									<DropDownButton variant=""
+										onClick={() => {
+											setToggleNavDropDown(!toggleNavDropDown);
+											router.push(profile)
+										}}
+									>
+										user information
+									</DropDownButton>
+									<DropDownButton variant=""
+										onClick={() => {
+											setToggleNavDropDown((prev) => !prev);
+											localStorage.removeItem("token");
+											router.push(home);
+											dispatch(onClearUserValue());
+											successToast("Succesfully logged out");
+										}}
+									>
+										sign out
+									</DropDownButton>
+								</NavBarToggleButtonHolder>
+							)}
+						</UserProfileNavHolder>
+					)}
+					{!user && (
+						<SecondaryButton
+							className="me-5"
+							variant=""
+							onClick={() => {
+								router.push(identify)
 							}}
 						>
-							<Avatar
-								size={40}
-								variant="beam"
-								name={user.full_name}
-								colors={["#92A1C6", "#146A7C", "#ffffff", "#C271B4", "#C20D90"]}
-							/>
-							<span className="me-2 ms-2">{user.username}</span>
-						</div>
+							sign in
+						</SecondaryButton>
 					)}
-					<SecondaryButton
-						className="me-5"
-						variant=""
-						onClick={() => {
-							if (user) {
-								localStorage.removeItem("token");
-								router.push(home)
-								dispatch(onClearUserValue());
-								successToast("Succesfully logged out");
-							} else {
-								router.push(identify)
-							}
-						}}
-					>
-						{user ? "sign out" : "sign in"}
-					</SecondaryButton>
 				</Navbar.Collapse>
 			</Container>
 		</NavBarHolder>

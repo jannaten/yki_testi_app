@@ -21,6 +21,15 @@ export const SecondaryButton = styled(Button)`
   }
 `;
 
+export const DropDownButton = styled(Button)`
+  background-color: ${({ theme }) => theme.basic.primary};
+  color: ${({ theme }) => theme.basic.bright};
+	&:hover {
+    background-color: ${({ theme }) => theme.secondary};
+    color: ${({ theme }) => theme.basic.bright};
+  }
+`;
+
 // export const FacebookAuthButton = styled(FacebookLogin)`
 //   ${(props) =>
 //     props.className === "kep-login-facebook" &&

@@ -1,10 +1,8 @@
 import axios from "axios";
 import { api } from "../../config";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import {
-	errorToast,
-	successToast,
-} from "../../components/common/toast.component";
+import { errorToast } from "../../components/common/toast.component";
+import { successToast } from "../../components/common/toast.component";
 
 export const loadTranslations = createAsyncThunk(
 	"localization/loadTranslations",

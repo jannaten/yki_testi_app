@@ -1,44 +1,34 @@
-import React from "react";
 import { routes } from "../../config";
 import { useRouter } from "next/router";
+import React, { useEffect } from "react";
 import { FcGoogle } from "react-icons/fc";
 import { auth } from "../../utils/firebase.utils";
 import { useDispatch, useSelector } from "react-redux";
+import { Button, Col, Container, Form, Row } from "react-bootstrap";
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { successToast } from "../../components/common/toast.component";
 import { onHandleUserValueChange, signInOrUp } from "../../redux/slices";
-import { Button, Col, Container, Form, Row, Spinner } from "react-bootstrap";
 
-function IdentifyPage() {
-	const { home } = routes;
+function ProfilePage() {
+	const { identify } = routes;
 	const router = useRouter();
 	const dispatch = useDispatch();
-	const googleProvider = new GoogleAuthProvider();
-	const { initialInputValues, loading } = useSelector(({ user }) => user);
+	const { initialInputValues, user } = useSelector(({ user }) => user);
 
-	const GoogleLogin = async () => {
-		try {
-			const result = await signInWithPopup(auth, googleProvider);
-			if (result.user) {
-				await dispatch(signInOrUp({ token: result.user, platform: "fire_base_google" }));
-				router.push(home);
-				successToast("Succesfully logged in");
-			}
-		} catch (error) {
-			console.log(error);
-		}
-	};
+	useEffect(() => {
+		if (!user) router.push(identify);
+	}, []);
 
 	const onSubmit = async () => {
 		try {
-			await dispatch(
-				signInOrUp({
-					email: initialInputValues.email,
-					password: initialInputValues.password,
-				})
-			);
-			router.push(home);
-			successToast("Succesfully logged in");
+			// await dispatch(
+			// 	signInOrUp({
+			// 		email: initialInputValues.email,
+			// 		password: initialInputValues.password,
+			// 	})
+			// );
+			// router.push(home);
+			// successToast("Succesfully logged in");
 		} catch (error) {
 			console.log(error);
 		}
@@ -74,14 +64,13 @@ function IdentifyPage() {
 								onClick={onSubmit}
 							>
 								login
-								{loading && <Spinner style={{ marginLeft: "0.5rem", marginBottom: "0.1rem" }} animation="border" variant="light" size="sm" />}
 							</Button>
 						</Col>
 					</Row>
 					<Button
 						variant=""
 						className="mt-5"
-						onClick={GoogleLogin}
+						// onClick={GoogleLogin}
 						style={{ border: "0.1rem solid #9967CE" }}
 					>
 						<FcGoogle style={{ fontSize: "1.5rem" }} />
@@ -93,4 +82,4 @@ function IdentifyPage() {
 	);
 }
 
-export default IdentifyPage;
+export default ProfilePage;

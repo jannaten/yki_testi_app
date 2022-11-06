@@ -1,7 +1,8 @@
+export { NavBarToggleButtonHolder, UserProfileNavHolder } from "./navigation.styles";
+export { PrimaryButton, SecondaryButton, DropDownButton } from "./buttons.styles";
 export { LocalizationEditorButtonsHolder } from "./localization.styles";
 export { SideBarHolder, SideBarContainer } from "./sidebar.styles";
 export { SideBarLocalizationMatchHolder } from "./sidebar.styles";
-export { PrimaryButton, SecondaryButton } from "./buttons.styles";
 export { SideBarLocalizationMatchTitle } from "./sidebar.styles";
 export { LocalizationTitleCount } from "./localization.styles";
 export { LocalizationHolder } from "./localization.styles";

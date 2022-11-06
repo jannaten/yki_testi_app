@@ -1,4 +1,5 @@
 import React from "react";
+import { Spinner } from 'react-bootstrap';
 import { Form, Col, Table } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { translationInputReset } from "../redux/slices";
@@ -9,7 +10,7 @@ import { SideBarContainer, PrimaryButton, SideBarTableHolder } from "../styles";
 
 const Sidebar = () => {
 	const dispatch = useDispatch();
-	const { translations, languages, localeValueInputPair, defaultInputValue } =
+	const { translations, languages, localeValueInputPair, defaultInputValue, loading } =
 		useSelector(({ localization }) => localization);
 
 	const isTransltionDefined = Array.isArray(translations);
@@ -73,8 +74,8 @@ const Sidebar = () => {
 				{languages.length > 0 && (
 					<PrimaryButton
 						variant=""
-						onClick={() => {
-							dispatch(
+						onClick={async() => {
+							await dispatch(
 								addTranslation({
 									key: localeValueInputPair
 										.map((el) => el.name)
@@ -100,6 +101,7 @@ const Sidebar = () => {
 						}}
 					>
 						Add
+						{localeValueInputPair.length > 0 && loading && <Spinner style={{ marginLeft: "0.5rem", marginBottom: "0.1rem" }} animation="border" variant="light" size="sm" />}
 					</PrimaryButton>
 				)}
 			</Form>
