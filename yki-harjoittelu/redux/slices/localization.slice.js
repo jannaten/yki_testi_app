@@ -179,6 +179,7 @@ const localizationSlice = createSlice({
 					if (el._id === payload._id) el = payload;
 					return el;
 				});
+				state.loading = false;
 			})
 			// DELETE ALL
 			.addCase(deleteTranslation.fulfilled, (state, { payload }) => {
