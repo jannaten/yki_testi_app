@@ -37,6 +37,7 @@ export default async function handler(req, res) {
 									status: result.status,
 									username: result.username,
 									full_name: result.full_name,
+									studyWords: result.studyWords,
 								},
 								JWT_SECRET_KEY,
 								{
@@ -53,6 +54,7 @@ export default async function handler(req, res) {
 									status: user.status,
 									username: user.username,
 									full_name: user.full_name,
+									studyWords: user.studyWords,
 								},
 								JWT_SECRET_KEY,
 								{
@@ -81,6 +83,7 @@ export default async function handler(req, res) {
 									status: result.status,
 									username: result.username,
 									full_name: result.full_name,
+									studyWords: result.studyWords,
 								},
 								JWT_SECRET_KEY,
 								{
@@ -97,6 +100,7 @@ export default async function handler(req, res) {
 									status: user.status,
 									username: user.username,
 									full_name: user.full_name,
+									studyWords: user.studyWords,
 								},
 								JWT_SECRET_KEY,
 								{
@@ -121,6 +125,7 @@ export default async function handler(req, res) {
 							status: user.status,
 							username: user.username,
 							full_name: user.full_name,
+							studyWords: user.studyWords,
 						},
 						JWT_SECRET_KEY,
 						{

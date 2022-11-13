@@ -29,6 +29,7 @@ const userSchema = new mongoose.Schema(
 			enum: userType,
 			default: userType[0],
 		},
+		studyWords: [{ type: Object, required: false }],
 		deletedAt: {
 			type: Date,
 			default: null,

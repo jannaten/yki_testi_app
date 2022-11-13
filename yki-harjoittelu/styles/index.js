@@ -7,5 +7,6 @@ export { SideBarLocalizationMatchTitle } from "./sidebar.styles";
 export { LocalizationTitleCount } from "./localization.styles";
 export { LocalizationHolder } from "./localization.styles";
 export { SideBarTableHolder } from "./sidebar.styles";
+export { PrimaryRowButton } from "./buttons.styles";
 export { NavBarHolder } from "./navigation.styles";
 export { LoaderHolder } from "./common.styles";

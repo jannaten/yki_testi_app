@@ -25,10 +25,12 @@ function ProfilePage() {
 
 	const onSubmit = async () => {
 		try {
-			await dispatch(userUpdate({ data: userData, token: localStorage.token }));
-			setUserData(false);
-			setEnableEdit(false);
-			successToast("user information updated");
+			const respond = await dispatch(userUpdate({ data: userData, token: localStorage.token }));
+			if (respond?.error?.message !== "Rejected") {
+				setUserData(false);
+				setEnableEdit(false);
+				successToast("user information updated");
+			}
 		} catch (error) {
 			errorToast(error.message);
 		}

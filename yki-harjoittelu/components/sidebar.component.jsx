@@ -1,5 +1,6 @@
 import React from "react";
 import { Spinner } from 'react-bootstrap';
+import { useTheme } from "styled-components";
 import { Form, Col, Table } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { translationInputReset } from "../redux/slices";
@@ -9,7 +10,9 @@ import { addTranslation, handleTranslationValueChange } from "../redux/slices";
 import { SideBarContainer, PrimaryButton, SideBarTableHolder } from "../styles";
 
 const Sidebar = () => {
+	const { width } = useTheme();
 	const dispatch = useDispatch();
+	const { user } = useSelector(({ user }) => user);
 	const { translations, languages, localeValueInputPair, defaultInputValue, loading } =
 		useSelector(({ localization }) => localization);
 
@@ -50,61 +53,63 @@ const Sidebar = () => {
 
 	return (
 		<SideBarContainer>
-			<Form>
-				<p className="h5">Add a translation</p>
-				{languages.length > 0 &&
-					languages.map(({ _id, name, locale }) => (
-						<Form.Group className="my-3" key={_id}>
-							<Col lg={12} md={12} sm={12}>
-								<Form.Label>{name}</Form.Label>
-								<Form.Control
-									type="text"
-									name={locale}
-									value={
-										defaultInputValue[locale] ? defaultInputValue[locale] : ""
-									}
-									placeholder={`enter ${locale} value`}
-									onChange={(e) => {
-										dispatch(handleTranslationValueChange({ event: e, _id }));
-									}}
-								/>
-							</Col>
-						</Form.Group>
-					))}
-				{languages.length > 0 && (
-					<PrimaryButton
-						variant=""
-						onClick={async() => {
-							await dispatch(
-								addTranslation({
-									key: localeValueInputPair
-										.map((el) => el.name)
-										.join(".")
-										.replace(/ /g, "")
-										.toLowerCase(),
-									locale_values: localeValueInputPair.map((el) => {
-										let obj = { ...el };
-										obj.name = el.name
-											?.replace(/^\s+|\s+$|\s+(?=\s)/g, "")
-											?.split(" ")
-											?.map((word, index) =>
-												index === 0
-													? word[index]?.toUpperCase() + word?.substring(1)
-													: word
-											)
-											?.join(" ");
-										return obj;
-									}),
-								})
-							);
-							dispatch(translationInputReset());
-						}}
-					>
-						Add
-						{localeValueInputPair.length > 0 && loading && <Spinner style={{ marginLeft: "0.5rem", marginBottom: "0.1rem" }} animation="border" variant="light" size="sm" />}
-					</PrimaryButton>
-				)}
-			</Form>
+			{user?.type === "admin" && (
+				<Form>
+					<p className="h5">Add a translation</p>
+					{languages.length > 0 &&
+						languages.map(({ _id, name, locale }) => (
+							<Form.Group className="my-3" key={_id}>
+								<Col lg={12} md={12} sm={12}>
+									<Form.Label>{name}</Form.Label>
+									<Form.Control
+										type="text"
+										name={locale}
+										value={
+											defaultInputValue[locale] ? defaultInputValue[locale] : ""
+										}
+										placeholder={`enter ${locale} value`}
+										onChange={(e) => {
+											dispatch(handleTranslationValueChange({ event: e, _id }));
+										}}
+									/>
+								</Col>
+							</Form.Group>
+						))}
+					{languages.length > 0 && (
+						<PrimaryButton
+							variant=""
+							onClick={async () => {
+								await dispatch(
+									addTranslation({
+										key: localeValueInputPair
+											.map((el) => el.name)
+											.join(".")
+											.replace(/ /g, "")
+											.toLowerCase(),
+										locale_values: localeValueInputPair.map((el) => {
+											let obj = { ...el };
+											obj.name = el.name
+												?.replace(/^\s+|\s+$|\s+(?=\s)/g, "")
+												?.split(" ")
+												?.map((word, index) =>
+													index === 0
+														? word[index]?.toUpperCase() + word?.substring(1)
+														: word
+												)
+												?.join(" ");
+											return obj;
+										}),
+									})
+								);
+								dispatch(translationInputReset());
+							}}
+						>
+							Add
+							{localeValueInputPair.length > 0 && loading && <Spinner style={{ marginLeft: "0.5rem", marginBottom: "0.1rem" }} animation="border" variant="light" size="sm" />}
+						</PrimaryButton>
+					)}
+				</Form>
+			)}
 			{filteredTranslations.length !== translations.length &&
 				filteredTranslations.length > 0 && (
 					<div
@@ -159,6 +164,26 @@ const Sidebar = () => {
 						</SideBarLocalizationMatchHolder>
 					</div>
 				)}
+			<PrimaryButton
+				disabled={!user}
+				className={
+					user?.type === "admin" ?
+						"w-100 mt-3" :
+						width < 992 && user?.type === "admin" ? "w-100 mt-3"
+							: "w-100"
+				}
+				variant=""
+			>
+				Study plan words
+			</PrimaryButton>
+			<PrimaryButton
+				className="w-100 mt-3"
+				disabled={!user}
+				variant=""
+			>
+				Memorized words
+			</PrimaryButton>
+
 		</SideBarContainer>
 	);
 };

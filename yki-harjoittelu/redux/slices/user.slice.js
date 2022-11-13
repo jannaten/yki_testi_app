@@ -40,7 +40,6 @@ export const userUpdate = createAsyncThunk(
 	async (data, { rejectWithValue }) => {
 		try {
 			const response = await axios.patch(api.userUpdate, data);
-			localStorage.setItem("token", response.data.token);
 			return jwt_decode(response.data.token);
 		} catch (error) {
 			errorToast(error.response.data.message);
@@ -65,10 +64,10 @@ const INITIAL_SIGN_IN_DATA = {
 const userSlice = createSlice({
 	name: "user",
 	initialState: {
+		user: null,
 		errors: false,
 		loading: false,
 		initialInputValues: INITIAL_SIGN_IN_DATA,
-		user: null,
 	},
 	reducers: {
 		onHandleUserValueChange: (state, { payload }) => {

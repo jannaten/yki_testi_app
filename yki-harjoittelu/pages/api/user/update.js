@@ -12,7 +12,7 @@ export default async function handler(req, res) {
 	switch (method) {
 		case 'PATCH':
 			let decoded_user = {};
-			const { token, data } = req.body;
+			const { token, data, studyWords } = req.body;
 			if (!token)
 				return res.status(401).send({ message: "ACCESS DENIED: No token provided" });
 			try {
@@ -31,22 +31,72 @@ export default async function handler(req, res) {
 				} else if (data.password) {
 					return res.status(400).send({ message: `password should be more than 4 charactors` });
 				}
-				const user = await User.findByIdAndUpdate({ _id: decoded_user.id, }, { $set: data }, { new: true });
-				const token = jwt.sign(
-					{
-						id: user._id,
-						type: user.type,
-						email: user.email,
-						status: user.status,
-						username: user.username,
-						full_name: user.full_name,
-					},
-					JWT_SECRET_KEY,
-					{
-						expiresIn: "10h",
+				if (studyWords) {
+					const user = await User.findById({ _id: decoded_user.id });
+					const wordExist = user.studyWords.filter((el) => el?.word?._id === data?.word?._id)
+
+					if (wordExist[0]) {
+						const user = await User.findByIdAndUpdate({ _id: decoded_user.id },
+							{ $pull: { studyWords: data } },
+							{ new: true });
+						const token = jwt.sign(
+							{
+								id: user._id,
+								type: user.type,
+								email: user.email,
+								status: user.status,
+								username: user.username,
+								full_name: user.full_name,
+								studyWords: user.studyWords,
+							},
+							JWT_SECRET_KEY,
+							{
+								expiresIn: "10h",
+							}
+						);
+						return res.status(200).json({ token });
+					} else {
+						const user = await User.findByIdAndUpdate(
+							{ _id: decoded_user.id },
+							{ $push: { studyWords: data } },
+							{ new: true }
+						);
+						const token = jwt.sign(
+							{
+								id: user._id,
+								type: user.type,
+								email: user.email,
+								status: user.status,
+								username: user.username,
+								full_name: user.full_name,
+								studyWords: user.studyWords,
+							},
+							JWT_SECRET_KEY,
+							{
+								expiresIn: "10h",
+							}
+						);
+						return res.status(200).json({ token });
 					}
-				);
-				return res.status(200).json({ token });
+				} else {
+					const user = await User.findByIdAndUpdate({ _id: decoded_user.id, }, { $set: data }, { new: true });
+					const token = jwt.sign(
+						{
+							id: user._id,
+							type: user.type,
+							email: user.email,
+							status: user.status,
+							username: user.username,
+							full_name: user.full_name,
+							studyWords: user.studyWords,
+						},
+						JWT_SECRET_KEY,
+						{
+							expiresIn: "10h",
+						}
+					);
+					return res.status(200).json({ token });
+				}
 			} catch ({ message }) {
 				res.status(500).send({ message });
 			}

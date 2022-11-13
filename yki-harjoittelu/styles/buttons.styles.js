@@ -11,6 +11,16 @@ export const PrimaryButton = styled(Button)`
   }
 `;
 
+export const PrimaryRowButton = styled(Button)`
+background-color: ${({ theme, outline }) => outline && theme.primary};
+	color: ${({ theme, outline }) => outline ? theme.basic.bright : theme.primary} !important;
+	border: ${({ theme, outline }) => !outline && `0.05rem solid ${theme.primary}`}; 
+  &:hover {
+    background-color: ${({ theme, outline }) => !outline ? theme.primary : theme.secondary};
+		color: ${({ theme, outline }) => !outline && theme.basic.bright} !important;
+  }
+`;
+
 export const SecondaryButton = styled(Button)`
   background-color: ${({ theme }) => theme.basic.bright};
   color: ${({ theme }) => theme.primary};

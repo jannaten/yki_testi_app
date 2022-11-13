@@ -1,20 +1,21 @@
 import Head from "next/head";
 import { paginate } from "../utils";
 import { useTheme } from "styled-components";
-import { Col, InputGroup } from "react-bootstrap";
-import { LocalizationTitleCount } from "../styles";
 import React, { useState, useEffect } from "react";
 import Sidebar from "../components/sidebar.component";
 import { useDispatch, useSelector } from "react-redux";
-import { XDiamond, Pencil } from "react-bootstrap-icons";
+import { Card, Col, InputGroup } from "react-bootstrap";
 import Loader from "../components/common/loader.component";
 import Pagination from "../components/common/pagination.component";
-import { Table, Form, Button, Row, Container } from "react-bootstrap";
+import { LocalizationTitleCount, PrimaryRowButton } from "../styles";
+import { Table, Form, Row, Container } from "react-bootstrap";
 import { LoaderHolder, LocalizationEditorButtonsHolder } from "../styles";
-import { loadTranslations, loadLanguages, openModal } from "../redux/slices";
 import { SideBarHolder, LocalizationHolder, PrimaryButton } from "../styles";
+import { successToast, errorToast } from "../components/common/toast.component";
 import LocalizationEditModal from "../components/modals/localization-edit.modal";
 import LocalizationDeleteModal from "../components/modals/localization-delete-modal";
+import { loadTranslations, loadLanguages, openModal, userUpdate } from "../redux/slices";
+import { XDiamondFill, BookHalf, BookmarkCheckFill, PencilFill } from "react-bootstrap-icons";
 
 export default function Home() {
 	const { width } = useTheme();
@@ -28,6 +29,7 @@ export default function Home() {
 	const { translations, languages } = useSelector(
 		({ localization }) => localization
 	);
+
 	const isPrevilegedUser = user?.type === "admin" || user?.type === "teacher";
 
 	useEffect(() => {
@@ -65,6 +67,16 @@ export default function Home() {
 		currentPage,
 		pageSize
 	);
+
+	const onSubmitStudy = async (data) => {
+		try {
+			const respond = await dispatch(userUpdate({ data, token: localStorage.token, studyWords: true }));
+			if (respond?.error?.message !== "Rejected")
+				successToast("user information updated");
+		} catch (error) {
+			errorToast(error.message);
+		}
+	};
 
 	return (
 		<div>
@@ -110,81 +122,106 @@ export default function Home() {
 						{translations.length > 0 ? (
 							<>
 								{width <= 992 ? (
-									<Container>
+									<div>
 										<Row style={{ borderBottom: "0.1rem solid black" }} className="mb-2 p-0">
 											{languages.length &&
 												languages.map(({ _id, name, locale }) => (
-													<Col xs={!isPrevilegedUser ? 6 : 4} sm={!isPrevilegedUser ? 6 : 5} md={!isPrevilegedUser ? 6 : 5} key={_id} className="d-flex align-items-center">
+													<Col xs={6} sm={6} md={6} key={_id} className="d-flex align-items-center justify-content-center">
 														{locale} ({name})
 													</Col>
 												))}
-											{isPrevilegedUser && (
-												<>
-													<Col xs={2} sm={1} md={1} ></Col>
-													<Col xs={2} sm={1} md={1}></Col>
-												</>
-											)}
 										</Row>
 										{paginatedTranslations.length > 0 && paginatedTranslations.map((translation) => (
-											<Row key={translation._id} style={{ paddingBottom: "1rem", borderBottom: "0.1rem solid #0000000C" }}>
-												{languages?.length &&
-													languages.map((locales) => (
-														<Col key={locales._id} xs={!isPrevilegedUser ? 6 : 4} sm={!isPrevilegedUser ? 6 : 5} md={!isPrevilegedUser ? 6 : 5}
-															style={{ display: "flex", flexDirection: "row", justifyContent: "flex-start", flexWrap: "wrap", marginTop: "1rem" }}
+											<Card className="mt-3 mb-3" key={translation._id}>
+												<Card.Header>
+													<Row>
+														{languages?.length &&
+															languages.map((locales) => (
+																<Col key={locales._id} xs={6} sm={6} md={6}
+																	className="d-flex align-items-center justify-content-center flex-wrap"
+																>
+																	{translation.locale_values.length &&
+																		translation.locale_values.map(
+																			({ language, name }) => (
+																				<>
+																					{locales.locale === language.locale &&
+																						name}
+																				</>
+																			)
+																		)}
+																</Col>
+															))}
+													</Row>
+												</Card.Header>
+												<div className="d-flex align-items-center justify-content-center flex-wrap mb-2 mt-2">
+													<PrimaryRowButton
+														variant=""
+														className="ms-1 me-1"
+														disabled={!user}
+														onClick={() => {
+															onSubmitStudy({
+																initialCount: 10,
+																memorized: true,
+																progressCount: 0,
+																word: translation
+															})
+														}}
+														outline={user && user?.studyWords?.some(el => el?.word?._id === translation?._id)}
+													>
+														<BookHalf width={20} height={20} />
+													</PrimaryRowButton>
+													<PrimaryRowButton
+														variant=""
+														className="ms-1 me-1"
+														disabled={!user}
+														outline={user && user?.studyWords?.some((el) => el.initialCount >= el.progressCount && el.initialCount === el.progressCount)}
+													>
+														<BookmarkCheckFill width={20} height={20} />
+													</PrimaryRowButton>
+													{isPrevilegedUser && (
+														<PrimaryRowButton
+															variant=""
+															className="ms-1 me-1"
+															onClick={() =>
+																dispatch(
+																	openModal({
+																		content: (
+																			<LocalizationEditModal
+																				translation={translation}
+																			/>
+																		),
+																	})
+																)
+															}
 														>
-															{translation.locale_values.length &&
-																translation.locale_values.map(
-																	({ language, name }, index) => (
-																		<>
-																			{locales.locale === language.locale &&
-																				name}
-																		</>
-																	)
-																)}
-														</Col>
-													))}
-												{isPrevilegedUser && (
-													<>
-														<Col xs={2} sm={1} md={1} style={{ marginTop: "0.5rem" }}>
-															<PrimaryButton
-																variant=""
-																onClick={() =>
-																	dispatch(
-																		openModal({
-																			content: (
-																				<LocalizationEditModal
-																					translation={translation}
-																				/>
-																			),
-																		})
-																	)
-																}
-															>
-																<Pencil />
-															</PrimaryButton>
-														</Col>
-														<Col xs={2} sm={1} md={1} style={{ marginTop: "0.5rem" }}>
-															<div style={{ width: "2.4rem", height: "2.4rem", display: "flex", justifyContent: "center", alignItems: 'center', cursor: "pointer" }}>
-																<XDiamond onClick={() =>
-																	dispatch(
-																		openModal({
-																			content: (
-																				<LocalizationDeleteModal
-																					translation={translation}
-																				/>
-																			),
-																		})
-																	)
-																} width={20} height={20} />
-															</div>
-														</Col>
-													</>
-												)}
-											</Row>
+															<PencilFill />
+														</PrimaryRowButton>
+													)}
+													{user?.type === "admin" && (
+														<PrimaryRowButton
+															variant=""
+															className="ms-1 me-1"
+															onClick={() =>
+																dispatch(
+																	openModal({
+																		content: (
+																			<LocalizationDeleteModal
+																				translation={translation}
+																			/>
+																		),
+																	})
+																)
+															}
+														>
+															<XDiamondFill width={20} height={20} />
+														</PrimaryRowButton>
+													)}
+												</div>
+											</Card>
 										))}
-									</Container>
+									</div>
 								) : (
-									<Table size="lg" responsive={width < 992}>
+									<Table size="lg" responsive={width < 992} hover>
 										<thead>
 											<tr
 												style={width < 992 ? { width: "100vw" } : {}}
@@ -199,19 +236,13 @@ export default function Home() {
 															{locale} ({name})
 														</th>
 													))}
-												{width >= 992 && (user?.type === "admin" || user?.type === "teacher") && <th className="ms-auto"></th>}
+												{width >= 992 && <th className="ms-auto"></th>}
 											</tr>
 										</thead>
 										<tbody>
 											{paginatedTranslations.length > 0 &&
 												paginatedTranslations.map((translation) => (
-													<tr
-														key={translation._id}
-														style={width < 992 ? { width: "100vw" } : {}}
-														className={
-															width < 992 ? "d-flex flex-column text-center" : ""
-														}
-													>
+													<tr key={translation._id}>
 														{user?.type === "admin" && <td>{translation.key}</td>}
 														{!sliderView &&
 															languages?.length &&
@@ -230,41 +261,69 @@ export default function Home() {
 																	</>
 																</td>
 															))}
-														{(user?.type === "admin" || user?.type === "teacher") && <LocalizationEditorButtonsHolder>
-															<PrimaryButton
+														<LocalizationEditorButtonsHolder>
+															{isPrevilegedUser && (
+																<PrimaryButton
+																	variant=""
+																	onClick={() =>
+																		dispatch(
+																			openModal({
+																				content: (
+																					<LocalizationEditModal
+																						translation={translation}
+																					/>
+																				),
+																			})
+																		)
+																	}
+																>
+																	Edit
+																</PrimaryButton>
+															)}
+															<PrimaryRowButton
 																variant=""
-																onClick={() =>
-																	dispatch(
-																		openModal({
-																			content: (
-																				<LocalizationEditModal
-																					translation={translation}
-																				/>
-																			),
-																		})
-																	)
-																}
-															>
-																Edit
-															</PrimaryButton>
-															<Button
 																className="ms-3"
-																variant="outline-dark"
-																onClick={() =>
-																	dispatch(
-																		openModal({
-																			content: (
-																				<LocalizationDeleteModal
-																					translation={translation}
-																				/>
-																			),
-																		})
-																	)
-																}
+																disabled={!user}
+																onClick={() => {
+																	onSubmitStudy({
+																		initialCount: 10,
+																		memorized: true,
+																		progressCount: 0,
+																		word: translation
+																	})
+																}}
+																outline={user && user?.studyWords?.some(el => el?.word?._id === translation?._id)}
 															>
-																<XDiamond width={20} height={20} />
-															</Button>
-														</LocalizationEditorButtonsHolder>}
+																<BookHalf width={20} height={20} />
+															</PrimaryRowButton>
+															<PrimaryRowButton
+																variant=""
+																className="ms-3"
+																disabled={!user}
+																outline={user && user?.studyWords?.some((el) => el.initialCount >= el.progressCount && el.initialCount === el.progressCount)}
+															>
+																<BookmarkCheckFill width={20} height={20} />
+															</PrimaryRowButton>
+															{user?.type === "admin" && (
+																<PrimaryRowButton
+																	variant=""
+																	className="ms-3"
+																	onClick={() =>
+																		dispatch(
+																			openModal({
+																				content: (
+																					<LocalizationDeleteModal
+																						translation={translation}
+																					/>
+																				),
+																			})
+																		)
+																	}
+																>
+																	<XDiamondFill width={20} height={20} />
+																</PrimaryRowButton>
+															)}
+														</LocalizationEditorButtonsHolder>
 													</tr>
 												))}
 										</tbody>
