@@ -1,17 +1,19 @@
 import { useTheme } from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
 import { XDiamondFill, BookHalf } from "react-bootstrap-icons";
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useCallback } from "react";
 import { BookmarkCheckFill, PencilFill } from "react-bootstrap-icons";
 import { Table, Form, Row, Container, InputGroup, Col, Card } from "react-bootstrap";
 
 import { paginate } from "../utils";
+import Loader from './common/loader.component';
 import Pagination from './common/pagination.component';
 import { openModal, userUpdate } from "../redux/slices";
 import { successToast, errorToast } from "./common/toast.component";
 import LocalizationEditModal from './modals/localization-edit.modal';
 import LocalizationDeleteModal from './modals/localization-delete-modal';
-import { LocalizationEditorButtonsHolder, LocalizationTitleCount, PrimaryButton, PrimaryRowButton } from "../styles";
+import { LoaderHolder, LocalizationEditorButtonsHolder } from "../styles";
+import { LocalizationTitleCount, PrimaryButton, PrimaryRowButton } from "../styles";
 
 function LocalizationKeyValueBody() {
 	const { width } = useTheme();
