@@ -2,7 +2,6 @@ import { routes } from "../config";
 import Avatar from "boring-avatars";
 import React, { useState } from "react";
 import { useRouter } from "next/router";
-import { useTheme } from "styled-components";
 import { onClearUserValue } from "../redux/slices";
 import { PlusLg, XLg } from "react-bootstrap-icons";
 import { useSelector, useDispatch } from "react-redux";
@@ -119,4 +118,4 @@ const NavbarComponent = () => {
 	);
 };
 
-export default NavbarComponent;
+export default React.memo(NavbarComponent);

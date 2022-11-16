@@ -1,7 +1,7 @@
 import React from "react";
 import _ from "lodash";
 
-const Pagination = (props) => {
+function Pagination(props) {
 	const { itemsCount, pageSize, currentPage } = props;
 	const pagesCount = Math.ceil(itemsCount / pageSize);
 	if (pagesCount === 1) return null;
@@ -53,4 +53,4 @@ const Pagination = (props) => {
 	);
 };
 
-export default Pagination;
+export default React.memo(Pagination);

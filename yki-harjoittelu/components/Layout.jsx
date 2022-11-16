@@ -1,17 +1,16 @@
+import { themes } from "../config";
 import NavBar from "./navbar.component";
-import { Toaster } from "react-hot-toast";
-import ModalRootComponent from "./modal-root.component";
-import React, { useState, useEffect } from "react";
-import { ThemeProvider } from "styled-components";
 import { useDeviceSize } from "../hooks";
-import { loadUser } from "../redux/slices";
-import { routes, themes } from "../config";
+import { Toaster } from "react-hot-toast";
 import { useDispatch } from "react-redux";
+import { loadUser } from "../redux/slices";
+import { ThemeProvider } from "styled-components";
+import React, { useState, useEffect } from "react";
+import ModalRootComponent from "./modal-root.component";
 
 export default function Layout({ children }) {
 	const dispatch = useDispatch();
 	const [width, height] = useDeviceSize();
-	const { home, identify } = routes;
 	const [theme] = useState("defaultTheme");
 
 	useEffect(() => {

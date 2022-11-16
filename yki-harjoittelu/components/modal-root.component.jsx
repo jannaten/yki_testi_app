@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Modal } from "react-bootstrap";
 import { closeModal } from "../redux/slices";
 import { useDispatch, useSelector } from "react-redux";
@@ -13,7 +13,7 @@ import { useDispatch, useSelector } from "react-redux";
 	https://react-bootstrap.github.io/components/modal/
 ===================================================================*/
 
-export default function ModalRootComponent() {
+const ModalRootComponent = () => {
 	const dispatch = useDispatch();
 	const { options, content, callback } = useSelector(({ modal }) => modal);
 	// window.onpopstate = () => dispatch(closeModal());
@@ -22,7 +22,6 @@ export default function ModalRootComponent() {
 	//   dispatch(closeModal());
 	//   // eslint-disable-next-line react-hooks/exhaustive-deps
 	// }, [window.location.pathname]);
-
 	return (
 		<Modal
 			style={{ color: "#9967CE" }}
@@ -38,3 +37,5 @@ export default function ModalRootComponent() {
 		</Modal>
 	);
 }
+
+export default React.memo(ModalRootComponent);

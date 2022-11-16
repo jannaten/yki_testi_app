@@ -15,7 +15,7 @@ export const loadUser = createAsyncThunk(
 			});
 			return response.data;
 		} catch (error) {
-			errorToast(error.response.data.message);
+			localStorage.removeItem("token");
 			return rejectWithValue(error.response.data);
 		}
 	}

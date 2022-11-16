@@ -1,4 +1,6 @@
 import React from "react";
+import { routes } from "../config";
+import { useRouter } from "next/router";
 import { Spinner } from 'react-bootstrap';
 import { useTheme } from "styled-components";
 import { Form, Col, Table } from "react-bootstrap";
@@ -9,9 +11,13 @@ import { SideBarLocalizationMatchHolder } from "../styles";
 import { addTranslation, handleTranslationValueChange } from "../redux/slices";
 import { SideBarContainer, PrimaryButton, SideBarTableHolder } from "../styles";
 
-const Sidebar = () => {
+function Sidebar() {
+	const router = useRouter();
+	const { flipCard } = routes;
+
 	const { width } = useTheme();
 	const dispatch = useDispatch();
+
 	const { user } = useSelector(({ user }) => user);
 	const { translations, languages, localeValueInputPair, defaultInputValue, loading } =
 		useSelector(({ localization }) => localization);
@@ -50,7 +56,7 @@ const Sidebar = () => {
 		animation: "outAnimation 270ms ease-out",
 		animationFillMode: "forwards",
 	};
-
+	
 	return (
 		<SideBarContainer>
 			{user?.type === "admin" && (
@@ -183,9 +189,18 @@ const Sidebar = () => {
 			>
 				Memorized words
 			</PrimaryButton>
-
+			<PrimaryButton
+				className="w-100 mt-3"
+				disabled={!user}
+				variant=""
+				onClick={() => {
+					router.push(flipCard)
+				}}
+			>
+				Play card game
+			</PrimaryButton>
 		</SideBarContainer>
 	);
 };
 
-export default Sidebar;
+export default React.memo(Sidebar);
