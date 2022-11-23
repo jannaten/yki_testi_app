@@ -72,6 +72,7 @@ function LocalizationKeyValueBody() {
 			errorToast(error.message);
 		}
 	};
+
 	return (
 		<div>
 			<LocalizationTitleCount>
@@ -145,12 +146,12 @@ function LocalizationKeyValueBody() {
 											onClick={() => {
 												onSubmitStudy({
 													initialCount: 10,
-													memorized: true,
+													memorized: false,
 													progressCount: 0,
 													word: translation
 												})
 											}}
-											outline={user && user?.studyWords?.some(el => el?.word?._id === translation?._id)}
+											outline={user ? user?.studyWords?.some(el => el?.word?._id === translation?._id) : undefined}
 										>
 											<BookHalf width={20} height={20} />
 										</PrimaryRowButton>
@@ -158,7 +159,7 @@ function LocalizationKeyValueBody() {
 											variant=""
 											className="ms-1 me-1"
 											disabled={!user}
-											outline={user && user?.studyWords?.some((el) => el.initialCount >= el.progressCount && el.initialCount === el.progressCount)}
+											outline={user ? user?.studyWords?.some((el) => el.initialCount >= el.progressCount && el.initialCount === el.progressCount): undefined}
 										>
 											<BookmarkCheckFill width={20} height={20} />
 										</PrimaryRowButton>
@@ -271,12 +272,12 @@ function LocalizationKeyValueBody() {
 													onClick={() => {
 														onSubmitStudy({
 															initialCount: 10,
-															memorized: true,
+															memorized: false,
 															progressCount: 0,
 															word: translation
 														})
 													}}
-													outline={user && user?.studyWords?.some(el => el?.word?._id === translation?._id)}
+													outline={user ? user?.studyWords?.some(el => el?.word?._id === translation?._id) : "false"}
 												>
 													<BookHalf width={20} height={20} />
 												</PrimaryRowButton>
@@ -284,7 +285,7 @@ function LocalizationKeyValueBody() {
 													variant=""
 													className="ms-3"
 													disabled={!user}
-													outline={user && user?.studyWords?.some((el) => el.initialCount >= el.progressCount && el.initialCount === el.progressCount)}
+													outline={user ? user?.studyWords?.some((el) => el.initialCount >= el.progressCount && el.initialCount === el.progressCount): "false"}
 												>
 													<BookmarkCheckFill width={20} height={20} />
 												</PrimaryRowButton>

@@ -1,14 +1,20 @@
 import React from 'react';
 import Head from 'next/head';
+import { randomColor } from 'randomcolor';
 import { useSelector } from 'react-redux';
+import { ProgressBar } from 'react-bootstrap';
 import { Col, Container, Row } from 'react-bootstrap';
-import { useTheme } from 'styled-components';
 import FlipCard from '../../../components/flip-card.component';
 
-function App() {
-	const { width } = useTheme();
+function GamePage() {
 	const { user } = useSelector(({ user }) => user);
-	console.log(user);
+	// function count(arr) {
+	// 	return arr.reduce((prev, curr) => { 
+	// 		console.log(curr)
+	// 		return (prev[curr].memoro = ++prev[curr] || 1, prev)
+	// 	 }, {})
+	// }
+	// console.log(count(user?.studyWords))
 	return (
 		<div>
 			<Head>
@@ -17,10 +23,15 @@ function App() {
 				<link rel="icon" href="/favicon.ico" />
 			</Head>
 			<Container style={{ paddingTop: "5rem" }}>
-				<Row style={{ paddingTop: "5rem" }}>
+				<ProgressBar>
+					<ProgressBar animated striped variant="success" now={35} key={1} />
+					<ProgressBar animated variant="warning" now={20} key={2} />
+					<ProgressBar animated striped variant="danger" now={10} key={3} />
+				</ProgressBar>
+				<Row >
 					{user?.studyWords?.map((studyWord, index) => (
-						<Col key={index} xs={12} sm={12} md={6} lg={3} xl={3} studyWord={studyWord}>
-							<FlipCard />
+						<Col key={index} xs={12} sm={12} md={6} lg={3} xl={3} >
+							<FlipCard studyWord={studyWord} color={randomColor({ format: "hex" })} />
 						</Col>
 					))}
 				</Row>
@@ -29,4 +40,4 @@ function App() {
 	)
 }
 
-export default React.memo(App);
+export default React.memo(GamePage);

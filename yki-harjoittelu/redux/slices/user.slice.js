@@ -8,10 +8,8 @@ export const loadUser = createAsyncThunk(
 	"user/loadUser",
 	async (_, { rejectWithValue }) => {
 		try {
-			const response = await axios.get(api.userByToken, {
-				headers: {
-					"x-auth-token": localStorage.token,
-				},
+			const response = await axios.post(api.userByToken, {
+				"x-auth-token": localStorage.token,
 			});
 			return response.data;
 		} catch (error) {

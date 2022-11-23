@@ -9,9 +9,10 @@ export default async function handler(req, res) {
 	await dbConnect();
 
 	switch (method) {
-		case 'GET':
+		case 'POST':
 			let decoded_user = {};
-			const token = req.headers['x-auth-token'];
+			// const token = req.headers['x-auth-token'];
+			const token = req.body['x-auth-token'];
 			if (!token)
 				return res.status(401).send({ message: "ACCESS DENIED: No token provided" });
 			try {

@@ -1,96 +1,71 @@
 import { useState } from 'react';
-import { Card } from 'react-bootstrap';
+import { Toast } from 'react-bootstrap';
 import ReactCardFlip from 'react-card-flip';
-// import './common/flip-card.module.css';
-// import styles from './common/flip-card.module.css';
+import { Card, Form, Row, Col, Button } from 'react-bootstrap';
 
-const FlipCard = () => {
-	const [flipped, setFlipped] = useState(false)
+const FlipCard = ({ studyWord, color }) => {
+	const [showA, setShowA] = useState(false);
+	const [showB, setShowB] = useState(false);
+	const [flipped, setFlipped] = useState(false);
+	const [inputText, setInputField] = useState("");
+
+	const toggleShowA = () => setShowA(!showA);
+	const toggleShowB = () => setShowB(!showB);
+
+	const onCheck = () => {
+		if (inputText.toLowerCase() === studyWord?.word?.locale_values[1]?.name?.toLowerCase()) {
+			setShowA(true)
+		} else {
+			setShowB(true)
+		}
+	}
 
 	return (
-		<div>
+		<>
 			<ReactCardFlip isFlipped={flipped} flipDirection="vertical">
 				<Card
-					onClick={() => setFlipped(state => !state)}
-					// bg={variant.toLowerCase()}
-					// key={variant}
-					// text={variant.toLowerCase() === 'light' ? 'dark' : 'white'}
-					// style={{ width: '18rem' }}
+					style={{ minHeight: "10rem", width: "100%" }}
 					className="m-2"
 				>
-					<Card.Header>Header</Card.Header>
+					<Card.Header>{studyWord?.word?.locale_values[0]?.name}</Card.Header>
 					<Card.Body>
-						<Card.Title>Card Title </Card.Title>
-						<Card.Text>
-							front
-						</Card.Text>
+						<Form.Control type="text" name="word" value={inputText} onChange={(e) => setInputField(e.target.value)} />
+						<Row className="text-center mt-3">
+							<Col xs={6} sm={6} md={6} lg={6} xl={6}>
+								<Button variant="dark" onClick={onCheck}>Check</Button>
+							</Col>
+							<Col xs={6} sm={6} md={6} lg={6} xl={6}>
+								<Button variant="outline-success" onClick={() => setFlipped(state => !state)}>Hint</Button>{' '}
+							</Col>
+						</Row>
 					</Card.Body>
 				</Card>
 				<Card
+					style={{ minHeight: "10rem", width: "100%", backgroundColor: color }}
 					onClick={() => setFlipped(state => !state)}
-					// bg={variant.toLowerCase()}
-					// key={variant}
-					// text={variant.toLowerCase() === 'light' ? 'dark' : 'white'}
-					// style={{ width: '18rem' }}
-					className="m-2"
+					className="m-2 shadow"
 				>
-					<Card.Header>Header</Card.Header>
 					<Card.Body>
-						<Card.Title>Card Title </Card.Title>
-						<Card.Text>
-							back
-						</Card.Text>
+						<p className="fs-1 text-white" style={{ textShadow: "1px 1px 2px black" }}>{studyWord?.word?.locale_values[1]?.name}</p>
 					</Card.Body>
 				</Card>
 			</ReactCardFlip>
-		</div>
+			<Toast className="ms-2" show={showA} onClose={toggleShowA} bg="success">
+				<Toast.Header>
+					<strong className="me-auto">Correct!!!</strong>
+					<small>way to go</small>
+				</Toast.Header>
+				<Toast.Body className="text-light">Woohoo, you got it right!</Toast.Body>
+			</Toast>
+			<Toast className="ms-2" show={showB} onClose={toggleShowB} bg="danger">
+				<Toast.Header>
+					<strong className="me-auto">Wrong!!!</strong>
+					<small>keep trying</small>
+				</Toast.Header>
+				<Toast.Body className="text-light">Sorry, you got it wrong!</Toast.Body>
+			</Toast>
+		</>
 	)
 }
 
 export default FlipCard;
-// import { useState } from 'react';
-// import { useSpring, a } from '@react-spring/web';
-// // import './common/flip-card.module.css';
-// import styles from './common/flip-card.module.css';
-
-// const FlipCard = () => {
-// 	const [flipped, set] = useState(false)
-// 	const { transform, opacity } = useSpring({
-// 		opacity: flipped ? 1 : 0,
-// 		transform: `perspective(600px) rotateX(${flipped ? 180 : 0}deg)`,
-// 		config: { mass: 5, tension: 500, friction: 80 },
-// 	})
-
-// 	return (
-// 		<div onClick={() => set(state => !state)} style={{marginTop: "5rem"}}>
-// 			<div className={styles["flip-card"]}>
-// 				<div className={styles["flip-card-inner"]}>
-// 					<div className={styles["flip-card-front"]}>
-// 						{/* <img src="img_avatar.png" alt="Avatar"
-// 						style="width:300px;height:300px;"
-// 						 /> */}
-// 					</div>
-// 					<div className={styles["flip-card-back"]}>
-// 						<h1>John Doe</h1>
-// 						<p>Architect & Engineer</p>
-// 						<p>We love that guy</p>
-// 					</div>
-// 				</div>
-// 			</div>
-// 			{/* <a.div
-// 				className={`${styles.c} ${styles.back}`}
-// 				style={{ opacity: opacity.to(o => 1 - o), transform }}
-// 			/>
-// 			<a.div
-// 				className={`${styles.c} ${styles.front}`}
-// 				style={{
-// 					opacity,
-// 					transform,
-// 					rotateX: '180deg',
-// 				}}
-// 			/> */}
-// 		</div>
-// 	)
-// }
-
-// export default FlipCard;
