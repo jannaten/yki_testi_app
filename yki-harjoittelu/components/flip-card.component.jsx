@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Toast } from 'react-bootstrap';
 import ReactCardFlip from 'react-card-flip';
+import { compareTwoStrings } from "string-similarity";
 import { Card, Form, Row, Col, Button } from 'react-bootstrap';
 
 const FlipCard = ({ studyWord, color }) => {
@@ -8,12 +9,18 @@ const FlipCard = ({ studyWord, color }) => {
 	const [showB, setShowB] = useState(false);
 	const [flipped, setFlipped] = useState(false);
 	const [inputText, setInputField] = useState("");
+	const [comapreResult, setCompareResult] = useState(0);
 
 	const toggleShowA = () => setShowA(!showA);
 	const toggleShowB = () => setShowB(!showB);
 
 	const onCheck = () => {
-		if (inputText.toLowerCase() === studyWord?.word?.locale_values[1]?.name?.toLowerCase()) {
+		const specialChars = /[`~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gi;
+		const comaprableWord = studyWord?.word?.locale_values[1]?.name?.toLowerCase();
+		const removedCharCompare = comaprableWord.replace(specialChars, '');
+		const removeCharInput = inputText.toLowerCase().replace(specialChars, '');
+		setCompareResult((Math.round(compareTwoStrings(removedCharCompare, removeCharInput) * 100) / 100).toFixed(2));
+		if (compareTwoStrings(removedCharCompare, removeCharInput) > 0.8) {
 			setShowA(true)
 		} else {
 			setShowB(true)
@@ -50,17 +57,17 @@ const FlipCard = ({ studyWord, color }) => {
 					</Card.Body>
 				</Card>
 			</ReactCardFlip>
-			<Toast className="ms-2" show={showA} onClose={toggleShowA} bg="success">
+			<Toast autohide delay={3000} className="ms-2" show={showA} onClose={toggleShowA} bg="success">
 				<Toast.Header>
 					<strong className="me-auto">Correct!!!</strong>
-					<small>way to go</small>
+					<i><small>accuracy level: {comapreResult}</small></i>
 				</Toast.Header>
-				<Toast.Body className="text-light">Woohoo, you got it right!</Toast.Body>
+				<Toast.Body className="text-light">Woohoo, you got it right! <hr /> {studyWord?.word?.locale_values[1]?.name}</Toast.Body>
 			</Toast>
-			<Toast className="ms-2" show={showB} onClose={toggleShowB} bg="danger">
+			<Toast autohide delay={3000} className="ms-2" show={showB} onClose={toggleShowB} bg="danger">
 				<Toast.Header>
 					<strong className="me-auto">Wrong!!!</strong>
-					<small>keep trying</small>
+					<i><small>accuracy level: {comapreResult}</small></i>
 				</Toast.Header>
 				<Toast.Body className="text-light">Sorry, you got it wrong!</Toast.Body>
 			</Toast>
