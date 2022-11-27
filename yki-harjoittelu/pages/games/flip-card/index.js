@@ -15,6 +15,28 @@ function GamePage() {
 	// 	 }, {})
 	// }
 	// console.log(count(user?.studyWords))
+	function shuffle(array) {
+		let currentIndex = array?.length, randomIndex;
+
+		// While there remain elements to shuffle.
+		while (currentIndex != 0) {
+
+			// Pick a remaining element.
+			randomIndex = Math.floor(Math.random() * currentIndex);
+			currentIndex--;
+
+			// And swap it with the current element.
+			[array[currentIndex], array[randomIndex]] = [
+				array[randomIndex], array[currentIndex]];
+		}
+
+		return array;
+	}
+	
+	const shuffleWords = user?.studyWords?.map(value => ({ value, sort: Math.random() }))
+		?.sort((a, b) => a.sort - b.sort)
+		?.map(({ value }) => value);
+
 	return (
 		<div>
 			<Head>
@@ -29,7 +51,7 @@ function GamePage() {
 					<ProgressBar animated striped variant="danger" now={10} key={3} />
 				</ProgressBar>
 				<Row >
-					{user?.studyWords?.map((studyWord, index) => (
+					{shuffleWords?.map((studyWord, index) => (
 						<Col key={index} xs={12} sm={12} md={6} lg={3} xl={3} >
 							<FlipCard studyWord={studyWord} color={randomColor({ format: "hex" })} />
 						</Col>
