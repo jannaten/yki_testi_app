@@ -37,5 +37,5 @@ function Home() {
 	);
 };
 
-export default React.memo(Home);
+export default Home;
 

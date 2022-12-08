@@ -38,4 +38,4 @@ const ModalRootComponent = () => {
 	);
 }
 
-export default React.memo(ModalRootComponent);
+export default ModalRootComponent;

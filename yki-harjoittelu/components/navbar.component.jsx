@@ -118,4 +118,4 @@ const NavbarComponent = () => {
 	);
 };
 
-export default React.memo(NavbarComponent);
+export default NavbarComponent;
