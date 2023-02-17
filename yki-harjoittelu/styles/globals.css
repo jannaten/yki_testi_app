@@ -1,252 +1,248 @@
 /* @import url("https://fonts.googleapis.com/css2?family=Signika:wght@300;400;500;600;700&display=swap"); */
 .transitionDiv {
-	height: 100px;
-	width: 200px;
-	margin: 0 auto;
+  height: 100px;
+  width: 200px;
+  margin: 0 auto;
 }
 
 #basic-nav-dropdown {
-	color: white;
+  color: white;
 }
 
-.btn:focus,.btn:active {
-	outline: none !important;
-	box-shadow: none;
+.btn:focus,
+.btn:active {
+  outline: none !important;
+  box-shadow: none;
 }
 
 @keyframes inAnimation {
-	0% {
-		opacity: 0;
-		visibility: hidden;
-	}
+  0% {
+    opacity: 0;
+    visibility: hidden;
+  }
 
-	100% {
-		opacity: 1;
-		visibility: visible;
-	}
+  100% {
+    opacity: 1;
+    visibility: visible;
+  }
 }
 
 @keyframes outAnimation {
-	0% {
-		opacity: 1;
-	}
+  0% {
+    opacity: 1;
+  }
 
-	100% {
-		opacity: 0;
-		visibility: hidden;
-	}
+  100% {
+    opacity: 0;
+    visibility: hidden;
+  }
 }
 
 .kep-login-facebook {
-	background-color: white !important;
-	border: none !important;
-	color: #066cd2 !important;
-	font-family: "Signika", sans-serif !important;
-	padding: 0.3rem 1.3rem 0.3rem 0.3rem !important;
-	font-weight: normal !important;
-	text-transform: lowercase !important;
-	font-size: 0.9rem !important;
+  background-color: white !important;
+  border: none !important;
+  color: #066cd2 !important;
+  font-family: 'Signika', sans-serif !important;
+  padding: 0.3rem 1.3rem 0.3rem 0.3rem !important;
+  font-weight: normal !important;
+  text-transform: lowercase !important;
+  font-size: 0.9rem !important;
 }
 
 a {
-	color: inherit;
-	text-decoration: none;
+  color: inherit;
+  text-decoration: none;
 }
 
 * {
-	box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 @media (prefers-color-scheme: dark) {
-	html {
-		color-scheme: dark;
-	}
-
-	body {
-		color: white;
-		background: black;
-	}
+  html {
+    color-scheme: dark;
+  }
 }
 
 .d-spinner {
-	animation-duration: 2.4s;
-	animation-timing-function: cubic-bezier(0, 1, 0.3, 1);
-	animation-direction: normal;
-	animation-iteration-count: infinite;
-	transform-origin: left bottom;
+  animation-duration: 2.4s;
+  animation-timing-function: cubic-bezier(0, 1, 0.3, 1);
+  animation-direction: normal;
+  animation-iteration-count: infinite;
+  transform-origin: left bottom;
 }
 
 .d-spinner.d-spinner__one {
-	animation-name: dSpinnerOne;
-	fill: #9967ce;
+  animation-name: dSpinnerOne;
+  fill: #9967ce;
 }
 
 .d-spinner.d-spinner__two {
-	animation-name: dSpinnerTwo;
-	fill: #bb93e5;
+  animation-name: dSpinnerTwo;
+  fill: #bb93e5;
 }
 
 .d-spinner.d-spinner__three {
-	animation-name: dSpinnerThree;
-	fill: #e9d4ff;
+  animation-name: dSpinnerThree;
+  fill: #e9d4ff;
 }
 
 .d-spinner.d-spinner__four {
-	animation-name: dSpinnerFour;
-	fill: #fefefe;
+  animation-name: dSpinnerFour;
+  fill: #fefefe;
 }
 
 @keyframes dSpinnerOne {
-	0% {
-		opacity: 0;
-		fill: #bb93e5;
-		transform: rotateZ(-65deg) scale(0.6);
-	}
+  0% {
+    opacity: 0;
+    fill: #bb93e5;
+    transform: rotateZ(-65deg) scale(0.6);
+  }
 
-	7% {
-		opacity: 1;
-		fill: #bb93e5;
-		transform: rotateZ(0) scale(1);
-	}
+  7% {
+    opacity: 1;
+    fill: #bb93e5;
+    transform: rotateZ(0) scale(1);
+  }
 
-	57% {
-		animation-timing-function: cubic-bezier(0, 0, 0, 1);
-		fill: #9967ce;
-	}
+  57% {
+    animation-timing-function: cubic-bezier(0, 0, 0, 1);
+    fill: #9967ce;
+  }
 
-	74% {
-		opacity: 1;
-		transform: rotateZ(0) scale(1);
-		animation-timing-function: cubic-bezier(0, 0, 1, 0);
-	}
+  74% {
+    opacity: 1;
+    transform: rotateZ(0) scale(1);
+    animation-timing-function: cubic-bezier(0, 0, 1, 0);
+  }
 
-	83% {
-		opacity: 0;
-		transform: rotateZ(45deg) scale(0.61);
-	}
+  83% {
+    opacity: 0;
+    transform: rotateZ(45deg) scale(0.61);
+  }
 
-	100% {
-		opacity: 0;
-		transform: rotateZ(45deg) scale(0.61);
-	}
+  100% {
+    opacity: 0;
+    transform: rotateZ(45deg) scale(0.61);
+  }
 }
 
 @keyframes dSpinnerTwo {
-	0% {
-		opacity: 0;
-		transform: rotateZ(-65deg) scale(0.6);
-	}
+  0% {
+    opacity: 0;
+    transform: rotateZ(-65deg) scale(0.6);
+  }
 
-	3% {
-		opacity: 0;
-		fill: #d0b6eb;
-		transform: rotateZ(-65deg) scale(0.6);
-	}
+  3% {
+    opacity: 0;
+    fill: #d0b6eb;
+    transform: rotateZ(-65deg) scale(0.6);
+  }
 
-	10% {
-		opacity: 1;
-		fill: #d0b6eb;
-		transform: rotateZ(0) scale(1);
-	}
+  10% {
+    opacity: 1;
+    fill: #d0b6eb;
+    transform: rotateZ(0) scale(1);
+  }
 
-	60% {
-		animation-timing-function: cubic-bezier(0, 0, 0, 1);
-		fill: #bb93e5;
-	}
+  60% {
+    animation-timing-function: cubic-bezier(0, 0, 0, 1);
+    fill: #bb93e5;
+  }
 
-	71% {
-		opacity: 1;
-		transform: rotateZ(0) scale(1);
-		animation-timing-function: cubic-bezier(0, 0, 1, 0);
-	}
+  71% {
+    opacity: 1;
+    transform: rotateZ(0) scale(1);
+    animation-timing-function: cubic-bezier(0, 0, 1, 0);
+  }
 
-	79% {
-		opacity: 0;
-		transform: rotateZ(45deg) scale(0.61);
-	}
+  79% {
+    opacity: 0;
+    transform: rotateZ(45deg) scale(0.61);
+  }
 
-	100% {
-		opacity: 0;
-		transform: rotateZ(45deg) scale(0.61);
-	}
+  100% {
+    opacity: 0;
+    transform: rotateZ(45deg) scale(0.61);
+  }
 }
 
 @keyframes dSpinnerThree {
-	0% {
-		opacity: 0;
-		transform: rotateZ(-65deg) scale(0.6);
-	}
+  0% {
+    opacity: 0;
+    transform: rotateZ(-65deg) scale(0.6);
+  }
 
-	6% {
-		opacity: 0;
-		fill: white;
-		transform: rotateZ(-65deg) scale(0.6);
-	}
+  6% {
+    opacity: 0;
+    fill: white;
+    transform: rotateZ(-65deg) scale(0.6);
+  }
 
-	13% {
-		opacity: 1;
-		fill: white;
-		transform: rotateZ(0) scale(1);
-	}
+  13% {
+    opacity: 1;
+    fill: white;
+    transform: rotateZ(0) scale(1);
+  }
 
-	63% {
-		fill: #e9d4ff;
-		animation-timing-function: cubic-bezier(0, 0, 0, 1);
-	}
+  63% {
+    fill: #e9d4ff;
+    animation-timing-function: cubic-bezier(0, 0, 0, 1);
+  }
 
-	68% {
-		opacity: 1;
-		transform: rotateZ(0) scale(1);
-		animation-timing-function: cubic-bezier(0, 0, 1, 0);
-	}
+  68% {
+    opacity: 1;
+    transform: rotateZ(0) scale(1);
+    animation-timing-function: cubic-bezier(0, 0, 1, 0);
+  }
 
-	76% {
-		opacity: 0;
-		transform: rotateZ(45deg) scale(0.61);
-	}
+  76% {
+    opacity: 0;
+    transform: rotateZ(45deg) scale(0.61);
+  }
 
-	100% {
-		opacity: 0;
-		transform: rotateZ(45deg) scale(0.61);
-	}
+  100% {
+    opacity: 0;
+    transform: rotateZ(45deg) scale(0.61);
+  }
 }
 
 @keyframes dSpinnerFour {
-	0% {
-		opacity: 0;
-		transform: rotateZ(-65deg) scale(0.6);
-	}
+  0% {
+    opacity: 0;
+    transform: rotateZ(-65deg) scale(0.6);
+  }
 
-	9% {
-		opacity: 0;
-		fill: white;
-		transform: rotateZ(-65deg) scale(0.6);
-	}
+  9% {
+    opacity: 0;
+    fill: white;
+    transform: rotateZ(-65deg) scale(0.6);
+  }
 
-	16% {
-		opacity: 1;
-		fill: white;
-		transform: rotateZ(0) scale(1);
-	}
+  16% {
+    opacity: 1;
+    fill: white;
+    transform: rotateZ(0) scale(1);
+  }
 
-	64% {
-		fill: #fdf6ff;
-		animation-timing-function: cubic-bezier(0, 0, 0, 1);
-	}
+  64% {
+    fill: #fdf6ff;
+    animation-timing-function: cubic-bezier(0, 0, 0, 1);
+  }
 
-	65% {
-		opacity: 1;
-		transform: rotateZ(0) scale(1);
-		animation-timing-function: cubic-bezier(0, 0, 1, 0);
-	}
+  65% {
+    opacity: 1;
+    transform: rotateZ(0) scale(1);
+    animation-timing-function: cubic-bezier(0, 0, 1, 0);
+  }
 
-	73% {
-		opacity: 0;
-		transform: rotateZ(45deg) scale(0.61);
-	}
+  73% {
+    opacity: 0;
+    transform: rotateZ(45deg) scale(0.61);
+  }
 
-	100% {
-		opacity: 0;
-		transform: rotateZ(45deg) scale(0.61);
-	}
+  100% {
+    opacity: 0;
+    transform: rotateZ(45deg) scale(0.61);
+  }
 }

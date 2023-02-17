@@ -1,63 +1,61 @@
-import { routes } from "../config";
-import { useRouter } from "next/router";
-import { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { loadUser, userUpdate } from "../redux/slices";
-import { errorToast, successToast } from "../components/common/toast.component";
+import { routes } from '../config';
+import { useRouter } from 'next/router';
+import { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { loadUser, userUpdate } from '../redux/slices';
+import { errorToast, successToast } from '../components/common/toast.component';
 
 const useDeviceSize = () => {
-	const { identify } = routes;
-	const router = useRouter();
-	const dispatch = useDispatch();
+  const { identify } = routes;
+  const router = useRouter();
+  const dispatch = useDispatch();
 
-	const [userData, setUserData] = useState({});
-	const [enableEdit, setEnableEdit] = useState(false);
+  const [userData, setUserData] = useState({});
+  const [enableEdit, setEnableEdit] = useState(false);
 
-	const { user } = useSelector(({ user }) => user);
+  const { user } = useSelector(({ user }) => user);
 
-	useEffect(() => {
-		if (localStorage.token) {
-			dispatch(loadUser());
-		} else {
-			router.push(identify);
-		}
-	}, []);
+  useEffect(() => {
+    if (localStorage.token) dispatch(loadUser());
+    else router.push(identify);
+  }, []);
 
-	const onSubmit = async () => {
-		try {
-			const respond = await dispatch(userUpdate({ data: userData, token: localStorage.token }));
-			if (respond?.error?.message !== "Rejected") {
-				console.log("I am being cllaed")
-				setUserData(false);
-				setEnableEdit(false);
-				successToast("user information updated");
-			} else {
-				setEnableEdit(false);
-			}
-		} catch (error) {
-			errorToast(error.message);
-		}
-	};
+  const onSubmit = async () => {
+    try {
+      const respond = await dispatch(
+        userUpdate({ data: userData, token: localStorage.token })
+      );
+      if (respond?.error?.message !== 'Rejected') {
+        console.log('I am being cllaed');
+        setUserData(false);
+        setEnableEdit(false);
+        successToast('user information updated');
+      } else {
+        setEnableEdit(false);
+      }
+    } catch (error) {
+      errorToast(error.message);
+    }
+  };
 
-	const handleChange = (e) => {
-		setUserData({ ...userData, [e.target.name]: e.target.value })
-	}
+  const handleChange = (e) => {
+    setUserData({ ...userData, [e.target.name]: e.target.value });
+  };
 
-	const handleToggle = () => {
-		setEnableEdit((prev) => !prev);
-	}
+  const handleToggle = () => {
+    setEnableEdit((prev) => !prev);
+  };
 
-	return {
-		handleChange,
-		handleToggle,
-		enableEdit,
-		onSubmit,
-		user,
-	}
+  return {
+    handleChange,
+    handleToggle,
+    enableEdit,
+    onSubmit,
+    user
+  };
+};
 
-}
-
-export default useDeviceSize; 
+export default useDeviceSize;
 
 // import { useUser } from '../../hooks';
 // import { Badge, Button, Col, Container, Form, Row } from "react-bootstrap";

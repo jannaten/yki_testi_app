@@ -1,66 +1,69 @@
-import mongoose from "mongoose";
-import { wordLevelType, contentType } from "../constants";
-import { partOfSpeechs, grammerCases } from "../constants";
+import mongoose from 'mongoose';
+import { wordLevelType, contentType } from '../constants';
+import { partOfSpeechs, grammerCases } from '../constants';
 
 const localizationKeyValuesSchema = new mongoose.Schema(
-	{
-		key: {
-			type: String,
-			required: true,
-			minlength: 2,
-			maxlength: 1024,
-			unique: true,
-		},
-		locale_values: [
-			{
-				name: {
-					type: String,
-					required: true,
-					minlength: 2,
-					maxlength: 2048,
-				},
-				valueType: {
-					type: String,
-					enum: partOfSpeechs,
-					default: partOfSpeechs[0],
-				},
-				case: {
-					type: String,
-					enum: grammerCases,
-					default: grammerCases[0],
-				},
-				wordLevel: {
-					type: String,
-					enum: wordLevelType,
-					default: wordLevelType[0],
-				},
-				content: {
-					type: String,
-					enum: contentType,
-					default: contentType[0],
-				},
-				description: {
-					type: String,
-					minlength: 2,
-					maxlength: 5000,
-				},
-				language: {
-					type: mongoose.Schema.Types.ObjectId,
-					ref: "Localization_Locale",
-					required: true,
-				},
-			},
-		],
-		deletedAt: {
-			type: Date,
-			default: null,
-		},
-	},
-	{
-		timestamps: true,
-	}
+  {
+    key: {
+      type: String,
+      required: true,
+      minlength: 2,
+      maxlength: 1024,
+      unique: true
+    },
+    locale_values: [
+      {
+        name: {
+          type: String,
+          required: true,
+          minlength: 2,
+          maxlength: 2048
+        },
+        valueType: {
+          type: String,
+          enum: partOfSpeechs,
+          default: partOfSpeechs[0]
+        },
+        case: {
+          type: String,
+          enum: grammerCases,
+          default: grammerCases[0]
+        },
+        wordLevel: {
+          type: String,
+          enum: wordLevelType,
+          default: wordLevelType[0]
+        },
+        content: {
+          type: String,
+          enum: contentType,
+          default: contentType[0]
+        },
+        description: {
+          type: String,
+          minlength: 2,
+          maxlength: 5000
+        },
+        language: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'Localization_Locale',
+          required: true
+        }
+      }
+    ],
+    deletedAt: {
+      type: Date,
+      default: null
+    }
+  },
+  {
+    timestamps: true
+  }
 );
 
 mongoose.models = {};
-const LocalizationKeyValues = mongoose.model('Localization_Key_Values', localizationKeyValuesSchema);
+const LocalizationKeyValues = mongoose.model(
+  'Localization_Key_Values',
+  localizationKeyValuesSchema
+);
 export default LocalizationKeyValues;

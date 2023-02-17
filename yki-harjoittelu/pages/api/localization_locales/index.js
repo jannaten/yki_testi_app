@@ -2,33 +2,34 @@
 import { dbConnect } from '../../../utils';
 import { GenericService } from '../../../services';
 import { LocalizationLocale } from '../../../models';
-import { localization_locale_schema as schema } from "../../../validation";
+import { localization_locale_schema as schema } from '../../../validation';
 
 export default async function handler(req, res) {
-	const { method } = req;
-	await dbConnect();
-	const localizationLocaleService = new GenericService(LocalizationLocale);
-	switch (method) {
-		case 'GET':
-			try {
-				const locales = await localizationLocaleService.getAll();
-				return res.status(200).send(locales);
-			} catch ({ message }) {
-				res.status(500).send({ message });
-			}
-			break
-		case 'POST':
-			try {
-				const { value, error } = schema.validate(req.body);
-				if (error) return res.status(400).send({ message: error.details[0].message });
-				const locale = await localizationLocaleService.add(value);
-				return res.status(201).send(locale);
-			} catch ({ message }) {
-				res.status(500).send({ message });
-			}
-			break
-		default:
-			res.status(500).send({ message: "something happened" });
-			break
-	}
+  const { method } = req;
+  await dbConnect();
+  const localizationLocaleService = new GenericService(LocalizationLocale);
+  switch (method) {
+    case 'GET':
+      try {
+        const locales = await localizationLocaleService.getAll();
+        return res.status(200).send(locales);
+      } catch ({ message }) {
+        res.status(500).send({ message });
+      }
+      break;
+    case 'POST':
+      try {
+        const { value, error } = schema.validate(req.body);
+        if (error)
+          return res.status(400).send({ message: error.details[0].message });
+        const locale = await localizationLocaleService.add(value);
+        return res.status(201).send(locale);
+      } catch ({ message }) {
+        res.status(500).send({ message });
+      }
+      break;
+    default:
+      res.status(500).send({ message: 'something happened' });
+      break;
+  }
 }

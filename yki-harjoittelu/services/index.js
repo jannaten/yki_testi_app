@@ -1,1 +1,1 @@
-export {default as GenericService } from "./generic-query.services";
+export { default as GenericService } from './generic-query.services';

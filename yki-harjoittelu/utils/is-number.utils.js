@@ -1,3 +1,3 @@
 export function isNumber(str) {
-	return !/\D/.test(str);
+  return !/\D/.test(str);
 }
