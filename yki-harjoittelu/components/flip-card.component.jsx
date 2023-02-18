@@ -2,9 +2,9 @@ import { useState } from 'react';
 import { Toast } from 'react-bootstrap';
 import { useDispatch } from 'react-redux';
 import ReactCardFlip from 'react-card-flip';
-import { removeShuffleWords } from '../redux/slices';
 import { compareTwoStrings } from 'string-similarity';
 import { Card, Form, Row, Col, Button } from 'react-bootstrap';
+import { removeShuffleWords, userWordUpdate } from '../redux/slices';
 
 const FlipCard = ({ studyWord, color }) => {
   const delay = 3000;
@@ -18,7 +18,7 @@ const FlipCard = ({ studyWord, color }) => {
   const toggleShowA = () => setShowA(!showA);
   const toggleShowB = () => setShowB(!showB);
 
-  const onCheck = () => {
+  const onCheck = async () => {
     const specialChars = /[`~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gi;
     const comaprableWord = studyWord?.locale_values[1]?.name?.toLowerCase();
     const removedCharCompare = comaprableWord.replace(specialChars, '');
@@ -31,8 +31,22 @@ const FlipCard = ({ studyWord, color }) => {
       ).toFixed(2)
     );
     if (compareTwoStrings(removedCharCompare, removeCharInput) > 0.8) {
+      await dispatch(
+        userWordUpdate({
+          data: { id: studyWord._id },
+          token: localStorage.token,
+          operation: 'increment'
+        })
+      );
       setShowA(true);
     } else {
+      await dispatch(
+        userWordUpdate({
+          data: { id: studyWord._id },
+          token: localStorage.token,
+          operation: 'decrement'
+        })
+      );
       setShowB(true);
     }
     setInputField('');
@@ -41,8 +55,15 @@ const FlipCard = ({ studyWord, color }) => {
     }, delay);
   };
 
-  const onHandleFlip = () => {
+  const onHandleFlip = async () => {
     setFlipped((state) => !state);
+    await dispatch(
+      userWordUpdate({
+        data: { id: studyWord._id },
+        token: localStorage.token,
+        operation: 'decrement'
+      })
+    );
   };
 
   return (
@@ -93,7 +114,7 @@ const FlipCard = ({ studyWord, color }) => {
         autohide
         bg='success'
         show={showA}
-        delay={delay}
+        delay={2800}
         className='mb-2 ms-2'
         onClose={toggleShowA}
         style={{
@@ -119,7 +140,7 @@ const FlipCard = ({ studyWord, color }) => {
         autohide
         bg='danger'
         show={showB}
-        delay={delay}
+        delay={2800}
         className='mb-2 ms-2'
         onClose={toggleShowB}
         style={{

@@ -11,6 +11,7 @@ export {
   loadLanguages,
   loadUserWords,
   addTranslation,
+	userWordUpdate,
   loadTranslations,
   onKeyValueChange,
   deleteTranslation,

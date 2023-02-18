@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { api } from '../../config';
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice, current } from '@reduxjs/toolkit';
 import { errorToast } from '../../components/common/toast.component';
 import { successToast } from '../../components/common/toast.component';
 
@@ -34,7 +34,7 @@ export const loadUserWords = createAsyncThunk(
   'localization/loadUserWords',
   async (data, { rejectWithValue }) => {
     try {
-      const response = await axios.post(api.localizationStudy, data);
+      const response = await axios.post(api.userWords, data);
       return response.data;
     } catch (error) {
       errorToast(error.response.data.message);
@@ -49,6 +49,21 @@ export const addTranslation = createAsyncThunk(
     try {
       const respond = await axios.post(api.localizationKeyValues, data);
       successToast('translation added');
+      return respond.data;
+    } catch (error) {
+      errorToast(error.response.data.message);
+      console.log(error);
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
+export const userWordUpdate = createAsyncThunk(
+  'localization/userWordUpdate',
+  async (data, { rejectWithValue }) => {
+    try {
+      const respond = await axios.post(api.userWordUpdate, data);
+      successToast('word updated');
       return respond.data;
     } catch (error) {
       errorToast(error.response.data.message);
@@ -141,7 +156,7 @@ const localizationSlice = createSlice({
     },
     removeShuffleWords: (state, { payload }) => {
       state.shuffleWords = [...state.shuffleWords].filter(
-        ({ _id }) => _id !== payload
+        ({ wordId }) => wordId._id !== payload
       );
     },
     translationInputReset: (state, action) => {
@@ -210,6 +225,24 @@ const localizationSlice = createSlice({
         });
         state.loading = false;
       })
+      .addCase(userWordUpdate.fulfilled, (state, { payload }) => {
+        const { word, task } = payload;
+        if (task === 'add') {
+          state.userWords = [...state.userWords, word];
+        } else if (task === 'remove') {
+          state.userWords = [...state.userWords]?.filter(
+            (el) => el?._id !== word?._id
+          );
+        } else if (task === 'update') {
+          state.shuffleWords = [...state.shuffleWords].map((el) => {
+            if (el._id === word._id) el.count = word.count;
+            return el;
+          });
+        } else {
+          state.userWords = [...state.userWords];
+        }
+        state.loading = false;
+      })
       // DELETE ALL
       .addCase(deleteTranslation.fulfilled, (state, { payload }) => {
         state.translations = state.translations.filter(
@@ -234,8 +267,8 @@ export const {
   handleEnableKeyEditing,
   translationInputReset,
   handleKeyValueChange,
-	removeShuffleWords,
-  onKeyValueChange,
+  removeShuffleWords,
+  onKeyValueChange
 } = localizationSlice.actions;
 
 export default localizationSlice.reducer;

@@ -1,9 +1,11 @@
 const BASE = '/api';
 
 export const api = {
-  userUpdate: `${BASE}/user/update`,
+	userWords: `${BASE}/user/words`,
+	userUpdate: `${BASE}/user/update`,
   userSignIn: `${BASE}/user/signin`,
   userByToken: `${BASE}/user/token`,
+	userWordUpdate: `${BASE}/user/words/update`,
   localizationLocales: `${BASE}/localization_locales`,
   localizationStudy: `${BASE}/localization_key_values/studies`,
   localizationLocalesById: (id) => `${BASE}/localization_locales/${id}`,

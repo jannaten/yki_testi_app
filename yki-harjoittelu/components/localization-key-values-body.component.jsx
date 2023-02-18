@@ -1,7 +1,7 @@
 //importing libraries
 import { useTheme } from 'styled-components';
 import { Table, Form, Row } from 'react-bootstrap';
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { XDiamondFill, BookHalf } from 'react-bootstrap-icons';
 import { Container, InputGroup, Col, Card } from 'react-bootstrap';
@@ -10,10 +10,10 @@ import { BookmarkCheckFill, PencilFill } from 'react-bootstrap-icons';
 import { paginate } from '../utils';
 import Loader from './common/loader.component';
 import { LocalizationTitleCount } from '../styles';
+import { errorToast } from './common/toast.component';
 import Pagination from './common/pagination.component';
-import { openModal, userUpdate } from '../redux/slices';
+import { openModal, userWordUpdate } from '../redux/slices';
 import { PrimaryButton, PrimaryRowButton } from '../styles';
-import { successToast, errorToast } from './common/toast.component';
 import LocalizationEditModal from './modals/localization-edit.modal';
 import LocalizationDeleteModal from './modals/localization-delete-modal';
 import { LoaderHolder, LocalizationEditorButtonsHolder } from '../styles';
@@ -27,7 +27,7 @@ function LocalizationKeyValueBody() {
   const [searchInputValue, setSearchInputValue] = useState('');
 
   const { user } = useSelector(({ user }) => user);
-  const { translations, languages } = useSelector(
+  const { translations, languages, userWords } = useSelector(
     ({ localization }) => localization
   );
 
@@ -74,11 +74,13 @@ function LocalizationKeyValueBody() {
 
   const onSubmitStudy = async (data) => {
     try {
-      const respond = await dispatch(
-        userUpdate({ data, token: localStorage.token, studyWords: true })
+      await dispatch(
+        userWordUpdate({
+          data,
+          token: localStorage.token,
+          operation: 'add_or_modify'
+        })
       );
-      if (respond?.error?.message !== 'Rejected')
-        successToast('user information updated');
     } catch (error) {
       errorToast(error.message);
     }
@@ -164,13 +166,13 @@ function LocalizationKeyValueBody() {
                         variant=''
                         className='ms-1 me-1'
                         disabled={!user}
-                        onClick={() =>
-                          onSubmitStudy({ id: translation._id, count: 0 })
-                        }
+                        onClick={() => onSubmitStudy({ id: translation._id })}
                         outline={
                           user
-                            ? user?.studyWords?.some(
-                                (el) => el.id === translation?._id
+                            ? userWords?.some(
+                                (el) =>
+                                  el?.wordId === translation._id ||
+                                  el?.wordId._id === translation._id
                               )
                             : 'false'
                         }>
@@ -189,7 +191,7 @@ function LocalizationKeyValueBody() {
                         //       )
                         //     : 'false'
                         // }
-												>
+                      >
                         <BookmarkCheckFill width={20} height={20} />
                       </PrimaryRowButton>
                       {isPrevilegedUser && (
@@ -294,13 +296,13 @@ function LocalizationKeyValueBody() {
                           variant=''
                           className='ms-3'
                           disabled={!user}
-                          onClick={() =>
-                            onSubmitStudy({ id: translation._id, count: 0 })
-                          }
+                          onClick={() => onSubmitStudy({ id: translation._id })}
                           outline={
                             user
-                              ? user?.studyWords?.some(
-                                  (el) => el.id === translation?._id
+                              ? userWords?.some(
+                                  (el) =>
+                                    el?.wordId === translation._id ||
+                                    el?.wordId._id === translation._id
                                 )
                               : 'false'
                           }>
@@ -319,7 +321,7 @@ function LocalizationKeyValueBody() {
                           //       )
                           //     : 'false'
                           // }
-													>
+                        >
                           <BookmarkCheckFill width={20} height={20} />
                         </PrimaryRowButton>
                         {user?.type === 'admin' && (

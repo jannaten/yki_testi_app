@@ -1,6 +1,9 @@
 import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
 import { User } from '../../../models';
-import { dbConnect, getToken, randomString } from '../../../utils';
+import { dbConnect, randomString } from '../../../utils';
+
+const { JWT_SECRET_KEY } = process.env;
 
 export default async function handler(req, res) {
   const { method } = req;
@@ -30,9 +33,39 @@ export default async function handler(req, res) {
                 password: hashedPassword,
                 username: `${value}${randomString(5)}`
               });
-              return res.status(201).json({ token: getToken(result) });
+              const token = jwt.sign(
+                {
+                  id: result._id,
+                  type: result.type,
+                  email: result.email,
+                  status: result.status,
+                  username: result.username,
+                  full_name: result.full_name,
+                  studyWords: result.studyWords
+                },
+                JWT_SECRET_KEY,
+                {
+                  expiresIn: '10h'
+                }
+              );
+              return res.status(201).json({ token });
             } else {
-              return res.status(200).json({ token: getToken(user) });
+              const token = jwt.sign(
+                {
+                  id: user._id,
+                  type: user.type,
+                  email: user.email,
+                  status: user.status,
+                  username: user.username,
+                  full_name: user.full_name,
+                  studyWords: user.studyWords
+                },
+                JWT_SECRET_KEY,
+                {
+                  expiresIn: '10h'
+                }
+              );
+              return res.status(200).json({ token });
             }
           } else if (req.body.platform === 'facebook') {
             const { name, email } = req.body.token;
@@ -49,9 +82,39 @@ export default async function handler(req, res) {
                 username: `${value}${randomString(5)}`,
                 full_name: name
               });
-              return res.status(201).json({ token: getToken(result) });
+              const token = jwt.sign(
+                {
+                  id: result._id,
+                  type: result.type,
+                  email: result.email,
+                  status: result.status,
+                  username: result.username,
+                  full_name: result.full_name,
+                  studyWords: result.studyWords
+                },
+                JWT_SECRET_KEY,
+                {
+                  expiresIn: '10h'
+                }
+              );
+              return res.status(201).json({ token });
             } else {
-              return res.status(200).json({ token: getToken(user) });
+              const token = jwt.sign(
+                {
+                  id: user._id,
+                  type: user.type,
+                  email: user.email,
+                  status: user.status,
+                  username: user.username,
+                  full_name: user.full_name,
+                  studyWords: user.studyWords
+                },
+                JWT_SECRET_KEY,
+                {
+                  expiresIn: '10h'
+                }
+              );
+              return res.status(200).json({ token });
             }
           }
         } else {
@@ -65,7 +128,22 @@ export default async function handler(req, res) {
           );
           if (!isPasswordCorrect)
             return res.status(400).json({ message: 'Invalid credentials' });
-          return res.status(200).json({ token: getToken(user) });
+          const token = jwt.sign(
+            {
+              id: user._id,
+              type: user.type,
+              email: user.email,
+              status: user.status,
+              username: user.username,
+              full_name: user.full_name,
+              studyWords: user.studyWords
+            },
+            JWT_SECRET_KEY,
+            {
+              expiresIn: '10h'
+            }
+          );
+          return res.status(200).json({ token });
         }
       } catch ({ message }) {
         res.status(500).send({ message });

@@ -13,7 +13,7 @@ function GamePage() {
   const { shuffleWords } = useSelector(({ localization }) => localization);
 
   useEffect(() => {
-    dispatch(loadUserWords(user?.studyWords));
+    dispatch(loadUserWords({ token: localStorage.token }));
   }, [user]);
 
   return (
@@ -33,7 +33,7 @@ function GamePage() {
           {shuffleWords?.map((studyWord, index) => (
             <Col key={index} xs={12} sm={12} md={6} lg={3} xl={3}>
               <FlipCard
-                studyWord={studyWord}
+                studyWord={studyWord.wordId}
                 color={randomColor({ format: 'hex' })}
               />
             </Col>

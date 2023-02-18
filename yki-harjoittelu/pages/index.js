@@ -4,6 +4,7 @@ import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { useTheme } from 'styled-components';
 
+import { loadUserWords } from '../redux/slices';
 import Sidebar from '../components/sidebar.component';
 import { SideBarHolder, LocalizationHolder } from '../styles';
 import { loadLanguages, loadTranslations } from '../redux/slices';
@@ -14,6 +15,8 @@ function Home() {
   const dispatch = useDispatch();
 
   useEffect(() => {
+    localStorage.token &&
+      dispatch(loadUserWords({ token: localStorage.token }));
     dispatch(loadLanguages());
     dispatch(loadTranslations());
   }, []);

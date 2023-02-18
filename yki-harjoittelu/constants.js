@@ -36,3 +36,5 @@ export const wordLevelType = [
   'spoken',
   'official'
 ];
+
+export const wordTypes = ['study', 'memorized'];
