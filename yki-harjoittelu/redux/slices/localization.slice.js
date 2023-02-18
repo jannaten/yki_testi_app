@@ -124,10 +124,12 @@ const localizationSlice = createSlice({
     languages: [],
     userWords: [],
     searchField: '',
+    isSorted: false,
     shuffleWords: [],
     translations: [],
     keyValuesInput: {},
     defaultInputValue: {},
+    cachedTranslations: null,
     enableKeyEditing: false,
     localeValueInputPair: [],
     keyValueChangeInputValue: {}
@@ -152,6 +154,30 @@ const localizationSlice = createSlice({
           return el;
         });
         return;
+      }
+    },
+    sortStudyWords: (state) => {
+      if (state.isSorted) {
+        state.translations = state.cachedTranslations;
+        state.isSorted = false;
+        state.cachedTranslations = null;
+      } else {
+        state.cachedTranslations = state.translations;
+        state.translations = [...state.translations].sort((a, b) => {
+          const aStudyIndex = state.userWords.findIndex(
+            ({ wordId, type }) =>
+              type === 'study' && (wordId._id === a._id || wordId === a._id)
+          );
+          const bStudyIndex = state.userWords.findIndex(
+            ({ wordId, type }) =>
+              type === 'study' && (wordId._id === b._id || wordId === b._id)
+          );
+          return (
+            (aStudyIndex === -1) - (bStudyIndex === -1) ||
+            aStudyIndex - bStudyIndex
+          );
+        });
+        state.isSorted = true;
       }
     },
     removeShuffleWords: (state, { payload }) => {
@@ -268,7 +294,8 @@ export const {
   translationInputReset,
   handleKeyValueChange,
   removeShuffleWords,
-  onKeyValueChange
+  onKeyValueChange,
+  sortStudyWords
 } = localizationSlice.actions;
 
 export default localizationSlice.reducer;

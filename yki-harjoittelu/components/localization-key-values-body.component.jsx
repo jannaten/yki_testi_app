@@ -165,14 +165,25 @@ function LocalizationKeyValueBody() {
                       <PrimaryRowButton
                         variant=''
                         className='ms-1 me-1'
-                        disabled={!user}
+                        disabled={
+                          !user ||
+                          userWords?.some(
+                            (el) =>
+                              (el?.wordId === translation._id ||
+                                el?.wordId._id === translation._id) &&
+                              el?.count === 10 &&
+                              el?.type === 'memorized'
+                          )
+                        }
                         onClick={() => onSubmitStudy({ id: translation._id })}
                         outline={
                           user
                             ? userWords?.some(
                                 (el) =>
-                                  el?.wordId === translation._id ||
-                                  el?.wordId._id === translation._id
+                                  (el?.wordId === translation._id ||
+                                    el?.wordId._id === translation._id) &&
+                                  el?.count < 10 &&
+                                  el?.type === 'study'
                               )
                             : 'false'
                         }>
@@ -181,17 +192,34 @@ function LocalizationKeyValueBody() {
                       <PrimaryRowButton
                         variant=''
                         className='ms-1 me-1'
-                        disabled={!user}
-                        // outline={
-                        //   user
-                        //     ? user?.studyWords?.some(
-                        //         (el) =>
-                        //           el.count < el.progressCount &&
-                        //           el.initialCount === el.progressCount
-                        //       )
-                        //     : 'false'
-                        // }
-                      >
+                        onClick={() => onSubmitStudy({ id: translation._id })}
+                        disabled={
+                          !user ||
+                          userWords.length === 0 ||
+                          (userWords?.some(
+                            (el) =>
+                              el?.wordId !== translation._id ||
+                              el?.wordId._id !== translation._id
+                          ) &&
+                            !userWords?.some(
+                              (el) =>
+                                (el?.wordId === translation._id ||
+                                  el?.wordId._id === translation._id) &&
+                                el?.count === 10 &&
+                                el?.type === 'memorized'
+                            ))
+                        }
+                        outline={
+                          user
+                            ? userWords?.some(
+                                (el) =>
+                                  (el?.wordId === translation._id ||
+                                    el?.wordId._id === translation._id) &&
+                                  el?.count === 10 &&
+                                  el?.type === 'memorized'
+                              )
+                            : 'false'
+                        }>
                         <BookmarkCheckFill width={20} height={20} />
                       </PrimaryRowButton>
                       {isPrevilegedUser && (
@@ -295,14 +323,25 @@ function LocalizationKeyValueBody() {
                         <PrimaryRowButton
                           variant=''
                           className='ms-3'
-                          disabled={!user}
+                          disabled={
+                            !user ||
+                            userWords?.some(
+                              (el) =>
+                                (el?.wordId === translation._id ||
+                                  el?.wordId._id === translation._id) &&
+                                el?.count === 10 &&
+                                el?.type === 'memorized'
+                            )
+                          }
                           onClick={() => onSubmitStudy({ id: translation._id })}
                           outline={
                             user
                               ? userWords?.some(
                                   (el) =>
-                                    el?.wordId === translation._id ||
-                                    el?.wordId._id === translation._id
+                                    (el?.wordId === translation._id ||
+                                      el?.wordId._id === translation._id) &&
+                                    el?.count < 10 &&
+                                    el?.type === 'study'
                                 )
                               : 'false'
                           }>
@@ -311,17 +350,34 @@ function LocalizationKeyValueBody() {
                         <PrimaryRowButton
                           variant=''
                           className='ms-3'
-                          disabled={!user}
-                          // outline={
-                          //   user
-                          //     ? user?.studyWords?.some(
-                          //         (el) =>
-                          //           el.initialCount >= el.progressCount &&
-                          //           el.initialCount === el.progressCount
-                          //       )
-                          //     : 'false'
-                          // }
-                        >
+                          disabled={
+														!user ||
+														userWords.length === 0 ||
+														(userWords?.some(
+															(el) =>
+																el?.wordId !== translation._id ||
+																el?.wordId._id !== translation._id
+														) &&
+															!userWords?.some(
+																(el) =>
+																	(el?.wordId === translation._id ||
+																		el?.wordId._id === translation._id) &&
+																	el?.count === 10 &&
+																	el?.type === 'memorized'
+															))
+													}
+													onClick={() => onSubmitStudy({ id: translation._id })}
+                          outline={
+                            user
+                              ? userWords?.some(
+                                  (el) =>
+                                    (el?.wordId === translation._id ||
+                                      el?.wordId._id === translation._id) &&
+                                    el?.count === 10 &&
+                                    el?.type === 'memorized'
+                                )
+                              : 'false'
+                          }>
                           <BookmarkCheckFill width={20} height={20} />
                         </PrimaryRowButton>
                         {user?.type === 'admin' && (

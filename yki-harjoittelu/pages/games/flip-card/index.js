@@ -30,14 +30,16 @@ function GamePage() {
           <ProgressBar animated striped variant='danger' now={10} key={3} />
         </ProgressBar>
         <Row>
-          {shuffleWords?.map((studyWord, index) => (
-            <Col key={index} xs={12} sm={12} md={6} lg={3} xl={3}>
-              <FlipCard
-                studyWord={studyWord.wordId}
-                color={randomColor({ format: 'hex' })}
-              />
-            </Col>
-          ))}
+          {shuffleWords
+            ?.filter((el) => el.type === 'study')
+            .map((studyWord, index) => (
+              <Col key={index} xs={12} sm={12} md={6} lg={3} xl={3}>
+                <FlipCard
+                  studyWord={studyWord.wordId}
+                  color={randomColor({ format: 'hex' })}
+                />
+              </Col>
+            ))}
         </Row>
       </Container>
     </div>

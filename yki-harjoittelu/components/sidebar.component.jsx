@@ -5,9 +5,9 @@ import { Spinner } from 'react-bootstrap';
 import { useTheme } from 'styled-components';
 import { Form, Col, Table } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
-import { translationInputReset } from '../redux/slices';
 import { SideBarLocalizationMatchTitle } from '../styles';
 import { SideBarLocalizationMatchHolder } from '../styles';
+import { translationInputReset, sortStudyWords } from '../redux/slices';
 import { addTranslation, handleTranslationValueChange } from '../redux/slices';
 import { SideBarContainer, PrimaryButton, SideBarTableHolder } from '../styles';
 
@@ -182,6 +182,7 @@ function Sidebar() {
         )}
       <PrimaryButton
         disabled={!user}
+				onClick={() => dispatch(sortStudyWords())}
         className={
           user?.type === 'admin'
             ? 'w-100 mt-3'

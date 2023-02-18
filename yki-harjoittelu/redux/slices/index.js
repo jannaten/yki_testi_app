@@ -12,6 +12,7 @@ export {
   loadUserWords,
   addTranslation,
 	userWordUpdate,
+	sortStudyWords,
   loadTranslations,
   onKeyValueChange,
   deleteTranslation,
