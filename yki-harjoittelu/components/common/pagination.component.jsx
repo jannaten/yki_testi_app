@@ -1,5 +1,5 @@
-import React from 'react';
 import _ from 'lodash';
+import React from 'react';
 
 function Pagination(props) {
   const { itemsCount, pageSize, currentPage } = props;
@@ -12,6 +12,7 @@ function Pagination(props) {
         {pages.map((page) => (
           <li key={page}>
             <button
+						
               style={
                 page === currentPage
                   ? {

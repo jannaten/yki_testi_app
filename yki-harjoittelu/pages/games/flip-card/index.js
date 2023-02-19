@@ -1,21 +1,21 @@
+import React from 'react';
 import Head from 'next/head';
-import React, { useEffect } from 'react';
-import { randomColor } from 'randomcolor';
+import { useWords } from '../../../hooks';
 import { ProgressBar } from 'react-bootstrap';
 import { Col, Container, Row } from 'react-bootstrap';
-import { loadUserWords } from '../../../redux/slices';
-import { useDispatch, useSelector } from 'react-redux';
+import { LocalizationTitleCount } from '../../../styles';
 import FlipCard from '../../../components/flip-card.component';
 
 function GamePage() {
-  const dispatch = useDispatch();
-  const { user } = useSelector(({ user }) => user);
-  const { shuffleWords } = useSelector(({ localization }) => localization);
-
-  useEffect(() => {
-    dispatch(loadUserWords({ token: localStorage.token }));
-  }, [user]);
-
+  const {
+    color,
+    initialRate,
+    onGoingRate,
+    successRate,
+    shuffleWords,
+    progressRate,
+    studyShuffledWords
+  } = useWords();
   return (
     <div>
       <Head>
@@ -24,22 +24,91 @@ function GamePage() {
         <link rel='icon' href='/favicon.ico' />
       </Head>
       <Container style={{ paddingTop: '5rem' }}>
+        <LocalizationTitleCount>
+          {shuffleWords.length}{' '}
+          {shuffleWords.length > 1 ? 'translations' : 'translation'} found
+          <br />
+          <div style={{ opacity: '0.8' }} className='d-flex flex-wrap'>
+            <span style={{ fontSize: '1rem' }} className='text-dark me-2 ms-2'>
+              {' '}
+              **{' '}
+            </span>
+            <span style={{ fontSize: '1rem' }} className='text-success'>
+              {successRate.length} {successRate.length > 0 ? 'words' : 'word'}{' '}
+              are memorized
+            </span>
+            <span style={{ fontSize: '1rem' }} className='text-dark me-2 ms-2'>
+              {' '}
+              **{' '}
+            </span>
+            <span style={{ fontSize: '1rem' }} className='text-warning'>
+              {onGoingRate.length} {onGoingRate.length > 0 ? 'words' : 'word'}{' '}
+              on progress
+            </span>
+            <span style={{ fontSize: '1rem' }} className='text-dark me-2 ms-2'>
+              {' '}
+              **{' '}
+            </span>
+            <span style={{ fontSize: '1rem' }} className='text-info'>
+              {progressRate.length} {progressRate.length > 0 ? 'words' : 'word'}{' '}
+              almost leanred
+            </span>
+            <span style={{ fontSize: '1rem' }} className='text-dark me-2 ms-2'>
+              {' '}
+              **{' '}
+            </span>
+            <span style={{ fontSize: '1rem' }} className='text-danger'>
+              {initialRate.length} {initialRate.length > 0 ? 'words' : 'word'}{' '}
+              to be leanred
+            </span>
+            <span style={{ fontSize: '1rem' }} className='text-dark me-2 ms-2'>
+              {' '}
+              **{' '}
+            </span>
+          </div>
+        </LocalizationTitleCount>
         <ProgressBar>
-          <ProgressBar animated striped variant='success' now={35} key={1} />
-          <ProgressBar animated variant='warning' now={20} key={2} />
-          <ProgressBar animated striped variant='danger' now={10} key={3} />
+          <ProgressBar
+            animated
+            striped
+            variant='success'
+            now={successRate.value}
+            key={1}
+          />
+          <ProgressBar
+            animated
+            variant='warning'
+            now={onGoingRate.value}
+            key={2}
+          />
+          <ProgressBar
+            animated
+            striped
+            variant='info'
+            now={progressRate.value}
+            key={3}
+          />
+          <ProgressBar
+            animated
+            striped
+            variant='danger'
+            now={initialRate.value}
+            key={4}
+          />
         </ProgressBar>
-        <Row>
-          {shuffleWords
-            ?.filter((el) => el.type === 'study')
-            .map((studyWord, index) => (
-              <Col key={index} xs={12} sm={12} md={6} lg={3} xl={3}>
-                <FlipCard
-                  studyWord={studyWord.wordId}
-                  color={randomColor({ format: 'hex' })}
-                />
-              </Col>
-            ))}
+        <Row className='mt-2'>
+          {studyShuffledWords.map((studyWord, index) => (
+            <Col
+              xs={12}
+              sm={12}
+              md={6}
+              lg={3}
+              xl={3}
+              key={index}
+              className='mt-2 mb-2'>
+              <FlipCard color={color} studyWord={studyWord.wordId} />
+            </Col>
+          ))}
         </Row>
       </Container>
     </div>

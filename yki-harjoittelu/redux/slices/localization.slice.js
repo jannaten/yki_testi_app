@@ -63,7 +63,7 @@ export const userWordUpdate = createAsyncThunk(
   async (data, { rejectWithValue }) => {
     try {
       const respond = await axios.post(api.userWordUpdate, data);
-      successToast('word updated');
+      data?.notification && successToast('word updated');
       return respond.data;
     } catch (error) {
       errorToast(error.response.data.message);

@@ -1,13 +1,14 @@
 //importing libraries
 import { useTheme } from 'styled-components';
 import { Table, Form, Row } from 'react-bootstrap';
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { XDiamondFill, BookHalf } from 'react-bootstrap-icons';
 import { Container, InputGroup, Col, Card } from 'react-bootstrap';
 import { BookmarkCheckFill, PencilFill } from 'react-bootstrap-icons';
 //importing utiles, components, redux and styles
 import { paginate } from '../utils';
+import { useScrollToTop } from '../hooks';
 import Loader from './common/loader.component';
 import { LocalizationTitleCount } from '../styles';
 import { errorToast } from './common/toast.component';
@@ -85,7 +86,7 @@ function LocalizationKeyValueBody() {
       errorToast(error.message);
     }
   };
-
+	useScrollToTop(currentPage);
   return (
     <div>
       <LocalizationTitleCount>
@@ -123,7 +124,7 @@ function LocalizationKeyValueBody() {
               <Row
                 style={{ borderBottom: '0.1rem solid black' }}
                 className='mb-2 p-0'>
-                {languages.length &&
+                {languages.length > 0 &&
                   languages.map(({ _id, name, locale }) => (
                     <Col
                       xs={6}
@@ -140,7 +141,7 @@ function LocalizationKeyValueBody() {
                   <Card className='mt-3 mb-3' key={translation._id}>
                     <Card.Header>
                       <Row>
-                        {languages?.length &&
+                        {languages?.length > 0 &&
                           languages.map((locales) => (
                             <Col
                               xs={6}
@@ -148,7 +149,7 @@ function LocalizationKeyValueBody() {
                               md={6}
                               key={locales._id}
                               className='d-flex align-items-center justify-content-center flex-wrap'>
-                              {translation.locale_values.length &&
+                              {translation.locale_values.length > 0 &&
                                 translation.locale_values.map(
                                   ({ language, name }) => (
                                     <React.Fragment key={`${language}-${name}`}>
@@ -271,7 +272,7 @@ function LocalizationKeyValueBody() {
                     width < 992 ? 'd-flex flex-column text-center' : ''
                   }>
                   {width >= 992 && user?.type === 'admin' && <th>keys</th>}
-                  {languages.length &&
+                  {languages.length > 0 &&
                     languages.map(({ _id, name, locale }) => (
                       <th key={_id}>
                         {locale} ({name})
@@ -286,11 +287,11 @@ function LocalizationKeyValueBody() {
                     <tr key={translation._id}>
                       {user?.type === 'admin' && <td>{translation.key}</td>}
                       {!sliderView &&
-                        languages?.length &&
+                        languages?.length > 0 &&
                         languages.map((locales) => (
                           <td key={locales._id}>
                             <>
-                              {translation.locale_values.length &&
+                              {translation.locale_values.length > 0 &&
                                 translation.locale_values.map(
                                   ({ language, name }, index) => (
                                     <span key={index}>
@@ -351,22 +352,22 @@ function LocalizationKeyValueBody() {
                           variant=''
                           className='ms-3'
                           disabled={
-														!user ||
-														userWords.length === 0 ||
-														(userWords?.some(
-															(el) =>
-																el?.wordId !== translation._id ||
-																el?.wordId._id !== translation._id
-														) &&
-															!userWords?.some(
-																(el) =>
-																	(el?.wordId === translation._id ||
-																		el?.wordId._id === translation._id) &&
-																	el?.count === 10 &&
-																	el?.type === 'memorized'
-															))
-													}
-													onClick={() => onSubmitStudy({ id: translation._id })}
+                            !user ||
+                            userWords.length === 0 ||
+                            (userWords?.some(
+                              (el) =>
+                                el?.wordId !== translation._id ||
+                                el?.wordId._id !== translation._id
+                            ) &&
+                              !userWords?.some(
+                                (el) =>
+                                  (el?.wordId === translation._id ||
+                                    el?.wordId._id === translation._id) &&
+                                  el?.count === 10 &&
+                                  el?.type === 'memorized'
+                              ))
+                          }
+                          onClick={() => onSubmitStudy({ id: translation._id })}
                           outline={
                             user
                               ? userWords?.some(

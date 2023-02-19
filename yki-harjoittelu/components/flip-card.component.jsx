@@ -51,25 +51,27 @@ const FlipCard = ({ studyWord, color }) => {
     }
     setInputField('');
     setTimeout(() => {
-      dispatch(removeShuffleWords(studyWord._id));
+      setFlipped((state) => !state);
+      // dispatch(removeShuffleWords(studyWord._id));
     }, delay);
   };
 
   const onHandleFlip = async () => {
     setFlipped((state) => !state);
-    await dispatch(
-      userWordUpdate({
-        data: { id: studyWord._id },
-        token: localStorage.token,
-        operation: 'decrement'
-      })
-    );
+    !flipped &&
+      (await dispatch(
+        userWordUpdate({
+          data: { id: studyWord._id },
+          token: localStorage.token,
+          operation: 'decrement'
+        })
+      ));
   };
 
   return (
     <div style={{ position: 'relative' }}>
       <ReactCardFlip isFlipped={flipped} flipDirection='vertical'>
-        <Card className='m-2' style={{ minHeight: '10rem', width: '100%' }}>
+        <Card style={{ minHeight: '10rem', width: '100%' }}>
           <Card.Header>{studyWord?.locale_values[0]?.name}</Card.Header>
           <Card.Body>
             <Form.Control
@@ -86,7 +88,9 @@ const FlipCard = ({ studyWord, color }) => {
                 </Button>
               </Col>
               <Col xs={6} sm={6} md={6} lg={6} xl={6}>
-                <Button variant='outline-success' onClick={onHandleFlip}>
+                <Button
+                  variant='outline-success'
+                  onClick={() => !flipped && onHandleFlip()}>
                   Hint
                 </Button>{' '}
               </Col>
@@ -99,8 +103,8 @@ const FlipCard = ({ studyWord, color }) => {
             minHeight: '10rem',
             backgroundColor: color
           }}
-          onClick={onHandleFlip}
-          className='m-2 shadow'>
+          onClick={() => !flipped && onHandleFlip()}
+          className='shadow'>
           <Card.Body>
             <p
               className='fs-1 text-white'
@@ -114,8 +118,7 @@ const FlipCard = ({ studyWord, color }) => {
         autohide
         bg='success'
         show={showA}
-        delay={2800}
-        className='mb-2 ms-2'
+        delay={delay}
         onClose={toggleShowA}
         style={{
           zIndex: 1,
@@ -140,8 +143,7 @@ const FlipCard = ({ studyWord, color }) => {
         autohide
         bg='danger'
         show={showB}
-        delay={2800}
-        className='mb-2 ms-2'
+        delay={delay}
         onClose={toggleShowB}
         style={{
           zIndex: 1,
