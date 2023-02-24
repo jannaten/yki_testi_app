@@ -1,7 +1,7 @@
 import randomColor from 'randomcolor';
 import { loadUserWords } from '../redux/slices';
 import { useDispatch, useSelector } from 'react-redux';
-import { useCallback, useEffect, useMemo } from 'react';
+import { useCallback, useEffect, useMemo, useRef } from 'react';
 
 export default function useWords() {
   const dispatch = useDispatch();
@@ -56,8 +56,11 @@ export default function useWords() {
     return shuffleWords?.filter((el) => el.type === 'study');
   }, [shuffleWords]);
 
-  const color = useCallback(() => {
-    return randomColor({ format: 'hex' });
+	const colorRef = useRef({});
+  const getColor = useCallback((index) => {
+    if (!colorRef.current[index])
+      colorRef.current[index] = randomColor({ format: 'hex' });
+    return colorRef.current[index];
   }, []);
 
   return {
@@ -67,6 +70,6 @@ export default function useWords() {
     initialRate,
     onGoingRate,
     successRate,
-    color
+		getColor,
   };
 }

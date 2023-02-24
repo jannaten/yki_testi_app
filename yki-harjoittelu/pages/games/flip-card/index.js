@@ -1,5 +1,5 @@
-import React from 'react';
 import Head from 'next/head';
+import React from 'react';
 import { useWords } from '../../../hooks';
 import { ProgressBar } from 'react-bootstrap';
 import { Col, Container, Row } from 'react-bootstrap';
@@ -8,7 +8,7 @@ import FlipCard from '../../../components/flip-card.component';
 
 function GamePage() {
   const {
-    color,
+    getColor,
     initialRate,
     onGoingRate,
     successRate,
@@ -27,46 +27,46 @@ function GamePage() {
         <LocalizationTitleCount>
           {shuffleWords.length}{' '}
           {shuffleWords.length > 1 ? 'translations' : 'translation'} found
-          <br />
-          <div style={{ opacity: '0.8' }} className='d-flex flex-wrap'>
-            <span style={{ fontSize: '1rem' }} className='text-dark me-2 ms-2'>
-              {' '}
-              **{' '}
-            </span>
-            <span style={{ fontSize: '1rem' }} className='text-success'>
-              {successRate.length} {successRate.length > 0 ? 'words' : 'word'}{' '}
-              are memorized
-            </span>
-            <span style={{ fontSize: '1rem' }} className='text-dark me-2 ms-2'>
-              {' '}
-              **{' '}
-            </span>
-            <span style={{ fontSize: '1rem' }} className='text-warning'>
-              {onGoingRate.length} {onGoingRate.length > 0 ? 'words' : 'word'}{' '}
-              on progress
-            </span>
-            <span style={{ fontSize: '1rem' }} className='text-dark me-2 ms-2'>
-              {' '}
-              **{' '}
-            </span>
-            <span style={{ fontSize: '1rem' }} className='text-info'>
-              {progressRate.length} {progressRate.length > 0 ? 'words' : 'word'}{' '}
-              almost leanred
-            </span>
-            <span style={{ fontSize: '1rem' }} className='text-dark me-2 ms-2'>
-              {' '}
-              **{' '}
-            </span>
-            <span style={{ fontSize: '1rem' }} className='text-danger'>
-              {initialRate.length} {initialRate.length > 0 ? 'words' : 'word'}{' '}
-              to be leanred
-            </span>
-            <span style={{ fontSize: '1rem' }} className='text-dark me-2 ms-2'>
-              {' '}
-              **{' '}
-            </span>
-          </div>
         </LocalizationTitleCount>
+        <br />
+        <div style={{ opacity: '0.8' }} className='d-flex flex-wrap'>
+          <span style={{ fontSize: '1rem' }} className='text-dark me-2 ms-2'>
+            {' '}
+            **{' '}
+          </span>
+          <span style={{ fontSize: '1rem' }} className='text-success'>
+            {successRate.length} {successRate.length > 1 ? 'words' : 'word'} are
+            memorized
+          </span>
+          <span style={{ fontSize: '1rem' }} className='text-dark me-2 ms-2'>
+            {' '}
+            **{' '}
+          </span>
+          <span style={{ fontSize: '1rem' }} className='text-warning'>
+            {onGoingRate.length} {onGoingRate.length > 1 ? 'words' : 'word'} on
+            progress
+          </span>
+          <span style={{ fontSize: '1rem' }} className='text-dark me-2 ms-2'>
+            {' '}
+            **{' '}
+          </span>
+          <span style={{ fontSize: '1rem' }} className='text-info'>
+            {progressRate.length} {progressRate.length > 1 ? 'words' : 'word'}{' '}
+            almost leanred
+          </span>
+          <span style={{ fontSize: '1rem' }} className='text-dark me-2 ms-2'>
+            {' '}
+            **{' '}
+          </span>
+          <span style={{ fontSize: '1rem' }} className='text-danger'>
+            {initialRate.length} {initialRate.length > 1 ? 'words' : 'word'} to
+            be leanred
+          </span>
+          <span style={{ fontSize: '1rem' }} className='text-dark me-2 ms-2'>
+            {' '}
+            **{' '}
+          </span>
+        </div>
         <ProgressBar>
           <ProgressBar
             animated
@@ -106,7 +106,7 @@ function GamePage() {
               xl={3}
               key={index}
               className='mt-2 mb-2'>
-              <FlipCard color={color} studyWord={studyWord.wordId} />
+              <FlipCard color={getColor(index)} studyWord={studyWord.wordId} />
             </Col>
           ))}
         </Row>
