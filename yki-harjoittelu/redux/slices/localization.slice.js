@@ -17,6 +17,21 @@ export const loadTranslations = createAsyncThunk(
   }
 );
 
+export const loadPaginatedTranslations = createAsyncThunk(
+  'localization/loadPaginatedTranslations',
+  async ({ pageNumber = 1, pageSize = 25 }, { rejectWithValue }) => {
+    try {
+      const response = await axios.get(
+        `${api.localizationKeyValuesPaginate}?pageNumber=${pageNumber}&pageSize=${pageSize}`
+      );
+      return response.data;
+    } catch (error) {
+      errorToast(error.response.data.message);
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
 export const loadLanguages = createAsyncThunk(
   'localization/loadLanguages',
   async (_, { rejectWithValue }) => {
@@ -119,6 +134,7 @@ const isRejectedAction = (action) => {
 const localizationSlice = createSlice({
   name: 'localization',
   initialState: {
+    count: 0,
     errors: false,
     loading: false,
     languages: [],
@@ -227,6 +243,13 @@ const localizationSlice = createSlice({
       // LOAD
       .addCase(loadTranslations.fulfilled, (state, action) => {
         state.translations = action.payload;
+        state.loading = false;
+      })
+      // LOAD
+      .addCase(loadPaginatedTranslations.fulfilled, (state, action) => {
+        const { data, count } = action.payload;
+        state.count = count;
+        state.translations = data;
         state.loading = false;
       })
       // LOAD

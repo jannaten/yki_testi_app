@@ -1,5 +1,5 @@
-import Head from 'next/head';
 import React from 'react';
+import Head from 'next/head';
 import { useWords } from '../../../hooks';
 import { ProgressBar } from 'react-bootstrap';
 import { Col, Container, Row } from 'react-bootstrap';

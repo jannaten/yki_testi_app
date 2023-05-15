@@ -1,9 +1,9 @@
 //importing libraries
 import { useTheme } from 'styled-components';
 import { Table, Form, Row } from 'react-bootstrap';
+import React, { useState, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { XDiamondFill, BookHalf } from 'react-bootstrap-icons';
-import React, { useState, useEffect, useCallback } from 'react';
 import { Container, InputGroup, Col, Card } from 'react-bootstrap';
 import { BookmarkCheckFill, PencilFill } from 'react-bootstrap-icons';
 //importing utiles, components, redux and styles
@@ -18,7 +18,6 @@ import { PrimaryButton, PrimaryRowButton } from '../styles';
 import LocalizationEditModal from './modals/localization-edit.modal';
 import LocalizationDeleteModal from './modals/localization-delete-modal';
 import { LoaderHolder, LocalizationEditorButtonsHolder } from '../styles';
-import { loadPaginatedTranslations } from '../redux/slices/localization.slice';
 
 function LocalizationKeyValueBody() {
   const { width } = useTheme();
@@ -29,14 +28,9 @@ function LocalizationKeyValueBody() {
   const [searchInputValue, setSearchInputValue] = useState('');
 
   const { user } = useSelector(({ user }) => user);
-	
-  const { translations, languages, userWords, count } = useSelector(
+  const { translations, languages, userWords } = useSelector(
     ({ localization }) => localization
   );
-
-  useEffect(() => {
-    dispatch(loadPaginatedTranslations({ pageNumber: currentPage, pageSize }));
-  }, [currentPage]);
 
   const isPrevilegedUser = user?.type === 'admin' || user?.type === 'teacher';
 
@@ -74,6 +68,11 @@ function LocalizationKeyValueBody() {
     });
   }
 
+  const paginatedTranslations = useCallback(
+    paginate(filteredTranslations, currentPage, pageSize),
+    [filteredTranslations, currentPage, pageSize]
+  );
+
   const onSubmitStudy = async (data) => {
     try {
       await dispatch(
@@ -87,11 +86,12 @@ function LocalizationKeyValueBody() {
       errorToast(error.message);
     }
   };
-  useScrollToTop(currentPage);
+	useScrollToTop(currentPage);
   return (
     <div>
       <LocalizationTitleCount>
-        {count} {count > 1 ? 'translations' : 'translation'} found
+        {filteredTranslations.length}{' '}
+        {filteredTranslations.length > 1 ? 'translations' : 'translation'} found
       </LocalizationTitleCount>
       <InputGroup className='mb-3'>
         <Form.Control
@@ -109,12 +109,12 @@ function LocalizationKeyValueBody() {
       </InputGroup>
       <Container className='text-center'>
         <Pagination
-          itemsCount={count}
           pageSize={pageSize}
           onNextPage={onNextPage}
           currentPage={currentPage}
           onPageChange={handlePageChange}
           onPreviousPage={onPreviousPage}
+          itemsCount={filteredTranslations.length}
         />
       </Container>
       {translations.length > 0 ? (
@@ -136,8 +136,8 @@ function LocalizationKeyValueBody() {
                     </Col>
                   ))}
               </Row>
-              {filteredTranslations.length > 0 &&
-                filteredTranslations.map((translation) => (
+              {paginatedTranslations.length > 0 &&
+                paginatedTranslations.map((translation) => (
                   <Card className='mt-3 mb-3' key={translation._id}>
                     <Card.Header>
                       <Row>
@@ -282,8 +282,8 @@ function LocalizationKeyValueBody() {
                 </tr>
               </thead>
               <tbody>
-                {filteredTranslations.length > 0 &&
-                  filteredTranslations.map((translation) => (
+                {paginatedTranslations.length > 0 &&
+                  paginatedTranslations.map((translation) => (
                     <tr key={translation._id}>
                       {user?.type === 'admin' && <td>{translation.key}</td>}
                       {!sliderView &&
@@ -413,12 +413,12 @@ function LocalizationKeyValueBody() {
       )}
       <Container className='text-center'>
         <Pagination
-          itemsCount={count}
           pageSize={pageSize}
           onNextPage={onNextPage}
           currentPage={currentPage}
           onPageChange={handlePageChange}
           onPreviousPage={onPreviousPage}
+          itemsCount={filteredTranslations.length}
         />
       </Container>
     </div>
