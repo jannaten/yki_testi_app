@@ -127,13 +127,13 @@ function Sidebar() {
           )}
         </Form>
       )}
-      {filteredTranslations.length !== translations.length &&
-        filteredTranslations.length > 0 && (
+      {filteredTranslations?.length !== translations?.length &&
+        filteredTranslations?.length > 0 && (
           <div
             className='w-100'
             style={
-              filteredTranslations.length !== translations.length &&
-              filteredTranslations.length > 0
+              filteredTranslations?.length !== translations?.length &&
+              filteredTranslations?.length > 0
                 ? mountedStyle
                 : unmountedStyle
             }>
@@ -182,7 +182,7 @@ function Sidebar() {
         )}
       <PrimaryButton
         disabled={!user}
-				onClick={() => dispatch(sortStudyWords())}
+        onClick={() => dispatch(sortStudyWords())}
         className={
           user?.type === 'admin'
             ? 'w-100 mt-3'

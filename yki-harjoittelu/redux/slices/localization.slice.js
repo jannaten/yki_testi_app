@@ -17,13 +17,14 @@ export const loadTranslations = createAsyncThunk(
   }
 );
 
-export const loadPaginatedTranslations = createAsyncThunk(
-  'localization/loadPaginatedTranslations',
-  async ({ pageNumber = 1, pageSize = 25 }, { rejectWithValue }) => {
+export const loadFilteredTranslations = createAsyncThunk(
+  'localization/loadFilteredTranslations',
+  async ({ pageNumber = 1, pageSize = 25, text }, { rejectWithValue }) => {
     try {
-      const response = await axios.get(
-        `${api.localizationKeyValuesPaginate}?pageNumber=${pageNumber}&pageSize=${pageSize}`
-      );
+      const url = text
+        ? `${api.localizationKeyValuesByText}?search=${text}`
+        : `${api.localizationKeyValuesPaginate}?pageNumber=${pageNumber}&pageSize=${pageSize}`;
+      const response = await axios.get(url);
       return response.data;
     } catch (error) {
       errorToast(error.response.data.message);
@@ -246,7 +247,7 @@ const localizationSlice = createSlice({
         state.loading = false;
       })
       // LOAD
-      .addCase(loadPaginatedTranslations.fulfilled, (state, action) => {
+      .addCase(loadFilteredTranslations.fulfilled, (state, action) => {
         const { data, count } = action.payload;
         state.count = count;
         state.translations = data;

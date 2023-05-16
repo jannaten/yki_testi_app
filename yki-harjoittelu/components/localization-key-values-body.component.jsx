@@ -7,7 +7,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { Container, InputGroup, Col, Card } from 'react-bootstrap';
 import { BookmarkCheckFill, PencilFill } from 'react-bootstrap-icons';
 //importing utiles, components, redux and styles
-import { useScrollToTop } from '../hooks';
+// import { useScrollToTop } from '../hooks';
 import Loader from './common/loader.component';
 import { LocalizationTitleCount } from '../styles';
 import { errorToast } from './common/toast.component';
@@ -17,7 +17,7 @@ import { PrimaryButton, PrimaryRowButton } from '../styles';
 import LocalizationEditModal from './modals/localization-edit.modal';
 import LocalizationDeleteModal from './modals/localization-delete-modal';
 import { LoaderHolder, LocalizationEditorButtonsHolder } from '../styles';
-import { loadPaginatedTranslations } from '../redux/slices/localization.slice';
+import { loadFilteredTranslations } from '../redux/slices/localization.slice';
 
 function LocalizationKeyValueBody() {
   const { width } = useTheme();
@@ -28,14 +28,34 @@ function LocalizationKeyValueBody() {
   const [searchInputValue, setSearchInputValue] = useState('');
 
   const { user } = useSelector(({ user }) => user);
-	
   const { translations, languages, userWords, count } = useSelector(
     ({ localization }) => localization
   );
 
   useEffect(() => {
-    dispatch(loadPaginatedTranslations({ pageNumber: currentPage, pageSize }));
-  }, [currentPage]);
+    let timeoutId;
+    if (searchInputValue) {
+      if (timeoutId) clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => {
+        dispatch(
+          loadFilteredTranslations({
+            text: searchInputValue
+          })
+        );
+      }, 300);
+    } else {
+      dispatch(
+        loadFilteredTranslations({
+          pageNumber: currentPage,
+          pageSize
+        })
+      );
+    }
+
+    return () => {
+      if (timeoutId) clearTimeout(timeoutId);
+    };
+  }, [currentPage, searchInputValue]);
 
   const isPrevilegedUser = user?.type === 'admin' || user?.type === 'teacher';
 
@@ -54,25 +74,6 @@ function LocalizationKeyValueBody() {
     setCurrentPage(currentPage + 1);
   }, [currentPage]);
 
-  const isTransltionDefined = Array.isArray(translations);
-  let filteredTranslations;
-  if (isTransltionDefined) {
-    filteredTranslations = translations.filter((filtering) => {
-      if (
-        filtering?.key?.toLowerCase().includes(searchInputValue.toLowerCase())
-      )
-        return true;
-      for (let i = 0; i < filtering.locale_values.length; i++)
-        if (
-          filtering.locale_values[i].name
-            ?.toLowerCase()
-            .includes(searchInputValue?.toLowerCase())
-        )
-          return true;
-      return false;
-    });
-  }
-
   const onSubmitStudy = async (data) => {
     try {
       await dispatch(
@@ -86,11 +87,12 @@ function LocalizationKeyValueBody() {
       errorToast(error.message);
     }
   };
-  useScrollToTop(currentPage);
+  // useScrollToTop(currentPage);
+  const itemsCount = searchInputValue ? translations.length : count;
   return (
     <div>
       <LocalizationTitleCount>
-        {count} {count > 1 ? 'translations' : 'translation'} found
+        {itemsCount} {itemsCount > 1 ? 'translations' : 'translation'} found
       </LocalizationTitleCount>
       <InputGroup className='mb-3'>
         <Form.Control
@@ -108,15 +110,15 @@ function LocalizationKeyValueBody() {
       </InputGroup>
       <Container className='text-center'>
         <Pagination
-          itemsCount={count}
           pageSize={pageSize}
           onNextPage={onNextPage}
+          itemsCount={itemsCount}
           currentPage={currentPage}
           onPageChange={handlePageChange}
           onPreviousPage={onPreviousPage}
         />
       </Container>
-      {translations.length > 0 ? (
+      {translations?.length > 0 ? (
         <>
           {width <= 992 ? (
             <div>
@@ -135,132 +137,130 @@ function LocalizationKeyValueBody() {
                     </Col>
                   ))}
               </Row>
-              {filteredTranslations.length > 0 &&
-                filteredTranslations.map((translation) => (
-                  <Card className='mt-3 mb-3' key={translation._id}>
-                    <Card.Header>
-                      <Row>
-                        {languages?.length > 0 &&
-                          languages.map((locales) => (
-                            <Col
-                              xs={6}
-                              sm={6}
-                              md={6}
-                              key={locales._id}
-                              className='d-flex align-items-center justify-content-center flex-wrap'>
-                              {translation.locale_values.length > 0 &&
-                                translation.locale_values.map(
-                                  ({ language, name }) => (
-                                    <React.Fragment key={`${language}-${name}`}>
-                                      {locales.locale === language.locale &&
-                                        name}
-                                    </React.Fragment>
-                                  )
-                                )}
-                            </Col>
-                          ))}
-                      </Row>
-                    </Card.Header>
-                    <div className='d-flex align-items-center justify-content-center flex-wrap mb-2 mt-2'>
-                      <PrimaryRowButton
-                        variant=''
-                        className='ms-1 me-1'
-                        disabled={
-                          !user ||
-                          userWords?.some(
+              {translations.map((translation) => (
+                <Card className='mt-3 mb-3' key={translation._id}>
+                  <Card.Header>
+                    <Row>
+                      {languages?.length > 0 &&
+                        languages.map((locales) => (
+                          <Col
+                            xs={6}
+                            sm={6}
+                            md={6}
+                            key={locales._id}
+                            className='d-flex align-items-center justify-content-center flex-wrap'>
+                            {translation.locale_values.length > 0 &&
+                              translation.locale_values.map(
+                                ({ language, name }) => (
+                                  <React.Fragment key={`${language}-${name}`}>
+                                    {locales.locale === language.locale && name}
+                                  </React.Fragment>
+                                )
+                              )}
+                          </Col>
+                        ))}
+                    </Row>
+                  </Card.Header>
+                  <div className='d-flex align-items-center justify-content-center flex-wrap mb-2 mt-2'>
+                    <PrimaryRowButton
+                      variant=''
+                      className='ms-1 me-1'
+                      disabled={
+                        !user ||
+                        userWords?.some(
+                          (el) =>
+                            (el?.wordId === translation._id ||
+                              el?.wordId._id === translation._id) &&
+                            el?.count === 10 &&
+                            el?.type === 'memorized'
+                        )
+                      }
+                      onClick={() => onSubmitStudy({ id: translation._id })}
+                      outline={
+                        user
+                          ? userWords?.some(
+                              (el) =>
+                                (el?.wordId === translation._id ||
+                                  el?.wordId._id === translation._id) &&
+                                el?.count < 10 &&
+                                el?.type === 'study'
+                            )
+                          : 'false'
+                      }>
+                      <BookHalf width={20} height={20} />
+                    </PrimaryRowButton>
+                    <PrimaryRowButton
+                      variant=''
+                      className='ms-1 me-1'
+                      onClick={() => onSubmitStudy({ id: translation._id })}
+                      disabled={
+                        !user ||
+                        userWords.length === 0 ||
+                        (userWords?.some(
+                          (el) =>
+                            el?.wordId !== translation._id ||
+                            el?.wordId._id !== translation._id
+                        ) &&
+                          !userWords?.some(
                             (el) =>
                               (el?.wordId === translation._id ||
                                 el?.wordId._id === translation._id) &&
                               el?.count === 10 &&
                               el?.type === 'memorized'
-                          )
-                        }
-                        onClick={() => onSubmitStudy({ id: translation._id })}
-                        outline={
-                          user
-                            ? userWords?.some(
-                                (el) =>
-                                  (el?.wordId === translation._id ||
-                                    el?.wordId._id === translation._id) &&
-                                  el?.count < 10 &&
-                                  el?.type === 'study'
-                              )
-                            : 'false'
-                        }>
-                        <BookHalf width={20} height={20} />
-                      </PrimaryRowButton>
-                      <PrimaryRowButton
-                        variant=''
-                        className='ms-1 me-1'
-                        onClick={() => onSubmitStudy({ id: translation._id })}
-                        disabled={
-                          !user ||
-                          userWords.length === 0 ||
-                          (userWords?.some(
-                            (el) =>
-                              el?.wordId !== translation._id ||
-                              el?.wordId._id !== translation._id
-                          ) &&
-                            !userWords?.some(
+                          ))
+                      }
+                      outline={
+                        user
+                          ? userWords?.some(
                               (el) =>
                                 (el?.wordId === translation._id ||
                                   el?.wordId._id === translation._id) &&
                                 el?.count === 10 &&
                                 el?.type === 'memorized'
-                            ))
-                        }
-                        outline={
-                          user
-                            ? userWords?.some(
-                                (el) =>
-                                  (el?.wordId === translation._id ||
-                                    el?.wordId._id === translation._id) &&
-                                  el?.count === 10 &&
-                                  el?.type === 'memorized'
+                            )
+                          : 'false'
+                      }>
+                      <BookmarkCheckFill width={20} height={20} />
+                    </PrimaryRowButton>
+                    {isPrevilegedUser && (
+                      <PrimaryRowButton
+                        variant=''
+                        className='ms-1 me-1'
+                        onClick={() =>
+                          dispatch(
+                            openModal({
+                              content: (
+                                <LocalizationEditModal
+                                  translation={translation}
+                                />
                               )
-                            : 'false'
+                            })
+                          )
                         }>
-                        <BookmarkCheckFill width={20} height={20} />
+                        <PencilFill />
                       </PrimaryRowButton>
-                      {isPrevilegedUser && (
-                        <PrimaryRowButton
-                          variant=''
-                          className='ms-1 me-1'
-                          onClick={() =>
-                            dispatch(
-                              openModal({
-                                content: (
-                                  <LocalizationEditModal
-                                    translation={translation}
-                                  />
-                                )
-                              })
-                            )
-                          }>
-                          <PencilFill />
-                        </PrimaryRowButton>
-                      )}
-                      {user?.type === 'admin' && (
-                        <PrimaryRowButton
-                          variant=''
-                          className='ms-1 me-1'
-                          onClick={() =>
-                            dispatch(
-                              openModal({
-                                content: (
-                                  <LocalizationDeleteModal
-                                    translation={translation}
-                                  />
-                                )
-                              })
-                            )
-                          }>
-                          <XDiamondFill width={20} height={20} />
-                        </PrimaryRowButton>
-                      )}
-                    </div>
-                  </Card>
-                ))}
+                    )}
+                    {user?.type === 'admin' && (
+                      <PrimaryRowButton
+                        variant=''
+                        className='ms-1 me-1'
+                        onClick={() =>
+                          dispatch(
+                            openModal({
+                              content: (
+                                <LocalizationDeleteModal
+                                  translation={translation}
+                                />
+                              )
+                            })
+                          )
+                        }>
+                        <XDiamondFill width={20} height={20} />
+                      </PrimaryRowButton>
+                    )}
+                  </div>
+                </Card>
+              ))}
             </div>
           ) : (
             <Table size='lg' responsive={width < 992} hover>
@@ -281,8 +281,8 @@ function LocalizationKeyValueBody() {
                 </tr>
               </thead>
               <tbody>
-                {filteredTranslations.length > 0 &&
-                  filteredTranslations.map((translation) => (
+                {translations.length > 0 &&
+                  translations.map((translation) => (
                     <tr key={translation._id}>
                       {user?.type === 'admin' && <td>{translation.key}</td>}
                       {!sliderView &&
@@ -412,9 +412,9 @@ function LocalizationKeyValueBody() {
       )}
       <Container className='text-center'>
         <Pagination
-          itemsCount={count}
           pageSize={pageSize}
           onNextPage={onNextPage}
+          itemsCount={itemsCount}
           currentPage={currentPage}
           onPageChange={handlePageChange}
           onPreviousPage={onPreviousPage}

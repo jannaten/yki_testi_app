@@ -7,9 +7,10 @@ export const api = {
   userByToken: `${BASE}/user/token`,
   userWordUpdate: `${BASE}/user/words/update`,
   localizationLocales: `${BASE}/localization_locales`,
-  localizationStudy: `${BASE}/localization_key_values/studies`,
-  localizationLocalesById: (id) => `${BASE}/localization_locales/${id}`,
   localizationKeyValues: `${BASE}/localization_key_values`,
+  localizationStudy: `${BASE}/localization_key_values/studies`,
+  localizationKeyValuesByText: `${BASE}/localization_key_values/search`,
+  localizationLocalesById: (id) => `${BASE}/localization_locales/${id}`,
   localizationKeyValuesPaginate: `${BASE}/localization_key_values/paginate`,
   localizationKeyValuesById: (id) => `${BASE}/localization_key_values/${id}`,
 };
