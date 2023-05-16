@@ -7,7 +7,6 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { Container, InputGroup, Col, Card } from 'react-bootstrap';
 import { BookmarkCheckFill, PencilFill } from 'react-bootstrap-icons';
 //importing utiles, components, redux and styles
-import { paginate } from '../utils';
 import { useScrollToTop } from '../hooks';
 import Loader from './common/loader.component';
 import { LocalizationTitleCount } from '../styles';
