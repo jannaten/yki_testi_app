@@ -1,10 +1,9 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { translationInputReset } from '../../redux/slices';
-import { handleEnableKeyEditing } from '../../redux/slices';
-import { closeModal, editKeyValues } from '../../redux/slices';
-import { handleKeyValueChange, onKeyValueChange } from '../../redux/slices';
+import { translationInputReset, closeModal } from '../../redux/slices';
+import { handleEnableKeyEditing, editKeyValues } from '../../redux/slices';
 import { Button, Form, Modal, Row, Col, InputGroup } from 'react-bootstrap';
+import { handleKeyValueChange, onKeyValueChange } from '../../redux/slices';
 
 function LocalizationEditModal({ translation }) {
   const dispatch = useDispatch();

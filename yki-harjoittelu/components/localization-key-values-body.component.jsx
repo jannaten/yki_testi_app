@@ -12,12 +12,12 @@ import Loader from './common/loader.component';
 import { LocalizationTitleCount } from '../styles';
 import { errorToast } from './common/toast.component';
 import Pagination from './common/pagination.component';
+import { loadFilteredTranslations } from '../redux/slices';
 import { openModal, userWordUpdate } from '../redux/slices';
 import { PrimaryButton, PrimaryRowButton } from '../styles';
 import LocalizationEditModal from './modals/localization-edit.modal';
 import LocalizationDeleteModal from './modals/localization-delete-modal';
 import { LoaderHolder, LocalizationEditorButtonsHolder } from '../styles';
-import { loadFilteredTranslations } from '../redux/slices/localization.slice';
 
 function LocalizationKeyValueBody() {
   const { width } = useTheme();
@@ -66,14 +66,6 @@ function LocalizationKeyValueBody() {
     [currentPage]
   );
 
-  const onPreviousPage = useCallback(() => {
-    setCurrentPage(currentPage - 1);
-  }, [currentPage]);
-
-  const onNextPage = useCallback(() => {
-    setCurrentPage(currentPage + 1);
-  }, [currentPage]);
-
   const onSubmitStudy = async (data) => {
     try {
       await dispatch(
@@ -89,6 +81,8 @@ function LocalizationKeyValueBody() {
   };
   // useScrollToTop(currentPage);
   const itemsCount = searchInputValue ? translations.length : count;
+
+  console.log(translations);
   return (
     <div>
       <LocalizationTitleCount>
@@ -111,11 +105,9 @@ function LocalizationKeyValueBody() {
       <Container className='text-center'>
         <Pagination
           pageSize={pageSize}
-          onNextPage={onNextPage}
           itemsCount={itemsCount}
           currentPage={currentPage}
           onPageChange={handlePageChange}
-          onPreviousPage={onPreviousPage}
         />
       </Container>
       {translations?.length > 0 ? (
@@ -413,11 +405,9 @@ function LocalizationKeyValueBody() {
       <Container className='text-center'>
         <Pagination
           pageSize={pageSize}
-          onNextPage={onNextPage}
           itemsCount={itemsCount}
           currentPage={currentPage}
           onPageChange={handlePageChange}
-          onPreviousPage={onPreviousPage}
         />
       </Container>
     </div>

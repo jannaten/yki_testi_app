@@ -80,12 +80,18 @@ import { NavBarToggleButtonHolder, UserProfileNavHolder } from '../styles';
 // export default NavbarComponent;
 
 const NavbarComponent = () => {
-	const router = useRouter();
+  const router = useRouter();
   const dispatch = useDispatch();
   const { home, identify, profile } = routes;
   const { user } = useSelector(({ user }) => user);
   const [toggleButton, setToggleButton] = useState(false);
   const [toggleNavDropDown, setToggleNavDropDown] = useState(false);
+
+  const mountedStyle = { animation: 'inAnimation 250ms ease-in' };
+  const unmountedStyle = {
+    animation: 'outAnimation 270ms ease-out',
+    animationFillMode: 'forwards'
+  };
 
   return (
     <NavBarHolder expand='lg'>

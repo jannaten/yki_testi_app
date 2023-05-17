@@ -20,5 +20,6 @@ export {
   handleKeyValueChange,
   translationInputReset,
   handleEnableKeyEditing,
+	loadFilteredTranslations,
   handleTranslationValueChange
 } from './localization.slice';

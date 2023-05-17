@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { api } from '../../config';
-import { createAsyncThunk, createSlice, current } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { errorToast } from '../../components/common/toast.component';
 import { successToast } from '../../components/common/toast.component';
 
