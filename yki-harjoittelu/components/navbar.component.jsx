@@ -1,86 +1,18 @@
 import { routes } from '../config';
 import Avatar from 'boring-avatars';
-import { useRouter } from 'next/router';
 import React, { useState } from 'react';
+import { useRouter } from 'next/router';
+import { useTheme } from 'styled-components';
 import { onClearUserValue } from '../redux/slices';
 import { PlusLg, XLg } from 'react-bootstrap-icons';
 import { useSelector, useDispatch } from 'react-redux';
-import { successToast } from './common/toast.component';
-import { Container, Nav, Navbar, NavDropdown } from 'react-bootstrap';
+import { Nav, Container, Navbar } from 'react-bootstrap';
+import { DropDownButton, NavBarHolder } from '../styles';
+import { UserProfileNavHolder, SecondaryButton } from '../styles';
 
-import { DropDownButton, NavBarHolder, SecondaryButton } from '../styles';
-import { NavBarToggleButtonHolder, UserProfileNavHolder } from '../styles';
-
-// function NavbarComponent() {
-//   const router = useRouter();
-//   const dispatch = useDispatch();
-//   const { home, identify, profile } = routes;
-//   const { user } = useSelector(({ user }) => user);
-//   const [toggleButton, setToggleButton] = useState(false);
-//   const [toggleNavDropDown, setToggleNavDropDown] = useState(false);
-
-//   const mountedStyle = { animation: 'inAnimation 250ms ease-in' };
-//   const unmountedStyle = {
-//     animation: 'outAnimation 270ms ease-out',
-//     animationFillMode: 'forwards'
-//   };
-//   return (
-//     <Navbar collapseOnSelect expand='lg' bg='dark' variant='dark'>
-//       <Container>
-//         <Navbar.Brand onClick={() => router.push(home)}>
-//           YKI harjoittelu
-//         </Navbar.Brand>
-//         <Navbar.Toggle
-//           aria-controls='navbarScroll'
-//           style={{ border: 'none', boxShadow: 'none' }}>
-//           {toggleButton ? (
-//             <XLg
-//               width={35}
-//               height={35}
-//               color='#fff'
-//               onClick={() => setToggleButton(!toggleButton)}
-//             />
-//           ) : (
-//             <PlusLg
-//               width={35}
-//               height={35}
-//               color='#fff'
-//               onClick={() => setToggleButton(!toggleButton)}
-//             />
-//           )}
-//         </Navbar.Toggle>
-//         <Navbar.Collapse id='responsive-navbar-nav'>
-//           <Nav className='me-auto'>
-//             <Nav.Link href='#features'>Features</Nav.Link>
-//             <Nav.Link href='#pricing'>Pricing</Nav.Link>
-//             <NavDropdown title='Dropdown' id='collasible-nav-dropdown'>
-//               <NavDropdown.Item href='#action/3.1'>Action</NavDropdown.Item>
-//               <NavDropdown.Item href='#action/3.2'>
-//                 Another action
-//               </NavDropdown.Item>
-//               <NavDropdown.Item href='#action/3.3'>Something</NavDropdown.Item>
-//               <NavDropdown.Divider />
-//               <NavDropdown.Item href='#action/3.4'>
-//                 Separated link
-//               </NavDropdown.Item>
-//             </NavDropdown>
-//           </Nav>
-//           <Nav>
-//             <Nav.Link href='#deets'>More deets</Nav.Link>
-//             <Nav.Link eventKey={2} href='#memes'>
-//               Dank memes
-//             </Nav.Link>
-//           </Nav>
-//         </Navbar.Collapse>
-//       </Container>
-//     </Navbar>
-//   );
-// }
-
-// export default NavbarComponent;
-
-const NavbarComponent = () => {
+function NavScrollExample() {
   const router = useRouter();
+  const { width } = useTheme();
   const dispatch = useDispatch();
   const { home, identify, profile } = routes;
   const { user } = useSelector(({ user }) => user);
@@ -94,12 +26,12 @@ const NavbarComponent = () => {
   };
 
   return (
-    <NavBarHolder expand='lg'>
+    <NavBarHolder expand='lg' className='sticky-top'>
       <Container fluid>
-        <Navbar.Brand className='px-4 mt-1'>
-          <h5 style={{ color: '#FBFAF5' }} onClick={() => router.push(home)}>
-            YKI harjoittelu
-          </h5>
+        <Navbar.Brand
+          style={{ color: '#FBFAF5', cursor: 'pointer' }}
+          onClick={() => router.push(home)}>
+          YKI harjoittelu
         </Navbar.Brand>
         <Navbar.Toggle
           aria-controls='navbarScroll'
@@ -126,9 +58,11 @@ const NavbarComponent = () => {
             style={{ maxHeight: '100px' }}
             navbarScroll></Nav>
           {user && (
-            <UserProfileNavHolder
-              onClick={() => setToggleNavDropDown((prev) => !prev)}>
-              <div className='d-flex align-items-center justify-content-center flex-wrap'>
+            <UserProfileNavHolder>
+              <div
+                style={{ cursor: 'pointer' }}
+                className='d-flex align-items-center justify-content-center flex-wrap'
+                onClick={() => setToggleNavDropDown((prev) => !prev)}>
                 <Avatar
                   size={40}
                   variant='beam'
@@ -144,12 +78,16 @@ const NavbarComponent = () => {
                 <span className='me-2 ms-2'>{user.username}</span>
               </div>
               {user && toggleNavDropDown && (
-                <NavBarToggleButtonHolder
+                <div
+                  className={`d-flex ${
+                    width <= 992 ? 'flex-column' : 'flex-row'
+                  }`}
                   style={
                     user && toggleNavDropDown ? mountedStyle : unmountedStyle
                   }
                   onClick={() => setToggleNavDropDown((prev) => !prev)}>
                   <DropDownButton
+                    className={width <= 992 && 'mt-2'}
                     variant=''
                     onClick={() => {
                       setToggleNavDropDown(!toggleNavDropDown);
@@ -158,6 +96,7 @@ const NavbarComponent = () => {
                     user information
                   </DropDownButton>
                   <DropDownButton
+                    className=''
                     variant=''
                     onClick={() => {
                       setToggleNavDropDown((prev) => !prev);
@@ -168,7 +107,7 @@ const NavbarComponent = () => {
                     }}>
                     sign out
                   </DropDownButton>
-                </NavBarToggleButtonHolder>
+                </div>
               )}
             </UserProfileNavHolder>
           )}
@@ -186,6 +125,6 @@ const NavbarComponent = () => {
       </Container>
     </NavBarHolder>
   );
-};
+}
 
-export default NavbarComponent;
+export default NavScrollExample;

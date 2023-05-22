@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import { loadLanguages } from '../../../redux/slices';
 import { useDispatch, useSelector } from 'react-redux';
 import { LocalizationTitleCount } from '../../../styles';
 import { Col, Container, Form, Table } from 'react-bootstrap';
@@ -7,6 +6,7 @@ import { SideBarLocalizationMatchHolder } from '../../../styles';
 import { PrimaryButton, SideBarTableHolder } from '../../../styles';
 import { handleTranslationValueChange } from '../../../redux/slices';
 import { loadTranslations, addTranslation } from '../../../redux/slices';
+import { loadLanguages, translationInputReset } from '../../../redux/slices';
 
 function AddTranslation() {
   const dispatch = useDispatch();
@@ -54,7 +54,7 @@ function AddTranslation() {
   };
 
   return (
-    <Container style={{ paddingTop: '6rem' }}>
+    <Container className='pt-5'>
       <LocalizationTitleCount>Add a translation</LocalizationTitleCount>
       {languages.length > 0 &&
         languages.map(({ _id, name, locale }) => (

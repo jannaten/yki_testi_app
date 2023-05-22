@@ -82,7 +82,6 @@ function LocalizationKeyValueBody() {
   // useScrollToTop(currentPage);
   const itemsCount = searchInputValue ? translations.length : count;
 
-  console.log(translations);
   return (
     <div>
       <LocalizationTitleCount>
