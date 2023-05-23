@@ -93,7 +93,7 @@ function NavScrollExample() {
                       setToggleNavDropDown(!toggleNavDropDown);
                       router.push(profile);
                     }}>
-                    user information
+                    profile
                   </DropDownButton>
                   <DropDownButton
                     className=''
@@ -113,7 +113,6 @@ function NavScrollExample() {
           )}
           {!user && (
             <SecondaryButton
-              className='me-5'
               variant=''
               onClick={() => {
                 router.push(identify);

@@ -37,12 +37,12 @@ function ProfilePage() {
   };
 
   return (
-    <Container style={{ paddingTop: '10%' }}>
+    <Container className='pt-5'>
       <Form.Group style={{ width: '100%' }}>
         <Row>
           <Col lg={3} md={6} sm={12}>
             <div>
-              <h2>User information</h2>
+              <h2>Profile</h2>
               <Badge pill bg='success'>
                 status: {user?.status}
               </Badge>

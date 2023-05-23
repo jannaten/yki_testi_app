@@ -28,7 +28,7 @@ export const SecondaryButton = styled(Button)`
   background-color: ${({ theme }) => theme.basic.bright};
   color: ${({ theme }) => theme.primary};
   &:hover {
-    border: ${({ theme }) => `0.2rem solid ${theme.basic.bright}`};
+		box-shadow: inset 0 0 0 0.15rem ${({ theme }) => theme.basic.bright};
     background-color: ${({ theme }) => theme.primary};
     color: ${({ theme }) => theme.basic.bright};
   }
